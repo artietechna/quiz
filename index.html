@@ -236,7 +236,7 @@ function cr(PT,cog,conf){
    4. Скопируйте URL → вставьте в SU выше
 ══════════════════════════════════════════════ */
 function sv(data){
-  if(SU==="YOUR_APPS_SCRIPT_URL_HERE")return;
+  if(SU==="https://script.google.com/macros/s/AKfycbx5u2Ev4Irj6XRRYwIyohlWUr-npTDT9mFyLwf2bxc136INOR_2kQihLu2ZmDK3r8S4/exec")return;
   document.getElementById('sav').classList.add('on');
   fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
     .finally(()=>document.getElementById('sav').classList.remove('on'));
