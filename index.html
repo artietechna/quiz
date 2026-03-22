@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Диагностический опросник</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f2ff;--sur:#ffffff;--acc:#6c47ff;--acc2:#3b9eff;--text:#18102e;--mut:#7a6f96;--brd:rgba(108,71,255,.13);--pbg:rgba(108,71,255,.08);--grad:linear-gradient(135deg,#6c47ff 0%,#3b9eff 100%);--sh:0 4px 32px rgba(108,71,255,.10);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;background-image:radial-gradient(ellipse 65% 55% at 92% 0%,rgba(108,71,255,.14) 0%,transparent 60%),radial-gradient(ellipse 50% 45% at 5% 95%,rgba(59,158,255,.12) 0%,transparent 60%);background-attachment:fixed;}
+.blob{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
+.b1{width:480px;height:480px;background:#c4b5fd;opacity:.22;top:-140px;right:-110px;}
+.b2{width:360px;height:360px;background:#bae6fd;opacity:.22;bottom:-90px;left:-90px;}
+.shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px 60px;}
+@keyframes rise{from{opacity:0;transform:translateY(20px) scale(.99);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+/* INTRO */
+#intro{max-width:560px;width:100%;animation:rise .55s cubic-bezier(.4,0,.2,1) both;}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--acc);letter-spacing:.04em;text-transform:uppercase;margin-bottom:24px;}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+.i-title{font-size:clamp(26px,6vw,40px);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;}
+.i-sub{font-size:clamp(14px,3vw,17px);font-weight:300;color:var(--mut);margin-bottom:20px;line-height:1.5;}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--brd),transparent);margin:20px 0;}
+.i-body{font-size:14px;line-height:1.82;color:var(--mut);margin-bottom:28px;}
+.i-body p{margin-bottom:5px;}
+.i-body p:last-child{margin-bottom:0;}
+.scale-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:30px;}
+.sc{display:flex;align-items:center;gap:10px;background:var(--sur);border:1.5px solid var(--brd);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--mut);}
+.sn{width:26px;height:26px;border-radius:8px;background:var(--grad);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.btn-go{width:100%;background:var(--grad);color:#fff;border:none;border-radius:16px;padding:17px 32px;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 28px rgba(108,71,255,.35);transition:transform .18s,box-shadow .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(108,71,255,.48);}
+.btn-go:active{transform:translateY(0);box-shadow:0 4px 16px rgba(108,71,255,.28);}
+
+/* QUIZ */
+#quizScreen{display:none;max-width:580px;width:100%;}
+.pb-wrap{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.pb-track{flex:1;height:5px;background:rgba(108,71,255,.1);border-radius:99px;overflow:hidden;}
+.pb-fill{height:100%;background:var(--grad);border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.pb-lbl{font-size:13px;font-weight:700;color:var(--acc);white-space:nowrap;min-width:48px;text-align:right;}
+.q-card{background:var(--sur);border:1.5px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:var(--sh);padding:38px 34px 30px;animation:rise .3s cubic-bezier(.4,0,.2,1) both;}
+.q-text{font-size:clamp(16px,3.5vw,19px);font-weight:600;line-height:1.55;color:var(--text);margin-bottom:28px;letter-spacing:-.01em;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{display:flex;align-items:center;gap:14px;background:var(--bg);border:1.5px solid var(--brd);border-radius:14px;padding:14px 18px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:500;color:var(--mut);transition:border-color .16s,background .16s,color .16s,transform .16s;text-align:left;}
+.opt:hover{border-color:var(--acc);background:rgba(108,71,255,.05);color:var(--text);transform:translateX(3px);}
+.opt.on{border-color:var(--acc);background:rgba(108,71,255,.07);color:var(--text);transform:translateX(5px);}
+.ob{min-width:32px;height:32px;border-radius:10px;background:rgba(108,71,255,.1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--acc);transition:background .16s,color .16s;flex-shrink:0;}
+.opt.on .ob{background:var(--grad);color:#fff;}
+
+/* RESULTS */
+#resultsScreen{display:none;max-width:660px;width:100%;animation:rise .45s ease both;}
+.res-top{margin-bottom:32px;}
+.res-chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+.res-title{font-size:clamp(26px,6vw,38px);font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.15;margin-bottom:6px;}
+.res-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rc{background:var(--sur);border:1.5px solid var(--brd);border-radius:20px;padding:26px;margin-bottom:12px;box-shadow:0 2px 16px rgba(108,71,255,.07);position:relative;overflow:hidden;}
+.rc-bar{position:absolute;top:0;left:0;width:100%;height:3px;background:var(--grad);border-radius:20px 20px 0 0;}
+.rc-lbl{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:12px;}
+.srow{display:flex;align-items:baseline;gap:7px;margin-bottom:10px;}
+.snum{font-size:32px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.02em;}
+.sof{font-size:13px;color:#c4b5e0;font-weight:600;}
+.pill{display:inline-block;padding:3px 12px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+.ph{background:#d1fae5;color:#065f46;}.pm{background:#fef9c3;color:#854d0e;}.pl{background:#fee2e2;color:#991b1b;}
+.segs{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;}
+.seg{flex:1;min-width:80px;}
+.sl{font-size:11px;font-weight:700;color:var(--mut);margin-bottom:4px;}
+.st{height:5px;background:rgba(108,71,255,.09);border-radius:99px;overflow:hidden;}
+.sf{height:100%;background:var(--grad);border-radius:99px;}
+.desc{font-size:14px;line-height:1.8;color:#4e4470;}
+.desc p{margin-bottom:10px;}
+.desc p:last-child{margin-bottom:0;}
+.desc strong{color:var(--acc);font-weight:700;}
+.pt-tag{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;font-size:20px;font-weight:800;padding:10px 22px;border-radius:99px;margin-bottom:14px;letter-spacing:-.01em;}
+.pt-nm{font-size:13px;font-weight:500;opacity:.65;}
+.tips{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:10px;}
+.tip{display:flex;gap:11px;align-items:flex-start;font-size:14px;line-height:1.72;color:#4e4470;}
+.tico{min-width:28px;height:28px;border-radius:8px;background:var(--pbg);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;}
+.btn-print{display:block;margin:20px auto 0;background:transparent;border:1.5px solid var(--brd);border-radius:12px;padding:12px 28px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;color:var(--mut);cursor:pointer;transition:all .18s;}
+.btn-print:hover{border-color:var(--acc);color:var(--acc);background:var(--pbg);}
+#sav{display:none;position:fixed;inset:0;background:rgba(244,242,255,.8);backdrop-filter:blur(10px);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-size:15px;font-weight:600;color:var(--acc);}
+#sav.on{display:flex;}
+.spin{width:40px;height:40px;border:3px solid rgba(108,71,255,.15);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+@media(max-width:480px){.q-card{padding:26px 18px 22px;}.rc{padding:20px 16px;}.scale-grid{grid-template-columns:1fr;}}
+@media print{body{background:white;}.blob,.btn-print{display:none;}}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div id="sav"><div class="spin"></div><span>Сохраняем результаты…</span></div>
+<div class="shell">
+
+<div id="intro">
+  <div class="chip"><span class="chip-dot"></span>психодиагностика</div>
+  <h1 class="i-title">Диагностический<br>опросник</h1>
+  <p class="i-sub">Индивидуально-психологические особенности<br>и мотивация в изучении английского языка</p>
+  <div class="divider"></div>
+  <div class="i-body">
+    <p>49 утверждений о том, как ты воспринимаешь, запоминаешь и чувствуешь язык.</p>
+    <p>Отвечай искренне, выбирая тот вариант, который наиболее точно отражает твоё мнение.</p>
+    <p>Узнай свой психотип и получи персональные советы.</p>
+  </div>
+  <div class="scale-grid">
+    <div class="sc"><span class="sn">1</span>Совсем не согласен</div>
+    <div class="sc"><span class="sn">2</span>Скорее не согласен</div>
+    <div class="sc"><span class="sn">3</span>Скорее согласен</div>
+    <div class="sc"><span class="sn">4</span>Полностью согласен</div>
+  </div>
+  <button class="btn-go" onclick="go()">Начать тест &nbsp;→</button>
+</div>
+
+<div id="quizScreen">
+  <div class="pb-wrap"><div class="pb-track"><div class="pb-fill" id="pf"></div></div><div class="pb-lbl" id="pl">1 / 49</div></div>
+  <div class="q-card" id="qc"><div class="q-text" id="qt"></div><div class="opts" id="op"></div></div>
+</div>
+
+<div id="resultsScreen">
+  <div class="res-top">
+    <div class="res-chip">✦ результаты</div>
+    <h2 class="res-title">Вот твой<br><span>профиль</span></h2>
+  </div>
+  <div id="rc"></div>
+  <button class="btn-print" onclick="window.print()">🖨 Распечатать результаты</button>
+</div>
+
+</div>
+<script>
+const SU="YOUR_APPS_SCRIPT_URL_HERE";
+const Q=["Я чувствую себя уверенно, когда говорю на английском языке.","Я боюсь допустить ошибку, когда говорю на английском.","Я стараюсь избегать разговоров на английском языке.","Даже если я делаю ошибки, я продолжаю говорить на английском.","Мне трудно начать разговор на английском языке.","Я могу объяснить свою мысль на английском, даже если не знаю точного слова.","Мне важно хорошо владеть английским языком.","Я регулярно стараюсь улучшать свой уровень английского.","Я изучаю английский язык только из-за необходимости (работа, учёба).","Мне интересно узнавать новые слова и выражения на английском.","Я испытываю удовольствие, когда понимаю английскую речь.","Я хотел(а) бы говорить на английском свободно.","Мне проще запоминать информацию, когда я вижу её (схемы, таблицы, карточки).","Я лучше понимаю грамматику, когда вижу правила в виде схем или таблиц.","Мне помогают видео с субтитрами для изучения английского.","Мне проще запоминать информацию, когда я слышу её (аудио, подкасты).","Я хорошо запоминаю произношение, слушая носителей языка.","Мне нравится изучать английский через песни и аудиокниги.","Мне нужно что-то делать руками, чтобы информация запомнилась.","Я лучше запоминаю слова, когда записываю их или печатаю.","Мне помогает физическое движение или ролевые игры при изучении языка.","Я предпочитаю изучать английский в группе, общаясь с другими людьми.","Мне легче говорить на английском, когда вокруг много людей.","Я предпочитаю изучать английский самостоятельно, в тишине.","Мне нужно время подумать, прежде чем ответить на английском.","Для меня важно понимать грамматические правила и логику языка.","Я стараюсь анализировать структуру предложений и находить закономерности.","Мне проще запоминать через истории, эмоции и контекст общения.","Я лучше запоминаю фразы, если они связаны с переживанием или ситуацией.","Я составляю чёткий план изучения языка и следую ему.","Я предпочитаю иметь расписание занятий и регулярную практику.","Я изучаю английский спонтанно, когда возникает интерес или необходимость.","Мне нравится гибкость в обучении, без строгих планов.","Мне важны практические примеры и конкретные ситуации использования английского.","Я предпочитаю учить язык через реальные диалоги и повседневные фразы.","Мне интересны общие концепции языка, его история и связь с другими языками.","Я люблю размышлять о том, почему в языке используются те или иные конструкции.","Мне легче запоминать английские выражения через фильмы и сериалы.","Музыка на английском помогает мне лучше понимать язык.","Социальные сети могут быть полезным инструментом для изучения языка.","Я обращаю внимание на новые английские слова в интернете.","Мне интересно изучать разговорные выражения и современный английский.","Я считаю, что язык лучше изучается через реальные примеры общения.","Я стараюсь использовать английский язык вне занятий.","Я готов(а) общаться с иностранцами на английском языке.","Я использую английский при просмотре видео, фильмов или чтении.","Я хотел(а) бы чаще применять английский в реальной жизни.","Я стараюсь думать на английском языке.","Я чувствую, что английский может открыть для меня новые возможности."];
+const OD=[{v:1,l:"Совсем не согласен"},{v:2,l:"Скорее не согласен"},{v:3,l:"Скорее согласен"},{v:4,l:"Полностью согласен"}];
+const REV=[2,3,5,9,24,25,32,33];
+let cur=0,raw=new Array(49).fill(null);
+function go(){document.getElementById('intro').style.display='none';document.getElementById('quizScreen').style.display='block';rq(0);}
+function rq(i){
+  cur=i;
+  document.getElementById('pf').style.width=Math.round(i/Q.length*100)+'%';
+  document.getElementById('pl').textContent=(i+1)+' / '+Q.length;
+  const c=document.getElementById('qc');c.style.animation='none';void c.offsetWidth;c.style.animation='rise .3s cubic-bezier(.4,0,.2,1) both';
+  document.getElementById('qt').textContent=Q[i];
+  const el=document.getElementById('op');el.innerHTML='';
+  OD.forEach(o=>{const b=document.createElement('button');b.className='opt'+(raw[i]===o.v?' on':'');b.innerHTML=`<span class="ob">${o.v}</span><span>${o.l}</span>`;b.onclick=()=>pick(i,o.v);el.appendChild(b);});
+}
+function pick(i,v){raw[i]=v;document.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('on',OD[j].v===v));setTimeout(()=>{i+1<Q.length?rq(i+1):res();},265);}
+function sc(i){const v=raw[i-1];return REV.includes(i)?5-v:v;}
+function lv(s,m){const p=s/m;return p>=.75?['Высокий','ph']:p>=.5?['Средний','pm']:['Низкий','pl'];}
+
+function res(){
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  const s=Q.map((_,i)=>sc(i+1));
+  const b1=s.slice(0,6).reduce((a,b)=>a+b,0),b2=s.slice(6,12).reduce((a,b)=>a+b,0);
+  const vis=s.slice(12,15).reduce((a,b)=>a+b,0),aud=s.slice(15,18).reduce((a,b)=>a+b,0),kin=s.slice(18,21).reduce((a,b)=>a+b,0);
+  const ei=s.slice(21,25).reduce((a,b)=>a+b,0);
+  const tL=s[25]+s[26],fE=s[27]+s[28],jP=s[29]+s[30],pS=s[31]+s[32],sC=s[33]+s[34],nA=s[35]+s[36];
+  const b5=s.slice(37,43).reduce((a,b)=>a+b,0),b6=s.slice(43,49).reduce((a,b)=>a+b,0);
+  const PT=(ei>=9?'E':'I')+(sC>nA?'S':'N')+(tL>fE?'T':'F')+(jP>pS?'J':'P');
+  let cog='Смешанный тип';const mx=Math.max(vis,aud,kin);
+  if(vis===mx&&vis>aud&&vis>kin)cog='Визуал';else if(aud===mx&&aud>vis&&aud>kin)cog='Аудиал';else if(kin===mx&&kin>vis&&kin>aud)cog='Кинестетик';
+  document.getElementById('rc').innerHTML=c1(b1)+c2(b2)+c3(cog,vis,aud,kin)+c4(PT,ei,tL,fE,jP,pS,sC,nA)+c56(b5,b6)+cr(PT,cog,b1);
+  sv({pt:PT,cog,b1,b2,b5,b6,vis,aud,kin,raw:raw.join(',')});
+}
+
+function card(lbl,sn,mx,top,body){const[l,cl]=lv(sn,mx);return`<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">${lbl}</div><div class="srow"><div class="snum">${sn}</div><div class="sof">/ ${mx}</div><span class="pill ${cl}">${l}</span></div>${top||''}<div class="desc">${body}</div></div>`;}
+
+function c1(s){const d=s>=18?`<p>Ты уверенно чувствуешь себя в английской речи и не останавливаешься перед ошибками — это <strong>самое ценное качество</strong>. Именно такие люди быстрее всего достигают беглости. Продолжай погружаться в живое общение: разговорные клубы, переписка с носителями.</p>`:s>=12?`<p>Есть база уверенности, но иногда страх ошибки даёт о себе знать. Попробуй технику <strong>«5 минут без цензуры»</strong> — говори по-английски не останавливаясь и не исправляя себя. Ошибки — не провал, а индикатор роста.</p>`:`<p>Вероятно, ощущаешь тревогу при использовании языка. Хорошая новость: это <strong>полностью преодолимо</strong>. Начни с безопасной среды: iTalki или Speaky. Разреши себе быть несовершенным.</p>`;return card('Уверенность в речи',s,24,null,d);}
+function c2(s){const d=s>=18?`<p>У тебя сильная <strong>внутренняя мотивация</strong> — ты хочешь знать язык не потому что «надо», а потому что тебе это интересно. Направь её в конкретное русло: поставь цель — посмотреть сезон сериала без субтитров или прочитать книгу в оригинале.</p>`:s>=12?`<p>Мотивация умеренная — есть интерес, но он не всегда стабилен. Найди личный смысл: что именно ты сможешь делать, когда заговоришь свободно? <strong>Конкретный образ цели</strong> поддержит в моменты спада.</p>`:`<p>Сейчас язык — скорее внешняя необходимость. Попробуй найти точку пересечения с тем, что тебе уже нравится: музыка, ютуб по хобби. <strong>Интерес рождается через контакт.</strong></p>`;return card('Мотивация',s,24,null,d);}
+function c3(cog,v,a,k){
+  const ds={'Визуал':`<p>Твой мозг лучше всего обрабатывает <strong>визуальную информацию</strong>. Ты буквально «видишь» слова и структуры.</p><p><strong>Используй:</strong> mind-map, цветные маркеры, видео с двуязычными субтитрами. Anki с картинками — твой лучший инструмент.</p><p><strong>Осторожно:</strong> не перегружай себя чисто аудио без визуальной опоры.</p>`,'Аудиал':`<p>Ты лучше всего воспринимаешь <strong>звучащую речь</strong>. Ритм, интонация и мелодия языка — твой главный инструмент.</p><p><strong>Используй:</strong> shadowing, подкасты каждый день, записывай себя на диктофон.</p><p><strong>Осторожно:</strong> не пренебрегай чтением — оно закрепляет то, что ты слышишь.</p>`,'Кинестетик':`<p>Ты запоминаешь через <strong>действие и практику</strong>. Для тебя «попробовать» важнее, чем «прочитать о».</p><p><strong>Используй:</strong> пиши от руки новые слова, делай физические карточки, участвуй в ролевых играх.</p><p><strong>Осторожно:</strong> долгое пассивное изучение без практики быстро тебя утомит.</p>`,'Смешанный тип':`<p>У тебя <strong>сбалансированный</strong> когнитивный стиль — ты гибко используешь разные каналы.</p><p><strong>Используй:</strong> комбинируй методы — посмотрел видео → записал фразы → повторил вслух. Мультисенсорная практика даёт самое прочное запоминание.</p>`};
+  const sg=`<div class="segs">${[['Визуал',v,12],['Аудиал',a,12],['Кинестетик',k,12]].map(([l,vl,m])=>`<div class="seg"><div class="sl">${l} ${vl}/${m}</div><div class="st"><div class="sf" style="width:${Math.round(vl/m*100)}%"></div></div></div>`).join('')}</div>`;
+  return`<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Когнитивный стиль</div><div style="font-size:22px;font-weight:800;color:var(--acc);letter-spacing:-.01em;margin-bottom:6px;">${cog}</div>${sg}<div class="desc">${ds[cog]}</div></div>`;
+}
+const PN={ENTJ:'Командир',ENTP:'Полемист',INTJ:'Стратег',INTP:'Логик',ENFJ:'Тренер',ENFP:'Борец',INFJ:'Советник',INFP:'Медиатор',ESTJ:'Менеджер',ESTP:'Делец',ISTJ:'Администратор',ISTP:'Виртуоз',ESFJ:'Консул',ESFP:'Шоумен',ISFJ:'Защитник',ISFP:'Художник'};
+const PD={ENTJ:`<p><strong>ENTJ — Командир.</strong> Прирождённый лидер с аналитическим умом. Язык привлекает системностью и применением в карьере и переговорах.</p><p><strong>Стиль:</strong> нужна чёткая программа с целями. Бизнес-английский, дебаты — твоя среда.</p><p><strong>Инструменты:</strong> Lingoda, Business English Pod, Harvard Business Review на английском.</p>`,ENTP:`<p><strong>ENTP — Полемист.</strong> Любишь идеи и нестандартные подходы. Язык — инструмент обмена мыслями.</p><p><strong>Стиль:</strong> нужны дискуссии и темы, которые тебя задевают.</p><p><strong>Инструменты:</strong> TED Talks, философские подкасты, Toastmasters International.</p>`,INTJ:`<p><strong>INTJ — Стратег.</strong> Независимый, системный. Язык — стратегический инструмент.</p><p><strong>Стиль:</strong> самостоятельная работа по чёткой системе. Терпеть не можешь пустую болтовню.</p><p><strong>Инструменты:</strong> Coursera, edX, сложная литература, индивидуальный тьютор.</p>`,INTP:`<p><strong>INTP — Логик.</strong> Аналитик, теоретик. Язык — система, которую нужно понять, а не заучить.</p><p><strong>Стиль:</strong> нужно понимать «почему». Главный вызов — начать говорить.</p><p><strong>Инструменты:</strong> Linguriosity, NativLang, этимологические словари. Правило: 1 час теории = 1 час разговора.</p>`,ENFJ:`<p><strong>ENFJ — Тренер.</strong> Вдохновляешь людей. Язык — мост к людям из других культур.</p><p><strong>Стиль:</strong> расцветаешь в группе и в эмоционально насыщенном контексте.</p><p><strong>Инструменты:</strong> HelloTalk, Tandem, волонтёрство с иностранцами.</p>`,ENFP:`<p><strong>ENFP — Борец.</strong> Творческий, энтузиастичный. Загораешься быстро — и угасаешь, если скучно.</p><p><strong>Стиль:</strong> нужны разнообразие и личная связь с материалом. Зубрёжка убивает интерес.</p><p><strong>Инструменты:</strong> Duolingo Stories, языковые кафе, творческие проекты на английском.</p>`,INFJ:`<p><strong>INFJ — Советник.</strong> Вдумчивый, глубокий. Язык — способ выразить важное и понять других.</p><p><strong>Стиль:</strong> тишина и глубина. Любишь читать и анализировать.</p><p><strong>Инструменты:</strong> литература, кино с глубоким сюжетом, pen-pal по интересующей теме.</p>`,INFP:`<p><strong>INFP — Медиатор.</strong> Идеалист с богатым воображением. Язык — способ выразить себя.</p><p><strong>Стиль:</strong> запоминаешь через истории, эмоции и личные смыслы.</p><p><strong>Инструменты:</strong> английская поэзия и худлитература, фильмы без дубляжа, дневник на английском.</p>`,ESTJ:`<p><strong>ESTJ — Менеджер.</strong> Практичный, организованный. Хочешь освоить язык эффективно.</p><p><strong>Стиль:</strong> чёткая структура, расписание, измеримый результат.</p><p><strong>Инструменты:</strong> Cambridge, IELTS, бизнес-английский, LinguaLeo с трекингом прогресса.</p>`,ESTP:`<p><strong>ESTP — Делец.</strong> Энергичный, прагматичный. Язык — инструмент здесь и сейчас.</p><p><strong>Стиль:</strong> учишься в действии. Теория без практики — пустая трата времени.</p><p><strong>Инструменты:</strong> разговорные клубы, путешествия, английские мероприятия. Speaky или Tandem.</p>`,ISTJ:`<p><strong>ISTJ — Администратор.</strong> Надёжный, методичный. Берёшься за изучение языка серьёзно.</p><p><strong>Стиль:</strong> система, последовательность, понятный прогресс.</p><p><strong>Инструменты:</strong> British Council, Anki с регулярным повторением, международные экзамены.</p>`,ISTP:`<p><strong>ISTP — Виртуоз.</strong> Независимый, технический. Язык — навык, который нужно «собрать руками».</p><p><strong>Стиль:</strong> разбираешься самостоятельно. Групповые занятия кажутся лишними.</p><p><strong>Инструменты:</strong> технические YouTube-каналы, документация и форумы. Language Transfer.</p>`,ESFJ:`<p><strong>ESFJ — Консул.</strong> Тёплый, заботливый. Язык — прежде всего связь с людьми.</p><p><strong>Стиль:</strong> расцветаешь в поддерживающей социальной среде.</p><p><strong>Инструменты:</strong> групповые курсы с куратором, языковые обмены, HelloTalk.</p>`,ESFP:`<p><strong>ESFP — Шоумен.</strong> Энергичный, общительный. Язык — способ веселиться и знакомиться.</p><p><strong>Стиль:</strong> нужны движение, разнообразие, веселье.</p><p><strong>Инструменты:</strong> стендап-комедия на английском, разбор текстов песен, языковые вечеринки.</p>`,ISFJ:`<p><strong>ISFJ — Защитник.</strong> Внимательный, терпеливый. Учишься тихо, но основательно.</p><p><strong>Стиль:</strong> повторение и закрепление. Нужна безопасная, доброжелательная обстановка.</p><p><strong>Инструменты:</strong> индивидуальные занятия с терпеливым преподавателем, онлайн-курсы в своём темпе.</p>`,ISFP:`<p><strong>ISFP — Художник.</strong> Чуткий, творческий. Язык — способ ощутить мир другого человека.</p><p><strong>Стиль:</strong> учишься через красоту и ощущения. Сухая грамматика отталкивает.</p><p><strong>Инструменты:</strong> фильмы без дубляжа, английские блоги о творчестве. Изучай язык через любимый вид искусства.</p>`};
+function c4(PT,ei,tL,fE,jP,pS,sC,nA){
+  const nm=PN[PT]||'';const d=PD[PT]||'';
+  const dm=[[ei>=9?'Экстраверт':'Интроверт',ei>=9?ei:16-ei,16],[sC>nA?'Сенсорный':'Интуит',Math.max(sC,nA),8],[tL>fE?'Логик':'Этик',Math.max(tL,fE),8],[jP>pS?'Планировщик':'Гибкий',Math.max(jP,pS),8]];
+  return`<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Психотип</div><div class="pt-tag">${PT}<span class="pt-nm">${nm}</span></div><div class="segs" style="margin-bottom:14px;">${dm.map(([l,v,m])=>`<div class="seg"><div class="sl">${l}</div><div class="st"><div class="sf" style="width:${Math.round(v/m*100)}%"></div></div></div>`).join('')}</div><div class="desc">${d}</div></div>`;
+}
+function c56(b5,b6){
+  const[l5,c5]=lv(b5,24),[l6,c6]=lv(b6,24);
+  const d5=b5>=18?'Ты активно используешь современный контент — отлично! Переходи от пассивного просмотра к активному: разбор фраз, shadowing, ведение заметок.':b5>=12?'Знаком(а) с современными методами, но используешь непоследовательно. Выбери 1–2 формата и добавь в ежедневную рутину.':'Попробуй добавить хотя бы один медиаформат: один подкаст в неделю или один эпизод сериала без дубляжа.';
+  const d6=b6>=18?'Английский уже часть твоей жизни вне занятий — самый быстрый путь к прогрессу. Найди регулярного разговорного партнёра-носителя.':b6>=12?'Периодически используешь язык в жизни, но есть куда расти. Добавь один «английский ритуал» в день.':'Чтобы сделать прорыв, важно начать «жить на языке»: переключи интерфейс телефона, подпишись на 2–3 англоязычных канала.';
+  return`<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Современные методы &amp; Реальная практика</div><div class="srow" style="margin-bottom:4px"><div style="flex:1;font-size:12px;font-weight:700;color:var(--mut)">Современные методы</div><div class="snum" style="font-size:22px">${b5}</div><div class="sof">/24</div><span class="pill ${c5}">${l5}</span></div><div class="desc" style="margin-bottom:16px"><p>${d5}</p></div><div class="srow" style="margin-bottom:4px"><div style="flex:1;font-size:12px;font-weight:700;color:var(--mut)">Реальная практика</div><div class="snum" style="font-size:22px">${b6}</div><div class="sof">/24</div><span class="pill ${c6}">${l6}</span></div><div class="desc"><p>${d6}</p></div></div>`;
+}
+function cr(PT,cog,conf){
+  const t=[];
+  if(PT[0]==='E')t.push(['👥','<strong>Групповое обучение:</strong> языковые клубы, разговорные ивенты — ты заряжаешься от людей.']);
+  else t.push(['🎧','<strong>Самостоятельная работа:</strong> онлайн-курсы в своём темпе, чтение, подготовленные монологи с записью.']);
+  if(PT[2]==='T')t.push(['📐','<strong>Системный подход:</strong> грамматика структурно, схемы и таблицы, анализ закономерностей.']);
+  else t.push(['🎬','<strong>Эмоциональный контекст:</strong> фильмы, истории, разговоры о личном — так запоминаешь лучше всего.']);
+  if(PT[1]==='S')t.push(['🗣','<strong>Практические диалоги:</strong> реальные ситуации — заказ в кафе, звонок, переговоры.']);
+  else t.push(['🌐','<strong>Концептуальное погружение:</strong> этимология, сравнение языков, лингвистика.']);
+  if(PT[3]==='J')t.push(['📅','<strong>Структура и план:</strong> учебный план на месяц, трекинг прогресса. Регулярность — твоя суперсила.']);
+  else t.push(['🎲','<strong>Гибкое обучение:</strong> следуй интересу, меняй темы и форматы. Главное — не пропускать практику.']);
+  if(cog==='Визуал')t.push(['🗂','<strong>Визуальные инструменты:</strong> Anki с картинками, mind-map, субтитры, цветовое кодирование.']);
+  else if(cog==='Аудиал')t.push(['🎙','<strong>Аудио-практика:</strong> shadowing, записывай себя, подкасты каждый день.']);
+  else if(cog==='Кинестетик')t.push(['✍️','<strong>Письмо и движение:</strong> от руки, физические карточки, ролевые игры.']);
+  else t.push(['🔄','<strong>Мультисенсорность:</strong> посмотрел видео → записал фразы → повторил вслух.']);
+  if(conf<12)t.push(['💛','<strong>Снижение языковой тревоги:</strong> начни с безопасной среды. Ошибки — это прогресс.']);
+  return`<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Персональные рекомендации</div><ul class="tips">${t.map(([i,tx])=>`<li class="tip"><span class="tico">${i}</span><span>${tx}</span></li>`).join('')}</ul></div>`;
+}
+
+/* ══════════════════════════════════════════════
+   GOOGLE SHEETS — как настроить:
+
+   1. Откройте Google Таблицы → создайте новую таблицу
+   2. Расширения → Apps Script → вставьте этот код:
+
+   function doPost(e) {
+     const ss = SpreadsheetApp.getActiveSpreadsheet();
+     let sh = ss.getSheetByName("Ответы");
+     if (!sh) sh = ss.insertSheet("Ответы");
+     const d = JSON.parse(e.postData.contents);
+     if (sh.getLastRow() === 0) {
+       const h = ["Дата","Психотип","Когнитивный стиль",
+         "Уверенность/24","Мотивация/24","Совр.методы/24","Практика/24",
+         "Визуал/12","Аудиал/12","Кинестетик/12"];
+       for (let i=1;i<=49;i++) h.push("В"+i);
+       sh.appendRow(h);
+       sh.getRange(1,1,1,h.length).setFontWeight("bold")
+         .setBackground("#6c47ff").setFontColor("#ffffff");
+     }
+     sh.appendRow([new Date(),d.pt,d.cog,
+       d.b1,d.b2,d.b5,d.b6,d.vis,d.aud,d.kin,
+       ...d.raw.split(',').map(Number)]);
+     return ContentService
+       .createTextOutput(JSON.stringify({ok:true}))
+       .setMimeType(ContentService.MimeType.JSON);
+   }
+
+   3. Deploy → New deployment → Web App
+      Execute as: Me / Who has access: Anyone
+   4. Скопируйте URL → вставьте в SU выше
+══════════════════════════════════════════════ */
+function sv(data){
+  if(SU==="YOUR_APPS_SCRIPT_URL_HERE")return;
+  document.getElementById('sav').classList.add('on');
+  fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+    .finally(()=>document.getElementById('sav').classList.remove('on'));
+}
+</script>
+</body>
+</html>
