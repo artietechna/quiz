@@ -18,10 +18,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 /* INTRO — всё по центру */
 #intro{max-width:560px;width:100%;animation:rise .55s cubic-bezier(.4,0,.2,1) both;text-align:center;}
-.chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:8px 16px;font-size:14px;font-weight:700;color:var(--acc);letter-spacing:.04em;text-transform:uppercase;margin-bottom:24px;}
 .chip-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
-.i-title{font-size:clamp(32px,6vw,46px);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;display:inline-flex;align-items:center;gap:10px;}
+
+/* Заголовок с точкой внутри */
+.i-title{font-size:clamp(28px,6vw,40px);font-weight:800;line-height:1.2;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;display:inline-flex;align-items:center;justify-content:center;gap:10px;}
+.title-dot{display:inline-flex;align-items:center;justify-content:center;width:10px;height:10px;}
+
 .i-sub{font-size:clamp(17px,3vw,20px);font-weight:300;color:var(--mut);margin-bottom:20px;line-height:1.6;}
 .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--brd),transparent);margin:20px 0;}
 .i-body{font-size:16px;line-height:1.85;color:var(--mut);margin-bottom:28px;}
@@ -129,7 +132,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   .ol{font-size:12px;}
   .q-text{font-size:19px;}
   .pb-lbl{font-size:14px;}
-  .i-title{font-size:28px;}
+  .i-title{font-size:26px;}
   .i-sub{font-size:16px;}
 }
 </style>
@@ -140,7 +143,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <div class="shell">
 
 <div id="intro">
-  <h1 class="i-title"><span class="chip"><span class="chip-dot"></span></span>Диагностический<br>опросник</h1>
+  <!-- Точка теперь внутри заголовка -->
+  <h1 class="i-title"><span class="title-dot"><span class="chip-dot"></span></span>Диагностический<br>опросник</h1>
   <p class="i-sub">Индивидуально-психологические особенности<br>и мотивация в изучении английского языка</p>
   <div class="divider"></div>
   <div class="i-body">
@@ -390,24 +394,31 @@ function c3(cog, v, a, k){
   return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Когнитивный стиль</div><div style="font-size:22px;font-weight:800;color:var(--acc);letter-spacing:-.01em;margin-bottom:6px;">${cog}</div>${sg}<div class="desc">${ds[cog]}</div></div>`;
 }
 
-const PN = {ENTJ:'Командир',ENTP:'Полемист',INTJ:'Стратег',INTP:'Логик',ENFJ:'Тренер',ENFP:'Борец',INFJ:'Советник',INFP:'Медиатор',ESTJ:'Менеджер',ESTP:'Делец',ISTJ:'Администратор',ISTP:'Виртуоз',ESFJ:'Консул',ESFP:'Шоумен',ISFJ:'Защитник',ISFP:'Художник'};
+// ===== ОБНОВЛЁННЫЕ ПСИХОТИПЫ (ЭНИОСТИЛЬ) =====
+const PN = {
+  ENTJ:'Командир', ENTP:'Полемист', INTJ:'Архитектор', INTP:'Логик',
+  ENFJ:'Протагонист', ENFP:'Активист', INFJ:'Заступник', INFP:'Посредник',
+  ESTJ:'Менеджер', ESTP:'Предприниматель', ISTJ:'Логист', ISTP:'Виртуоз',
+  ESFJ:'Консул', ESFP:'Артист', ISFJ:'Защитник', ISFP:'Авантюрист'
+};
+
 const PD = {
-  ENTJ:`<p><strong>ENTJ — Командир.</strong> Прирождённый лидер с аналитическим умом. Язык привлекает системностью и применением в карьере и переговорах.</p><p><strong>Стиль:</strong> нужна чёткая программа с целями. Бизнес-английский, дебаты — твоя среда.</p><p><strong>Инструменты:</strong> Lingoda, Business English Pod, Harvard Business Review на английском.</p>`,
-  ENTP:`<p><strong>ENTP — Полемист.</strong> Любишь идеи и нестандартные подходы. Язык — инструмент обмена мыслями.</p><p><strong>Стиль:</strong> нужны дискуссии и темы, которые тебя задевают.</p><p><strong>Инструменты:</strong> TED Talks, философские подкасты, Toastmasters International.</p>`,
-  INTJ:`<p><strong>INTJ — Стратег.</strong> Независимый, системный. Язык — стратегический инструмент.</p><p><strong>Стиль:</strong> самостоятельная работа по чёткой системе. Терпеть не можешь пустую болтовню.</p><p><strong>Инструменты:</strong> Coursera, edX, сложная литература, индивидуальный тьютор.</p>`,
-  INTP:`<p><strong>INTP — Логик.</strong> Аналитик, теоретик. Язык — система, которую нужно понять, а не заучить.</p><p><strong>Стиль:</strong> нужно понимать «почему». Главный вызов — начать говорить.</p><p><strong>Инструменты:</strong> Linguriosity, NativLang, этимологические словари. Правило: 1 час теории = 1 час разговора.</p>`,
-  ENFJ:`<p><strong>ENFJ — Тренер.</strong> Вдохновляешь людей. Язык — мост к людям из других культур.</p><p><strong>Стиль:</strong> расцветаешь в группе и в эмоционально насыщенном контексте.</p><p><strong>Инструменты:</strong> HelloTalk, Tandem, волонтёрство с иностранцами.</p>`,
-  ENFP:`<p><strong>ENFP — Борец.</strong> Творческий, энтузиастичный. Загораешься быстро — и угасаешь, если скучно.</p><p><strong>Стиль:</strong> нужны разнообразие и личная связь с материалом. Зубрёжка убивает интерес.</p><p><strong>Инструменты:</strong> Duolingo Stories, языковые кафе, творческие проекты на английском.</p>`,
-  INFJ:`<p><strong>INFJ — Советник.</strong> Вдумчивый, глубокий. Язык — способ выразить важное и понять других.</p><p><strong>Стиль:</strong> тишина и глубина. Любишь читать и анализировать.</p><p><strong>Инструменты:</strong> литература, кино с глубоким сюжетом, pen-pal по интересующей теме.</p>`,
-  INFP:`<p><strong>INFP — Медиатор.</strong> Идеалист с богатым воображением. Язык — способ выразить себя.</p><p><strong>Стиль:</strong> запоминаешь через истории, эмоции и личные смыслы.</p><p><strong>Инструменты:</strong> английская поэзия и худлитература, фильмы без дубляжа, дневник на английском.</p>`,
-  ESTJ:`<p><strong>ESTJ — Менеджер.</strong> Практичный, организованный. Хочешь освоить язык эффективно.</p><p><strong>Стиль:</strong> чёткая структура, расписание, измеримый результат.</p><p><strong>Инструменты:</strong> Cambridge, IELTS, бизнес-английский, LinguaLeo с трекингом прогресса.</p>`,
-  ESTP:`<p><strong>ESTP — Делец.</strong> Энергичный, прагматичный. Язык — инструмент здесь и сейчас.</p><p><strong>Стиль:</strong> учишься в действии. Теория без практики — пустая трата времени.</p><p><strong>Инструменты:</strong> разговорные клубы, путешествия, английские мероприятия. Speaky или Tandem.</p>`,
-  ISTJ:`<p><strong>ISTJ — Администратор.</strong> Надёжный, методичный. Берёшься за изучение языка серьёзно.</p><p><strong>Стиль:</strong> система, последовательность, понятный прогресс.</p><p><strong>Инструменты:</strong> British Council, Anki с регулярным повторением, международные экзамены.</p>`,
-  ISTP:`<p><strong>ISTP — Виртуоз.</strong> Независимый, технический. Язык — навык, который нужно «собрать руками».</p><p><strong>Стиль:</strong> разбираешься самостоятельно. Групповые занятия кажутся лишними.</p><p><strong>Инструменты:</strong> технические YouTube-каналы, документация и форумы. Language Transfer.</p>`,
-  ESFJ:`<p><strong>ESFJ — Консул.</strong> Тёплый, заботливый. Язык — прежде всего связь с людьми.</p><p><strong>Стиль:</strong> расцветаешь в поддерживающей социальной среде.</p><p><strong>Инструменты:</strong> групповые курсы с куратором, языковые обмены, HelloTalk.</p>`,
-  ESFP:`<p><strong>ESFP — Шоумен.</strong> Энергичный, общительный. Язык — способ веселиться и знакомиться.</p><p><strong>Стиль:</strong> нужны движение, разнообразие, веселье.</p><p><strong>Инструменты:</strong> стендап-комедия на английском, разбор текстов песен, языковые вечеринки.</p>`,
-  ISFJ:`<p><strong>ISFJ — Защитник.</strong> Внимательный, терпеливый. Учишься тихо, но основательно.</p><p><strong>Стиль:</strong> повторение и закрепление. Нужна безопасная, доброжелательная обстановка.</p><p><strong>Инструменты:</strong> индивидуальные занятия с терпеливым преподавателем, онлайн-курсы в своём темпе.</p>`,
-  ISFP:`<p><strong>ISFP — Художник.</strong> Чуткий, творческий. Язык — способ ощутить мир другого человека.</p><p><strong>Стиль:</strong> учишься через красоту и ощущения. Сухая грамматика отталкивает.</p><p><strong>Инструменты:</strong> фильмы без дубляжа, английские блоги о творчестве. Изучай язык через любимый вид искусства.</p>`
+  ENTJ:`<p><strong>ENTJ — Командир (+Север-Восток).</strong> Прирождённый лидер с аналитическим умом. Язык привлекает системностью и применением в карьере и переговорах.</p><p><strong>Стиль:</strong> нужна чёткая программа с целями. Бизнес-английский, дебаты — твоя среда.</p><p><strong>Инструменты:</strong> Lingoda, Business English Pod, Harvard Business Review на английском.</p>`,
+  ENTP:`<p><strong>ENTP — Полемист (+Восток-Север).</strong> Любишь идеи и нестандартные подходы. Язык — инструмент обмена мыслями.</p><p><strong>Стиль:</strong> нужны дискуссии и темы, которые тебя задевают.</p><p><strong>Инструменты:</strong> TED Talks, философские подкасты, Toastmasters International.</p>`,
+  INTJ:`<p><strong>INTJ — Архитектор (-Север+Восток).</strong> Независимый, системный. Язык — стратегический инструмент.</p><p><strong>Стиль:</strong> самостоятельная работа по чёткой системе. Терпеть не можешь пустую болтовню.</p><p><strong>Инструменты:</strong> Coursera, edX, сложная литература, индивидуальный тьютор.</p>`,
+  INTP:`<p><strong>INTP — Логик (-Восток+Север).</strong> Аналитик, теоретик. Язык — система, которую нужно понять, а не заучить.</p><p><strong>Стиль:</strong> нужно понимать «почему». Главный вызов — начать говорить.</p><p><strong>Инструменты:</strong> Linguriosity, NativLang, этимологические словари. Правило: 1 час теории = 1 час разговора.</p>`,
+  ENFJ:`<p><strong>ENFJ — Протагонист (+Юг-Восток).</strong> Вдохновляешь людей. Язык — мост к людям из других культур.</p><p><strong>Стиль:</strong> расцветаешь в группе и в эмоционально насыщенном контексте.</p><p><strong>Инструменты:</strong> HelloTalk, Tandem, волонтёрство с иностранцами.</p>`,
+  ENFP:`<p><strong>ENFP — Активист (+Восток-Юг).</strong> Творческий, энтузиастичный. Загораешься быстро — и угасаешь, если скучно.</p><p><strong>Стиль:</strong> нужны разнообразие и личная связь с материалом. Зубрёжка убивает интерес.</p><p><strong>Инструменты:</strong> Duolingo Stories, языковые кафе, творческие проекты на английском.</p>`,
+  INFJ:`<p><strong>INFJ — Заступник (-Юг+Восток).</strong> Вдумчивый, глубокий. Язык — способ выразить важное и понять других.</p><p><strong>Стиль:</strong> тишина и глубина. Любишь читать и анализировать.</p><p><strong>Инструменты:</strong> литература, кино с глубоким сюжетом, pen-pal по интересующей теме.</p>`,
+  INFP:`<p><strong>INFP — Посредник (-Восток+Юг).</strong> Идеалист с богатым воображением. Язык — способ выразить себя.</p><p><strong>Стиль:</strong> запоминаешь через истории, эмоции и личные смыслы.</p><p><strong>Инструменты:</strong> английская поэзия и худлитература, фильмы без дубляжа, дневник на английском.</p>`,
+  ESTJ:`<p><strong>ESTJ — Менеджер (+Север-Запад).</strong> Практичный, организованный. Хочешь освоить язык эффективно.</p><p><strong>Стиль:</strong> чёткая структура, расписание, измеримый результат.</p><p><strong>Инструменты:</strong> Cambridge, IELTS, бизнес-английский, LinguaLeo с трекингом прогресса.</p>`,
+  ESTP:`<p><strong>ESTP — Предприниматель (+Запад-Север).</strong> Энергичный, прагматичный. Язык — инструмент здесь и сейчас.</p><p><strong>Стиль:</strong> учишься в действии. Теория без практики — пустая трата времени.</p><p><strong>Инструменты:</strong> разговорные клубы, путешествия, английские мероприятия. Speaky или Tandem.</p>`,
+  ISTJ:`<p><strong>ISTJ — Логист (-Север+Запад).</strong> Надёжный, методичный. Берёшься за изучение языка серьёзно.</p><p><strong>Стиль:</strong> система, последовательность, понятный прогресс.</p><p><strong>Инструменты:</strong> British Council, Anki с регулярным повторением, международные экзамены.</p>`,
+  ISTP:`<p><strong>ISTP — Виртуоз (-Запад+Север).</strong> Независимый, технический. Язык — навык, который нужно «собрать руками».</p><p><strong>Стиль:</strong> разбираешься самостоятельно. Групповые занятия кажутся лишними.</p><p><strong>Инструменты:</strong> технические YouTube-каналы, документация и форумы. Language Transfer.</p>`,
+  ESFJ:`<p><strong>ESFJ — Консул (+Юг-Запад).</strong> Тёплый, заботливый. Язык — прежде всего связь с людьми.</p><p><strong>Стиль:</strong> расцветаешь в поддерживающей социальной среде.</p><p><strong>Инструменты:</strong> групповые курсы с куратором, языковые обмены, HelloTalk.</p>`,
+  ESFP:`<p><strong>ESFP — Артист (+Запад-Юг).</strong> Энергичный, общительный. Язык — способ веселиться и знакомиться.</p><p><strong>Стиль:</strong> нужны движение, разнообразие, веселье.</p><p><strong>Инструменты:</strong> стендап-комедия на английском, разбор текстов песен, языковые вечеринки.</p>`,
+  ISFJ:`<p><strong>ISFJ — Защитник (-Юг+Запад).</strong> Внимательный, терпеливый. Учишься тихо, но основательно.</p><p><strong>Стиль:</strong> повторение и закрепление. Нужна безопасная, доброжелательная обстановка.</p><p><strong>Инструменты:</strong> индивидуальные занятия с терпеливым преподавателем, онлайн-курсы в своём темпе.</p>`,
+  ISFP:`<p><strong>ISFP — Авантюрист (-Запад+Юг).</strong> Чуткий, творческий. Язык — способ ощутить мир другого человека.</p><p><strong>Стиль:</strong> учишься через красоту и ощущения. Сухая грамматика отталкивает.</p><p><strong>Инструменты:</strong> фильмы без дубляжа, английские блоги о творчестве. Изучай язык через любимый вид искусства.</p>`
 };
 
 function c4(PT, ei, tL, fE, jP, pS, sC, nA){
