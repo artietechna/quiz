@@ -15,14 +15,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .b2{width:360px;height:360px;background:#bae6fd;opacity:.22;bottom:-90px;left:-90px;}
 .shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px 60px;}
 @keyframes rise{from{opacity:0;transform:translateY(20px) scale(.99);}to{opacity:1;transform:translateY(0) scale(1);}}
-@keyframes flow{from{background-position:0 0;}to{background-position:100% 0;}}
 
-/* INTRO */
-#intro{max-width:560px;width:100%;animation:rise .55s cubic-bezier(.4,0,.2,1) both;}
+/* INTRO — всё по центру */
+#intro{max-width:560px;width:100%;animation:rise .55s cubic-bezier(.4,0,.2,1) both;text-align:center;}
 .chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:8px 16px;font-size:14px;font-weight:700;color:var(--acc);letter-spacing:.04em;text-transform:uppercase;margin-bottom:24px;}
 .chip-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
-.i-title{font-size:clamp(32px,6vw,46px);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;}
+.i-title{font-size:clamp(32px,6vw,46px);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;display:inline-flex;align-items:center;gap:10px;}
 .i-sub{font-size:clamp(17px,3vw,20px);font-weight:300;color:var(--mut);margin-bottom:20px;line-height:1.6;}
 .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--brd),transparent);margin:20px 0;}
 .i-body{font-size:16px;line-height:1.85;color:var(--mut);margin-bottom:28px;}
@@ -60,7 +59,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 /* RESULTS */
 #resultsScreen{display:none;max-width:660px;width:100%;}
-.res-top{margin-bottom:32px;animation:rise .45s ease both;}
+.res-top{margin-bottom:32px;animation:rise .45s ease both;text-align:center;}
 .res-chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:6px 16px;font-size:13px;font-weight:700;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
 .res-title{font-size:clamp(32px,6vw,44px);font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.15;margin-bottom:6px;}
 .res-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -141,8 +140,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <div class="shell">
 
 <div id="intro">
-  <div class="chip"><span class="chip-dot"></span>психодиагностика</div>
-  <h1 class="i-title">Диагностический<br>опросник</h1>
+  <h1 class="i-title"><span class="chip"><span class="chip-dot"></span></span>Диагностический<br>опросник</h1>
   <p class="i-sub">Индивидуально-психологические особенности<br>и мотивация в изучении английского языка</p>
   <div class="divider"></div>
   <div class="i-body">
