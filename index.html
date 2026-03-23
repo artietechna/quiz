@@ -15,82 +15,84 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .b2{width:360px;height:360px;background:#bae6fd;opacity:.22;bottom:-90px;left:-90px;}
 .shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px 60px;}
 @keyframes rise{from{opacity:0;transform:translateY(20px) scale(.99);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes flow{from{background-position:0 0;}to{background-position:100% 0;}}
 
 /* INTRO */
 #intro{max-width:560px;width:100%;animation:rise .55s cubic-bezier(.4,0,.2,1) both;}
-.chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:6px 14px;font-size:13px;font-weight:700;color:var(--acc);letter-spacing:.04em;text-transform:uppercase;margin-bottom:24px;}
-.chip-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:pulse 2s ease-in-out infinite;}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:8px 16px;font-size:14px;font-weight:700;color:var(--acc);letter-spacing:.04em;text-transform:uppercase;margin-bottom:24px;}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
-.i-title{font-size:clamp(28px,6vw,42px);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;}
-.i-sub{font-size:clamp(15px,3vw,18px);font-weight:300;color:var(--mut);margin-bottom:20px;line-height:1.5;}
+.i-title{font-size:clamp(32px,6vw,46px);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;}
+.i-sub{font-size:clamp(17px,3vw,20px);font-weight:300;color:var(--mut);margin-bottom:20px;line-height:1.6;}
 .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--brd),transparent);margin:20px 0;}
-.i-body{font-size:15px;line-height:1.82;color:var(--mut);margin-bottom:28px;}
+.i-body{font-size:16px;line-height:1.85;color:var(--mut);margin-bottom:28px;}
 .i-body p{margin-bottom:5px;}
 .i-body p:last-child{margin-bottom:0;}
 .scale-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:30px;}
-.sc{display:flex;align-items:center;gap:10px;background:var(--sur);border:1.5px solid var(--brd);border-radius:12px;padding:12px 14px;font-size:14px;font-weight:500;color:var(--mut);}
-.sn{width:28px;height:28px;border-radius:8px;background:var(--grad);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.btn-go{width:100%;background:var(--grad);color:#fff;border:none;border-radius:16px;padding:18px 32px;font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 6px 28px rgba(108,71,255,.35);transition:transform .18s,box-shadow .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.sc{display:flex;align-items:center;gap:10px;background:var(--sur);border:1.5px solid var(--brd);border-radius:12px;padding:14px 16px;font-size:15px;font-weight:500;color:var(--mut);}
+.sn{width:32px;height:32px;border-radius:8px;background:var(--grad);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.btn-go{width:100%;background:var(--grad);color:#fff;border:none;border-radius:16px;padding:20px 32px;font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 6px 28px rgba(108,71,255,.35);transition:transform .18s,box-shadow .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
 .btn-go:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(108,71,255,.48);}
 .btn-go:active{transform:translateY(0);box-shadow:0 4px 16px rgba(108,71,255,.28);}
 
 /* QUIZ */
 #quizScreen{display:none;max-width:680px;width:100%;}
 .pb-wrap{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
-.pb-track{flex:1;height:6px;background:rgba(108,71,255,.1);border-radius:99px;overflow:hidden;}
-.pb-fill{height:100%;background:var(--grad);border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1);}
-.pb-lbl{font-size:14px;font-weight:700;color:var(--acc);white-space:nowrap;min-width:64px;text-align:right;font-variant-numeric:tabular-nums;}
-.q-card{background:var(--sur);border:1.5px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:var(--sh);padding:38px 34px 30px;animation:rise .3s cubic-bezier(.4,0,.2,1) both;}
+.pb-track{flex:1;height:8px;background:rgba(108,71,255,.08);border-radius:99px;overflow:hidden;position:relative;}
+.pb-fill{height:100%;background:var(--grad);border-radius:99px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.pb-lbl{font-size:15px;font-weight:700;color:var(--acc);white-space:nowrap;min-width:72px;text-align:right;font-variant-numeric:tabular-nums;}
+.q-card{background:var(--sur);border:1.5px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:var(--sh);padding:40px 36px 32px;animation:rise .4s cubic-bezier(.4,0,.2,1) both;}
 
 /* Вопрос */
-.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:24px;}
-.q-text{font-size:clamp(19px,3.5vw,22px);font-weight:600;line-height:1.55;color:var(--text);letter-spacing:-.01em;}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:26px;}
+.q-text{font-size:clamp(21px,3.5vw,24px);font-weight:600;line-height:1.55;color:var(--text);letter-spacing:-.01em;}
 
-/* Горизонтальные кнопки-квадратики с закруглением (ВЕЗДЕ одинаковые) */
-.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.opt{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg);border:2px solid var(--brd);border-radius:18px;padding:18px 10px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;color:var(--mut);transition:border-color .16s,background .16s,color .16s,transform .1s;text-align:center;justify-content:center;min-height:100px;}
+/* Горизонтальные кнопки - текст в 2 строки */
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.opt{display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--bg);border:2px solid var(--brd);border-radius:18px;padding:20px 10px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:600;color:var(--mut);transition:border-color .2s,background .2s,color .2s,transform .15s;text-align:center;justify-content:center;min-height:110px;}
 .opt:hover{border-color:var(--acc);background:rgba(108,71,255,.05);color:var(--text);}
-.opt:active{transform:scale(0.97);transition:transform .1s;}
+.opt:active{transform:scale(0.96);transition:transform .15s;}
 .opt.on{border-color:var(--acc);background:rgba(108,71,255,.08);color:var(--text);box-shadow:0 0 0 3px rgba(108,71,255,.2);}
-.ob{width:46px;height:46px;border-radius:12px;background:rgba(108,71,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--acc);transition:background .16s,color .16s;flex-shrink:0;}
+.ob{width:50px;height:50px;border-radius:12px;background:rgba(108,71,255,.1);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--acc);transition:background .2s,color .2s;flex-shrink:0;}
 .opt.on .ob{background:var(--grad);color:#fff;}
-.ol{font-size:13px;font-weight:500;line-height:1.3;text-align:center;}
+.ol{font-size:14px;font-weight:500;line-height:1.35;text-align:center;display:flex;flex-direction:column;gap:2px;}
+.ol span{display:block;}
 
 /* RESULTS */
 #resultsScreen{display:none;max-width:660px;width:100%;}
 .res-top{margin-bottom:32px;animation:rise .45s ease both;}
-.res-chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:5px 14px;font-size:12px;font-weight:700;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
-.res-title{font-size:clamp(28px,6vw,40px);font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.15;margin-bottom:6px;}
+.res-chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:6px 16px;font-size:13px;font-weight:700;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+.res-title{font-size:clamp(32px,6vw,44px);font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.15;margin-bottom:6px;}
 .res-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
 /* Анимация карточек результатов */
-.rc{background:var(--sur);border:1.5px solid var(--brd);border-radius:20px;padding:26px;margin-bottom:12px;box-shadow:0 2px 16px rgba(108,71,255,.07);position:relative;overflow:hidden;opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);}
+.rc{background:var(--sur);border:1.5px solid var(--brd);border-radius:20px;padding:28px;margin-bottom:12px;box-shadow:0 2px 16px rgba(108,71,255,.07);position:relative;overflow:hidden;opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);}
 .rc.visible{opacity:1;transform:translateY(0);}
 .rc-bar{position:absolute;top:0;left:0;width:100%;height:3px;background:var(--grad);border-radius:20px 20px 0 0;}
-.rc-lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:12px;}
+.rc-lbl{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:12px;}
 .srow{display:flex;align-items:baseline;gap:7px;margin-bottom:10px;}
-.snum{font-size:34px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.02em;}
-.sof{font-size:14px;color:#c4b5e0;font-weight:600;}
-.pill{display:inline-block;padding:4px 14px;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+.snum{font-size:36px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.02em;}
+.sof{font-size:15px;color:#c4b5e0;font-weight:600;}
+.pill{display:inline-block;padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
 .ph{background:#d1fae5;color:#065f46;}.pm{background:#fef9c3;color:#854d0e;}.pl{background:#fee2e2;color:#991b1b;}
 .segs{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;}
 .seg{flex:1;min-width:80px;}
-.sl{font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px;}
+.sl{font-size:13px;font-weight:700;color:var(--mut);margin-bottom:4px;}
 .st{height:5px;background:rgba(108,71,255,.09);border-radius:99px;overflow:hidden;}
 .sf{height:100%;background:var(--grad);border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1);}
-.desc{font-size:15px;line-height:1.8;color:#4e4470;}
+.desc{font-size:16px;line-height:1.85;color:#4e4470;}
 .desc p{margin-bottom:10px;}
 .desc p:last-child{margin-bottom:0;}
 .desc strong{color:var(--acc);font-weight:700;}
-.pt-tag{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;font-size:21px;font-weight:800;padding:10px 22px;border-radius:99px;margin-bottom:14px;letter-spacing:-.01em;}
-.pt-nm{font-size:14px;font-weight:500;opacity:.65;}
+.pt-tag{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;font-size:22px;font-weight:800;padding:10px 22px;border-radius:99px;margin-bottom:14px;letter-spacing:-.01em;}
+.pt-nm{font-size:15px;font-weight:500;opacity:.65;}
 .tips{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:10px;}
-.tip{display:flex;gap:11px;align-items:flex-start;font-size:15px;line-height:1.72;color:#4e4470;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease;}
+.tip{display:flex;gap:11px;align-items:flex-start;font-size:16px;line-height:1.75;color:#4e4470;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease;}
 .tip.visible{opacity:1;transform:translateX(0);}
-.tico{min-width:30px;height:30px;border-radius:8px;background:var(--pbg);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:1px;}
-.btn-print{display:block;margin:20px auto 0;background:transparent;border:1.5px solid var(--brd);border-radius:12px;padding:14px 28px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;color:var(--mut);cursor:pointer;transition:all .18s;opacity:0;animation:rise .5s ease .8s forwards;}
+.tico{min-width:32px;height:32px;border-radius:8px;background:var(--pbg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px;}
+.btn-print{display:block;margin:20px auto 0;background:transparent;border:1.5px solid var(--brd);border-radius:12px;padding:16px 28px;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:600;color:var(--mut);cursor:pointer;transition:all .18s;opacity:0;animation:rise .5s ease .8s forwards;}
 .btn-print:hover{border-color:var(--acc);color:var(--acc);background:var(--pbg);}
-#sav{display:none;position:fixed;inset:0;background:rgba(244,242,255,.8);backdrop-filter:blur(10px);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-size:16px;font-weight:600;color:var(--acc);}
+#sav{display:none;position:fixed;inset:0;background:rgba(244,242,255,.8);backdrop-filter:blur(10px);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-size:17px;font-weight:600;color:var(--acc);}
 #sav.on{display:flex;}
 .spin{width:40px;height:40px;border:3px solid rgba(108,71,255,.15);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
@@ -112,22 +114,24 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 }
 
 @media(max-width:768px){
-  .opts{grid-template-columns:repeat(2,1fr);gap:10px;}
-  .opt{padding:16px 8px;border-radius:16px;min-height:90px;}
-  .ob{width:42px;height:42px;font-size:17px;border-radius:10px;}
-  .ol{font-size:12px;}
-  .q-card{padding:26px 18px 22px;}
-  .q-text{font-size:18px;}
-  .rc{padding:20px 16px;}
+  .opts{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .opt{padding:18px 10px;border-radius:16px;min-height:100px;}
+  .ob{width:46px;height:46px;font-size:18px;border-radius:10px;}
+  .ol{font-size:13px;}
+  .q-card{padding:28px 20px 24px;}
+  .q-text{font-size:20px;}
+  .rc{padding:22px 18px;}
   .scale-grid{grid-template-columns:1fr;}
 }
 @media(max-width:480px){
   .opts{grid-template-columns:repeat(2,1fr);}
-  .opt{padding:14px 6px;min-height:85px;}
-  .ob{width:40px;height:40px;font-size:16px;border-radius:10px;}
-  .ol{font-size:11px;}
-  .q-text{font-size:17px;}
-  .pb-lbl{font-size:13px;}
+  .opt{padding:16px 8px;min-height:95px;}
+  .ob{width:44px;height:44px;font-size:17px;border-radius:10px;}
+  .ol{font-size:12px;}
+  .q-text{font-size:19px;}
+  .pb-lbl{font-size:14px;}
+  .i-title{font-size:28px;}
+  .i-sub{font-size:16px;}
 }
 </style>
 </head>
@@ -184,13 +188,22 @@ const MIN_ANSWER_TIME_MS = 800;
 
 // ===== ВОПРОСЫ И ЛОГИКА =====
 const Q=["Я чувствую себя уверенно, когда говорю на английском языке.","Я боюсь допустить ошибку, когда говорю на английском.","Я стараюсь избегать разговоров на английском языке.","Даже если я делаю ошибки, я продолжаю говорить на английском.","Мне трудно начать разговор на английском языке.","Я могу объяснить свою мысль на английском, даже если не знаю точного слова.","Мне важно хорошо владеть английским языком.","Я регулярно стараюсь улучшать свой уровень английского.","Я изучаю английский язык только из-за необходимости (работа, учёба).","Мне интересно узнавать новые слова и выражения на английском.","Я испытываю удовольствие, когда понимаю английскую речь.","Я хотел(а) бы говорить на английском свободно.","Мне проще запоминать информацию, когда я вижу её (схемы, таблицы, карточки).","Я лучше понимаю грамматику, когда вижу правила в виде схем или таблиц.","Мне помогают видео с субтитрами для изучения английского.","Мне проще запоминать информацию, когда я слышу её (аудио, подкасты).","Я хорошо запоминаю произношение, слушая носителей языка.","Мне нравится изучать английский через песни и аудиокниги.","Мне нужно что-то делать руками, чтобы информация запомнилась.","Я лучше запоминаю слова, когда записываю их или печатаю.","Мне помогает физическое движение или ролевые игры при изучении языка.","Я предпочитаю изучать английский в группе, общаясь с другими людьми.","Мне легче говорить на английском, когда вокруг много людей.","Я предпочитаю изучать английский самостоятельно, в тишине.","Мне нужно время подумать, прежде чем ответить на английском.","Для меня важно понимать грамматические правила и логику языка.","Я стараюсь анализировать структуру предложений и находить закономерности.","Мне проще запоминать через истории, эмоции и контекст общения.","Я лучше запоминаю фразы, если они связаны с переживанием или ситуацией.","Я составляю чёткий план изучения языка и следую ему.","Я предпочитаю иметь расписание занятий и регулярную практику.","Я изучаю английский спонтанно, когда возникает интерес или необходимость.","Мне нравится гибкость в обучении, без строгих планов.","Мне важны практические примеры и конкретные ситуации использования английского.","Я предпочитаю учить язык через реальные диалоги и повседневные фразы.","Мне интересны общие концепции языка, его история и связь с другими языками.","Я люблю размышлять о том, почему в языке используются те или иные конструкции.","Мне легче запоминать английские выражения через фильмы и сериалы.","Музыка на английском помогает мне лучше понимать язык.","Социальные сети могут быть полезным инструментом для изучения языка.","Я обращаю внимание на новые английские слова в интернете.","Мне интересно изучать разговорные выражения и современный английский.","Я считаю, что язык лучше изучается через реальные примеры общения.","Я стараюсь использовать английский язык вне занятий.","Я готов(а) общаться с иностранцами на английском языке.","Я использую английский при просмотре видео, фильмов или чтении.","Я хотел(а) бы чаще применять английский в реальной жизни.","Я стараюсь думать на английском языке.","Я чувствую, что английский может открыть для меня новые возможности."];
-const OD=[{v:1,l:"Совсем не согласен"},{v:2,l:"Скорее не согласен"},{v:3,l:"Скорее согласен"},{v:4,l:"Полностью согласен"}];
+
+// Варианты ответов с разбивкой на 2 строки
+const OD=[
+  {v:1,l1:"Совсем",l2:"не согласен"},
+  {v:2,l1:"Скорее",l2:"не согласен"},
+  {v:3,l1:"Скорее",l2:"согласен"},
+  {v:4,l1:"Полностью",l2:"согласен"}
+];
+
 const REV_IDX = [1,2,4,8,23,24,31,32];
 
 let cur=0, raw=new Array(49).fill(null);
 let startTime = null;
 let answerTimes = [];
 let lastAnswerTime = null;
+let isTransitioning = false;
 
 function go(){
   if(raw.filter(x=>x===null).length > 0 && cur === Q.length){
@@ -205,15 +218,23 @@ function go(){
 }
 
 function rq(i){
+  if(isTransitioning) return;
+  isTransitioning = true;
+  
   cur=i;
   const progressPercent = Math.round((i)/Q.length*100);
-  document.getElementById('pf').style.width = progressPercent + '%';
+  
+  // Плавное обновление прогресс-бара
+  const pf = document.getElementById('pf');
+  pf.style.transition = 'width 1.2s cubic-bezier(.4,0,.2,1)';
+  pf.style.width = progressPercent + '%';
+  
   document.getElementById('pl').textContent = `${i+1} / ${Q.length}`;
   
   const c=document.getElementById('qc');
   c.style.animation='none';
   void c.offsetWidth;
-  c.style.animation='rise .3s cubic-bezier(.4,0,.2,1) both';
+  c.style.animation='rise .4s cubic-bezier(.4,0,.2,1) both';
   
   document.getElementById('qt').textContent=Q[i];
   const el=document.getElementById('op');
@@ -224,11 +245,14 @@ function rq(i){
     b.className='opt'+(raw[i]===o.v?' on':'');
     b.setAttribute('type','button');
     b.setAttribute('aria-pressed', raw[i]===o.v);
-    b.setAttribute('aria-label', `${o.l} (балл ${o.v})`);
-    b.innerHTML = `<span class="ob">${o.v}</span><span class="ol">${o.l}</span>`;
+    b.setAttribute('aria-label', `${o.l1} ${o.l2} (балл ${o.v})`);
+    // Текст в 2 строки через span
+    b.innerHTML = `<span class="ob">${o.v}</span><span class="ol"><span>${o.l1}</span><span>${o.l2}</span></span>`;
     b.onclick=()=>pick(i,o.v);
     el.appendChild(b);
   });
+  
+  setTimeout(() => { isTransitioning = false; }, 400);
 }
 
 function pick(i,v){
@@ -246,6 +270,7 @@ function pick(i,v){
   raw[i]=v;
   document.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('on',OD[j].v===v));
   
+  // Плавный переход к следующему вопросу
   setTimeout(()=>{
     if(i+1 < Q.length){
       rq(i+1);
@@ -257,7 +282,7 @@ function pick(i,v){
         rq(i);
       }
     }
-  }, 265);
+  }, 300);
 }
 
 function sc(i){
