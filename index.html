@@ -132,17 +132,6 @@ const Q=["Я чувствую себя уверенно, когда говорю
 const OD=[{v:1,l:"Совсем не согласен"},{v:2,l:"Скорее не согласен"},{v:3,l:"Скорее согласен"},{v:4,l:"Полностью согласен"}];
 const REV=[2,3,5,9,24,25,32,33];
 let cur=0,raw=new Array(49).fill(null);
-  function animatePercent(el, target) {
-let current = parseInt(el.textContent) || 0;
-const step = () => {
-if (current < target) {
-current += Math.ceil((target - current) * 0.2);
-el.textContent = current + '%';
-requestAnimationFrame(step);
-}
-};
-step();
-}
 function go(){document.getElementById('intro').style.display='none';document.getElementById('quizScreen').style.display='block';rq(0);}
 function rq(i){
   cur=i;
