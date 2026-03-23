@@ -136,7 +136,7 @@ function go(){document.getElementById('intro').style.display='none';document.get
 function rq(i){
   cur=i;
   document.getElementById('pf').style.width=Math.round(i/Q.length*100)+'%';
-  document.getElementById('pb-lbl').textContent=Math.round((i+1)/QS.length*100)+'%';
+  document.getElementById('pl').textContent=(i+1)+' / '+Q.length;
   const c=document.getElementById('qc');c.style.animation='none';void c.offsetWidth;c.style.animation='rise .3s cubic-bezier(.4,0,.2,1) both';
   document.getElementById('qt').textContent=Q[i];
   const el=document.getElementById('op');el.innerHTML='';
