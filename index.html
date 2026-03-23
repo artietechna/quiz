@@ -236,7 +236,7 @@ function cr(PT,cog,conf){
    4. Скопируйте URL → вставьте в SU выше
 ══════════════════════════════════════════════ */
 function sv(data){
-  if(SU==="https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec")return;
+  if(SU===""||SU==="YOUR_APPS_SCRIPT_URL_HERE")return;
   document.getElementById('sav').classList.add('on');
   const form=new FormData();
   form.append('data', JSON.stringify(data));
