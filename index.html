@@ -213,7 +213,7 @@ function cr(PT,cog,conf){
      const ss = SpreadsheetApp.getActiveSpreadsheet();
      let sh = ss.getSheetByName("Ответы");
      if (!sh) sh = ss.insertSheet("Ответы");
-     const d = JSON.parse(e.postData.contents);
+     const d = JSON.parse(e.parameter.data);
      if (sh.getLastRow() === 0) {
        const h = ["Дата","Психотип","Когнитивный стиль",
          "Уверенность/24","Мотивация/24","Совр.методы/24","Практика/24",
@@ -236,9 +236,11 @@ function cr(PT,cog,conf){
    4. Скопируйте URL → вставьте в SU выше
 ══════════════════════════════════════════════ */
 function sv(data){
-  if(SU==="https://script.google.com/macros/s/AKfycbx5u2Ev4Irj6XRRYwIyohlWUr-npTDT9mFyLwf2bxc136INOR_2kQihLu2ZmDK3r8S4/exec")return;
+  if(SU==="https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec")return;
   document.getElementById('sav').classList.add('on');
-  fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+  const form=new FormData();
+  form.append('data', JSON.stringify(data));
+  fetch(SU,{method:'POST',mode:'no-cors',body:form})
     .finally(()=>document.getElementById('sav').classList.remove('on'));
 }
 </script>
