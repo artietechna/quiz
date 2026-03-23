@@ -136,9 +136,7 @@ function go(){document.getElementById('intro').style.display='none';document.get
 function rq(i){
   cur=i;
   document.getElementById('pf').style.width=Math.round(i/Q.length*100)+'%';
-  const percent=Math.round((i)/Q.length*100);
-  const el=document.getElementById('pl');
-  animatePercent(el,percent);
+  document.getElementById('pl').textContent=Math.round((i)/Q.length*100)+'%';
   const c=document.getElementById('qc');c.style.animation='none';void c.offsetWidth;c.style.animation='rise .3s cubic-bezier(.4,0,.2,1) both';
   document.getElementById('qt').textContent=Q[i];
   const el=document.getElementById('op');el.innerHTML='';
