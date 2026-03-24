@@ -1,890 +1,621 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Диагностический опросник</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg: #f4f2ff;
-      --sur: #ffffff;
-      --acc: #6c47ff;
-      --acc2: #3b9eff;
-      --text: #18102e;
-      --mut: #7a6f96;
-      --brd: rgba(108, 71, 255, 0.13);
-      --pbg: rgba(108, 71, 255, 0.08);
-      --grad: linear-gradient(135deg, #6c47ff 0%, #3b9eff 100%);
-      --sh: 0 4px 32px rgba(108, 71, 255, 0.10);
-    }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { font-size: 16px; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      background-image:
-        radial-gradient(ellipse 65% 55% at 92% 0%, rgba(108,71,255,0.14) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 45% at 5% 95%, rgba(59,158,255,0.12) 0%, transparent 60%);
-      background-attachment: fixed;
-    }
-    .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .b1 { width: 480px; height: 480px; background: #c4b5fd; opacity: 0.22; top: -140px; right: -110px; }
-    .b2 { width: 360px; height: 360px; background: #bae6fd; opacity: 0.22; bottom: -90px; left: -90px; }
-    .shell {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px 60px;
-    }
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(20px) scale(0.99); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Диагностический опросник</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f2ff;--sur:#ffffff;--acc:#6c47ff;--acc2:#3b9eff;--text:#18102e;--mut:#7a6f96;--brd:rgba(108,71,255,.13);--pbg:rgba(108,71,255,.08);--grad:linear-gradient(135deg,#6c47ff 0%,#3b9eff 100%);--sh:0 4px 32px rgba(108,71,255,.10);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;background-image:radial-gradient(ellipse 65% 55% at 92% 0%,rgba(108,71,255,.14) 0%,transparent 60%),radial-gradient(ellipse 50% 45% at 5% 95%,rgba(59,158,255,.12) 0%,transparent 60%);background-attachment:fixed;}
+.blob{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
+.b1{width:480px;height:480px;background:#c4b5fd;opacity:.22;top:-140px;right:-110px;}
+.b2{width:360px;height:360px;background:#bae6fd;opacity:.22;bottom:-90px;left:-90px;}
+.shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px 60px;}
+@keyframes rise{from{opacity:0;transform:translateY(20px) scale(.99);}to{opacity:1;transform:translateY(0) scale(1);}}
 
-    /* INTRO */
-    #intro { max-width: 560px; width: 100%; animation: rise 0.55s cubic-bezier(0.4, 0, 0.2, 1) both; }
-    .chip {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--pbg); border: 1px solid var(--brd);
-      border-radius: 99px; padding: 8px 16px;
-      font-size: 14px; font-weight: 700; color: var(--acc);
-      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 24px;
-    }
-    .chip-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--acc); animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }
-    .i-title {
-      font-size: clamp(32px, 6vw, 46px); font-weight: 800;
-      line-height: 1.15; letter-spacing: -0.02em;
-      color: var(--text); margin-bottom: 6px;
-    }
-    .i-sub {
-      font-size: clamp(17px, 3vw, 20px); font-weight: 300;
-      color: var(--mut); margin-bottom: 20px; line-height: 1.6;
-    }
-    .divider {
-      width: 100%; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--brd), transparent);
-      margin: 20px 0;
-    }
-    .i-body { font-size: 16px; line-height: 1.85; color: var(--mut); margin-bottom: 28px; }
-    .i-body p { margin-bottom: 5px; }
-    .i-body p:last-child { margin-bottom: 0; }
-    .scale-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 30px; }
-    .sc {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--sur); border: 1.5px solid var(--brd);
-      border-radius: 12px; padding: 14px 16px;
-      font-size: 15px; font-weight: 500; color: var(--mut);
-    }
-    .sn {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: var(--grad); color: #fff;
-      font-size: 14px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .btn-go {
-      width: 100%; background: var(--grad); color: #fff; border: none;
-      border-radius: 16px; padding: 20px 32px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 18px; font-weight: 700; cursor: pointer;
-      box-shadow: 0 6px 28px rgba(108, 71, 255, 0.35);
-      transition: transform 0.18s, box-shadow 0.18s;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .btn-go:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(108, 71, 255, 0.48); }
-    .btn-go:active { transform: translateY(0); box-shadow: 0 4px 16px rgba(108, 71, 255, 0.28); }
+/* INTRO */
+#intro{max-width:560px;width:100%;animation:rise .55s cubic-bezier(.4,0,.2,1) both;}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:8px 16px;font-size:14px;font-weight:700;color:var(--acc);letter-spacing:.04em;text-transform:uppercase;margin-bottom:24px;}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+.i-title{font-size:clamp(32px,6vw,46px);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:6px;}
+.i-sub{font-size:clamp(17px,3vw,20px);font-weight:300;color:var(--mut);margin-bottom:20px;line-height:1.6;}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--brd),transparent);margin:20px 0;}
+.i-body{font-size:16px;line-height:1.85;color:var(--mut);margin-bottom:28px;}
+.i-body p{margin-bottom:5px;}
+.i-body p:last-child{margin-bottom:0;}
+.scale-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:30px;}
+.sc{display:flex;align-items:center;gap:10px;background:var(--sur);border:1.5px solid var(--brd);border-radius:12px;padding:14px 16px;font-size:15px;font-weight:500;color:var(--mut);}
+.sn{width:32px;height:32px;border-radius:8px;background:var(--grad);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.btn-go{width:100%;background:var(--grad);color:#fff;border:none;border-radius:16px;padding:20px 32px;font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 6px 28px rgba(108,71,255,.35);transition:transform .18s,box-shadow .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(108,71,255,.48);}
+.btn-go:active{transform:translateY(0);box-shadow:0 4px 16px rgba(108,71,255,.28);}
 
-    /* QUIZ */
-    #quizScreen { display: none; max-width: 680px; width: 100%; }
-    .pb-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; }
-    .pb-track { flex: 1; height: 8px; background: rgba(108, 71, 255, 0.08); border-radius: 99px; overflow: hidden; position: relative; }
-    .pb-fill { height: 100%; background: var(--grad); border-radius: 99px; width: 0%; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
-    .pb-lbl { font-size: 15px; font-weight: 700; color: var(--acc); white-space: nowrap; min-width: 72px; text-align: right; font-variant-numeric: tabular-nums; }
-    .q-card {
-      background: var(--sur); border: 1.5px solid rgba(255, 255, 255, 0.85);
-      border-radius: 24px; box-shadow: var(--sh);
-      padding: 40px 36px 32px; animation: rise 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
-    }
-    .q-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 26px; }
-    .q-text {
-      font-size: clamp(21px, 3.5vw, 24px); font-weight: 600;
-      line-height: 1.55; color: var(--text); letter-spacing: -0.01em;
-    }
-    .opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .opt {
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-      background: var(--bg); border: 2px solid var(--brd);
-      border-radius: 18px; padding: 20px 10px; cursor: pointer;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px; font-weight: 600; color: var(--mut);
-      transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
-      text-align: center; justify-content: center; min-height: 110px;
-    }
-    .opt:hover { border-color: var(--acc); background: rgba(108, 71, 255, 0.05); color: var(--text); }
-    .opt:active { transform: scale(0.96); transition: transform 0.15s; }
-    .opt.on {
-      border-color: var(--acc); background: rgba(108, 71, 255, 0.08);
-      color: var(--text); box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.2);
-    }
-    .ob {
-      width: 50px; height: 50px; border-radius: 12px;
-      background: rgba(108, 71, 255, 0.1);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; font-weight: 800; color: var(--acc);
-      transition: background 0.2s, color 0.2s; flex-shrink: 0;
-    }
-    .opt.on .ob { background: var(--grad); color: #fff; }
-    .ol { font-size: 14px; font-weight: 500; line-height: 1.35; text-align: center; display: flex; flex-direction: column; gap: 2px; }
-    .ol span { display: block; }
+/* QUIZ */
+#quizScreen{display:none;max-width:680px;width:100%;}
+.pb-wrap{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.pb-track{flex:1;height:8px;background:rgba(108,71,255,.08);border-radius:99px;overflow:hidden;position:relative;}
+.pb-fill{height:100%;background:var(--grad);border-radius:99px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.pb-lbl{font-size:15px;font-weight:700;color:var(--acc);white-space:nowrap;min-width:72px;text-align:right;font-variant-numeric:tabular-nums;}
+.q-card{background:var(--sur);border:1.5px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:var(--sh);padding:40px 36px 32px;animation:rise .4s cubic-bezier(.4,0,.2,1) both;}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:26px;}
+.q-text{font-size:clamp(21px,3.5vw,24px);font-weight:600;line-height:1.55;color:var(--text);letter-spacing:-.01em;}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.opt{display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--bg);border:2px solid var(--brd);border-radius:18px;padding:20px 10px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:600;color:var(--mut);transition:border-color .2s,background .2s,color .2s,transform .15s;text-align:center;justify-content:center;min-height:110px;}
+.opt:hover{border-color:var(--acc);background:rgba(108,71,255,.05);color:var(--text);}
+.opt:active{transform:scale(0.96);transition:transform .15s;}
+.opt.on{border-color:var(--acc);background:rgba(108,71,255,.08);color:var(--text);box-shadow:0 0 0 3px rgba(108,71,255,.2);}
+.ob{width:50px;height:50px;border-radius:12px;background:rgba(108,71,255,.1);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--acc);transition:background .2s,color .2s;flex-shrink:0;}
+.opt.on .ob{background:var(--grad);color:#fff;}
+.ol{font-size:14px;font-weight:500;line-height:1.35;text-align:center;display:flex;flex-direction:column;gap:2px;}
+.ol span{display:block;}
 
-    /* RESULTS */
-    #resultsScreen { display: none; max-width: 660px; width: 100%; }
-    .res-top { margin-bottom: 32px; animation: rise 0.45s ease both; }
-    .res-chip {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--pbg); border: 1px solid var(--brd);
-      border-radius: 99px; padding: 6px 16px;
-      font-size: 13px; font-weight: 700; color: var(--acc);
-      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
-    }
-    .res-title {
-      font-size: clamp(32px, 6vw, 44px); font-weight: 800;
-      letter-spacing: -0.02em; color: var(--text); line-height: 1.15; margin-bottom: 6px;
-    }
-    .res-title span {
-      background: var(--grad); -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .rc {
-      background: var(--sur); border: 1.5px solid var(--brd);
-      border-radius: 20px; padding: 28px; margin-bottom: 12px;
-      box-shadow: 0 2px 16px rgba(108, 71, 255, 0.07);
-      position: relative; overflow: hidden;
-      opacity: 0; transform: translateY(30px);
-      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .rc.visible { opacity: 1; transform: translateY(0); }
-    .rc-bar {
-      position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-      background: var(--grad); border-radius: 20px 20px 0 0;
-    }
-    .rc-lbl {
-      font-size: 12px; font-weight: 800; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--acc); margin-bottom: 12px;
-    }
-    .srow { display: flex; align-items: baseline; gap: 7px; margin-bottom: 10px; }
-    .snum { font-size: 36px; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -0.02em; }
-    .sof { font-size: 15px; color: #c4b5e0; font-weight: 600; }
-    .pill {
-      display: inline-block; padding: 4px 14px; border-radius: 99px;
-      font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
-    }
-    .ph { background: #d1fae5; color: #065f46; }
-    .pm { background: #fef9c3; color: #854d0e; }
-    .pl { background: #fee2e2; color: #991b1b; }
-    .segs { display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
-    .seg { flex: 1; min-width: 80px; }
-    .sl { font-size: 13px; font-weight: 700; color: var(--mut); margin-bottom: 4px; }
-    .st { height: 5px; background: rgba(108, 71, 255, 0.09); border-radius: 99px; overflow: hidden; }
-    .sf { height: 100%; background: var(--grad); border-radius: 99px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-    .desc { font-size: 16px; line-height: 1.85; color: #4e4470; }
-    .desc p { margin-bottom: 10px; }
-    .desc p:last-child { margin-bottom: 0; }
-    .desc strong { color: var(--acc); font-weight: 700; }
-    .pt-tag {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--text); color: #fff;
-      font-size: 22px; font-weight: 800; padding: 10px 22px;
-      border-radius: 99px; margin-bottom: 14px;
-      letter-spacing: -0.01em; flex-wrap: wrap; justify-content: center;
-    }
-    .pt-nm { font-size: 15px; font-weight: 500; opacity: 0.9; }
-    .pt-enio { font-size: 13px; font-weight: 400; opacity: 0.75; margin-left: 8px; }
-    .tips { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-top: 10px; }
-    .tip {
-      display: flex; gap: 11px; align-items: flex-start;
-      font-size: 16px; line-height: 1.75; color: #4e4470;
-      opacity: 0; transform: translateX(-10px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .tip.visible { opacity: 1; transform: translateX(0); }
-    .tico {
-      min-width: 32px; height: 32px; border-radius: 8px;
-      background: var(--pbg); display: flex; align-items: center; justify-content: center;
-      font-size: 16px; flex-shrink: 0; margin-top: 1px;
-    }
+/* RESULTS */
+#resultsScreen{display:none;max-width:660px;width:100%;}
+.res-top{margin-bottom:32px;animation:rise .45s ease both;}
+.res-chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:6px 16px;font-size:13px;font-weight:700;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+.res-title{font-size:clamp(32px,6vw,44px);font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.15;margin-bottom:6px;}
+.res-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rc{background:var(--sur);border:1.5px solid var(--brd);border-radius:20px;padding:28px;margin-bottom:12px;box-shadow:0 2px 16px rgba(108,71,255,.07);position:relative;overflow:hidden;opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);}
+.rc.visible{opacity:1;transform:translateY(0);}
+.rc-bar{position:absolute;top:0;left:0;width:100%;height:3px;background:var(--grad);border-radius:20px 20px 0 0;}
+.rc-lbl{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:12px;}
+.srow{display:flex;align-items:baseline;gap:7px;margin-bottom:10px;}
+.snum{font-size:36px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.02em;}
+.sof{font-size:15px;color:#c4b5e0;font-weight:600;}
+.pill{display:inline-block;padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+.ph{background:#d1fae5;color:#065f46;}.pm{background:#fef9c3;color:#854d0e;}.pl{background:#fee2e2;color:#991b1b;}
+.segs{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;}
+.seg{flex:1;min-width:80px;}
+.sl{font-size:13px;font-weight:700;color:var(--mut);margin-bottom:4px;}
+.st{height:5px;background:rgba(108,71,255,.09);border-radius:99px;overflow:hidden;}
+.sf{height:100%;background:var(--grad);border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.desc{font-size:16px;line-height:1.85;color:#4e4470;}
+.desc p{margin-bottom:10px;}
+.desc p:last-child{margin-bottom:0;}
+.desc strong{color:var(--acc);font-weight:700;}
+.pt-tag{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;font-size:22px;font-weight:800;padding:10px 22px;border-radius:99px;margin-bottom:14px;letter-spacing:-.01em;flex-wrap:wrap;justify-content:center;}
+.pt-nm{font-size:15px;font-weight:500;opacity:.9;}
+.pt-enio{font-size:13px;font-weight:400;opacity:.75;margin-left:8px;}
+.tips{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:10px;}
+.tip{display:flex;gap:11px;align-items:flex-start;font-size:16px;line-height:1.75;color:#4e4470;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease;}
+.tip.visible{opacity:1;transform:translateX(0);}
+.tico{min-width:32px;height:32px;border-radius:8px;background:var(--pbg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px;}
 
-    /* Save/Copy Buttons */
-    .save-section {
-      margin-top: 24px; padding-top: 20px;
-      border-top: 1px solid var(--brd);
-    }
-    .btn-save, .btn-copy {
-      width: 100%; border: none; border-radius: 16px;
-      padding: 16px 24px; font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: transform 0.18s, box-shadow 0.18s; margin-bottom: 12px;
-    }
-    .btn-save {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #fff; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
-    }
-    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(16, 185, 129, 0.35); }
-    .btn-copy {
-      background: var(--sur); color: var(--acc);
-      border: 2px solid var(--brd);
-    }
-    .btn-copy:hover { border-color: var(--acc); background: rgba(108, 71, 255, 0.05); }
-    .copy-success {
-      display: none; color: #10b981; font-size: 14px;
-      font-weight: 600; text-align: center; margin-top: 8px;
-      animation: rise 0.3s ease;
-    }
+/* Eniostyle legend */
+.enio-legend{background:var(--pbg);border:1px solid var(--brd);border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:var(--mut);}
+.enio-legend strong{color:var(--acc);}
+.enio-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;}
+.enio-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;}
+.dot-plus{background:var(--grad);}
+.dot-minus{background:rgba(108,71,255,.3);}
 
-    /* Eniostyle Legend */
-    .enio-legend {
-      background: var(--pbg); border: 1px solid var(--brd);
-      border-radius: 12px; padding: 16px; margin: 16px 0;
-      font-size: 13px; color: var(--mut);
-    }
-    .enio-legend strong { color: var(--acc); }
-    .enio-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
-    .enio-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-    .dot-plus { background: var(--grad); }
-    .dot-minus { background: rgba(108, 71, 255, 0.3); }
+@media(max-width:768px){
+  .opts{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .opt{padding:18px 10px;border-radius:16px;min-height:100px;}
+  .ob{width:46px;height:46px;font-size:18px;border-radius:10px;}
+  .ol{font-size:13px;}
+  .q-card{padding:28px 20px 24px;}
+  .q-text{font-size:20px;}
+  .rc{padding:22px 18px;}
+  .scale-grid{grid-template-columns:1fr;}
+  .pt-tag{font-size:20px;padding:8px 18px;}
+}
+@media(max-width:480px){
+  .opts{grid-template-columns:repeat(2,1fr);}
+  .opt{padding:16px 8px;min-height:95px;}
+  .ob{width:44px;height:44px;font-size:17px;border-radius:10px;}
+  .ol{font-size:12px;}
+  .q-text{font-size:19px;}
+  .pb-lbl{font-size:14px;}
+  .i-title{font-size:28px;}
+  .i-sub{font-size:16px;}
+  .pt-tag{font-size:18px;flex-direction:column;gap:4px;}
+  .pt-enio{margin-left:0;}
+}
 
-    @media (max-width: 768px) {
-      .opts { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .opt { padding: 18px 10px; border-radius: 16px; min-height: 100px; }
-      .ob { width: 46px; height: 46px; font-size: 18px; border-radius: 10px; }
-      .ol { font-size: 13px; }
-      .q-card { padding: 28px 20px 24px; }
-      .q-text { font-size: 20px; }
-      .rc { padding: 22px 18px; }
-      .scale-grid { grid-template-columns: 1fr; }
-      .pt-tag { font-size: 20px; padding: 8px 18px; }
-    }
-    @media (max-width: 480px) {
-      .opts { grid-template-columns: repeat(2, 1fr); }
-      .opt { padding: 16px 8px; min-height: 95px; }
-      .ob { width: 44px; height: 44px; font-size: 17px; border-radius: 10px; }
-      .ol { font-size: 12px; }
-      .q-text { font-size: 19px; }
-      .pb-lbl { font-size: 14px; }
-      .i-title { font-size: 28px; }
-      .i-sub { font-size: 16px; }
-      .pt-tag { font-size: 18px; flex-direction: column; gap: 4px; }
-      .pt-enio { margin-left: 0; }
-    }
-  </style>
+  /* ===== КНОПКА СОХРАНЕНИЯ PDF ===== */
+.save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #6c47ff 0%, #3b9eff 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+  margin: 24px 0 12px;
+  box-shadow: 0 4px 20px rgba(108, 71, 255, 0.25);
+  width: 100%;
+  max-width: 320px;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(108, 71, 255, 0.35);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Стили для печати (если пользователь выберет "Печать → Сохранить как PDF") */
+@media print {
+  .blob, .btn-go, .btn-save, .btn-copy, #intro, #quizScreen {
+    display: none !important;
+  }
+  #resultsScreen {
+    display: block !important;
+    padding: 20px !important;
+    background: white !important;
+  }
+  .rc {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+  
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
 </head>
 <body>
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="shell">
-    <!-- INTRO -->
-    <div id="intro">
-      <div class="chip"><span class="chip-dot"></span>психодиагностика</div>
-      <h1 class="i-title">Диагностический<br>опросник</h1>
-      <p class="i-sub">Индивидуально-психологические особенности и мотивация в изучении английского языка</p>
-      <div class="divider"></div>
-      <div class="i-body">
-        <p>49 утверждений о том, как ты воспринимаешь, запоминаешь и чувствуешь язык.</p>
-        <p>Отвечай искренне, выбирая тот вариант, который наиболее точно отражает твоё мнение.</p>
-        <p>Узнай свой психотип, профиль Эниостиля и получи персональные советы.</p>
-      </div>
-      <div class="scale-grid">
-        <div class="sc"><span class="sn">1</span>Совсем не согласен</div>
-        <div class="sc"><span class="sn">2</span>Скорее не согласен</div>
-        <div class="sc"><span class="sn">3</span>Скорее согласен</div>
-        <div class="sc"><span class="sn">4</span>Полностью согласен</div>
-      </div>
-      <button class="btn-go" onclick="startQuiz()">Начать тест →</button>
-    </div>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div class="shell">
 
-    <!-- QUIZ -->
-    <div id="quizScreen">
-      <div class="pb-wrap">
-        <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
-        <div class="pb-lbl" id="pbLabel">1 / 49</div>
-      </div>
-      <div class="q-card" id="qCard">
-        <div class="q-header">
-          <div class="q-text" id="qText"></div>
-        </div>
-        <div class="opts" id="qOptions"></div>
-      </div>
-    </div>
-
-    <!-- RESULTS -->
-    <div id="resultsScreen">
-      <div class="res-top">
-        <div class="res-chip">✦ результаты</div>
-        <h2 class="res-title">Вот твой <span>профиль</span></h2>
-      </div>
-      <div id="resultsContainer"></div>
-
-      <!-- Save/Copy Section -->
-      <div class="save-section">
-        <button class="btn-save" onclick="shareResults()">📤 Поделиться результатами</button>
-        <button class="btn-copy" onclick="copyResults()">📋 Скопировать текст</button>
-        <div class="copy-success" id="copyMsg">✓ Скопировано!</div>
-      </div>
-    </div>
+<div id="intro">
+  <div class="chip"><span class="chip-dot"></span>психодиагностика</div>
+  <h1 class="i-title">Диагностический<br>опросник</h1>
+  <p class="i-sub">Индивидуально-психологические особенности<br>и мотивация в изучении английского языка</p>
+  <div class="divider"></div>
+  <div class="i-body">
+    <p>49 утверждений о том, как ты воспринимаешь, запоминаешь и чувствуешь язык.</p>
+    <p>Отвечай искренне, выбирая тот вариант, который наиболее точно отражает твоё мнение.</p>
+    <p>Узнай свой психотип, профиль Эниостиля и получи персональные советы.</p>
   </div>
+  <div class="scale-grid">
+    <div class="sc"><span class="sn">1</span>Совсем не согласен</div>
+    <div class="sc"><span class="sn">2</span>Скорее не согласен</div>
+    <div class="sc"><span class="sn">3</span>Скорее согласен</div>
+    <div class="sc"><span class="sn">4</span>Полностью согласен</div>
+  </div>
+  <button class="btn-go" onclick="go()" aria-label="Начать тестирование">Начать тест &nbsp;→</button>
+</div>
 
-  <script>
-    // ===== КОНФИГУРАЦИЯ =====
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec";
+<div id="quizScreen">
+  <div class="pb-wrap"><div class="pb-track"><div class="pb-fill" id="pf"></div></div><div class="pb-lbl" id="pl">1 / 49</div></div>
+  <div class="q-card" id="qc">
+    <div class="q-header">
+      <div class="q-text" id="qt"></div>
+    </div>
+    <div class="opts" id="op"></div>
+  </div>
+</div>
 
-    // ===== ВОПРОСЫ =====
-    const QUESTIONS = [
-      "Я чувствую себя уверенно, когда говорю на английском языке.",
-      "Я боюсь допустить ошибку, когда говорю на английском.",
-      "Я стараюсь избегать разговоров на английском языке.",
-      "Даже если я делаю ошибки, я продолжаю говорить на английском.",
-      "Мне трудно начать разговор на английском языке.",
-      "Мне важно хорошо владеть английским языком.",
-      "Я регулярно стараюсь улучшать свой уровень английского.",
-      "Я изучаю английский язык только из-за необходимости (работа, учёба).",
-      "Мне интересно узнавать новые слова и выражения на английском.",
-      "Я испытываю удовольствие, когда понимаю английскую речь.",
-      "Я хотел(а) бы говорить на английском свободно.",
-      "Мне проще запоминать информацию, когда я вижу её (схемы, таблицы, карточки).",
-      "Я лучше понимаю грамматику, когда вижу правила в виде схем или таблиц.",
-      "Мне помогают видео с субтитрами для изучения английского.",
-      "Мне проще запоминать информацию, когда я слышу её (аудио, подкасты).",
-      "Я хорошо запоминаю произношение, слушая носителей языка.",
-      "Мне нравится изучать английский через песни и аудиокниги.",
-      "Мне нужно что-то делать руками, чтобы информация запомнилась.",
-      "Я лучше запоминаю слова, когда записываю их или печатаю.",
-      "Мне помогает физическое движение или ролевые игры при изучении языка.",
-      "Я предпочитаю изучать английский в группе, общаясь с другими людьми.",
-      "Мне легче говорить на английском, когда вокруг много людей.",
-      "Я предпочитаю изучать английский самостоятельно, в тишине.",
-      "Мне нужно время подумать, прежде чем ответить на английском.",
-      "Для меня важно понимать грамматические правила и логику языка.",
-      "Я стараюсь анализировать структуру предложений и находить закономерности.",
-      "Мне проще запоминать через истории, эмоции и контекст общения.",
-      "Я лучше запоминаю фразы, если они связаны с переживанием или ситуацией.",
-      "Я составляю чёткий план изучения языка и следую ему.",
-      "Я предпочитаю иметь расписание занятий и регулярную практику.",
-      "Я изучаю английский спонтанно, когда возникает интерес или необходимость.",
-      "Мне нравится гибкость в обучении, без строгих планов.",
-      "Мне важны практические примеры и конкретные ситуации использования английского.",
-      "Я предпочитаю учить язык через реальные диалоги и повседневные фразы.",
-      "Мне интересны общие концепции языка, его история и связь с другими языками.",
-      "Я люблю размышлять о том, почему в языке используются те или иные конструкции.",
-      "Мне легче запоминать английские выражения через фильмы и сериалы.",
-      "Музыка на английском помогает мне лучше понимать язык.",
-      "Социальные сети могут быть полезным инструментом для изучения языка.",
-      "Я обращаю внимание на новые английские слова в интернете.",
-      "Мне интересно изучать разговорные выражения и современный английский.",
-      "Я считаю, что язык лучше изучается через реальные примеры общения.",
-      "Я стараюсь использовать английский язык вне занятий.",
-      "Я готов(а) общаться с иностранцами на английском языке.",
-      "Я использую английский при просмотре видео, фильмов или чтении.",
-      "Я хотел(а) бы чаще применять английский в реальной жизни.",
-      "Я стараюсь думать на английском языке.",
-      "Я чувствую, что английский может открыть для меня новые возможности."
-    ];
+<div id="resultsScreen">
+  <div class="res-top">
+    <div class="res-chip">✦ результаты</div>
+    <h2 class="res-title">Вот твой<br><span>профиль</span></h2>
+  </div>
+  <div id="rc"></div>
 
-    const OPTIONS = [
-      { v: 1, l1: "Совсем", l2: "не согласен" },
-      { v: 2, l1: "Скорее", l2: "не согласен" },
-      { v: 3, l1: "Скорее", l2: "согласен" },
-      { v: 4, l1: "Полностью", l2: "согласен" }
-    ];
+  <!-- Кнопка сохранения PDF -->
+<button id="savePdfBtn" class="save-btn">
+  💾 Сохранить результат
+</button>
+  
+</div>
+<script>
+// ===== КОНФИГУРАЦИЯ =====
+// 🔧 ВАЖНО: Вставьте сюда ваш реальный URL Google Apps Script без пробелов!
+const SU="https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec";
 
-    const REVERSED = [1, 2, 4, 8, 23, 24, 31, 32];
+// ===== ВОПРОСЫ =====
+const Q=["Я чувствую себя уверенно, когда говорю на английском языке.","Я боюсь допустить ошибку, когда говорю на английском.","Я стараюсь избегать разговоров на английском языке.","Даже если я делаю ошибки, я продолжаю говорить на английском.","Мне трудно начать разговор на английском языке.","Я могу объяснить свою мысль на английском, даже если не знаю точного слова.","Мне важно хорошо владеть английским языком.","Я регулярно стараюсь улучшать свой уровень английского.","Я изучаю английский язык только из-за необходимости (работа, учёба).","Мне интересно узнавать новые слова и выражения на английском.","Я испытываю удовольствие, когда понимаю английскую речь.","Я хотел(а) бы говорить на английском свободно.","Мне проще запоминать информацию, когда я вижу её (схемы, таблицы, карточки).","Я лучше понимаю грамматику, когда вижу правила в виде схем или таблиц.","Мне помогают видео с субтитрами для изучения английского.","Мне проще запоминать информацию, когда я слышу её (аудио, подкасты).","Я хорошо запоминаю произношение, слушая носителей языка.","Мне нравится изучать английский через песни и аудиокниги.","Мне нужно что-то делать руками, чтобы информация запомнилась.","Я лучше запоминаю слова, когда записываю их или печатаю.","Мне помогает физическое движение или ролевые игры при изучении языка.","Я предпочитаю изучать английский в группе, общаясь с другими людьми.","Мне легче говорить на английском, когда вокруг много людей.","Я предпочитаю изучать английский самостоятельно, в тишине.","Мне нужно время подумать, прежде чем ответить на английском.","Для меня важно понимать грамматические правила и логику языка.","Я стараюсь анализировать структуру предложений и находить закономерности.","Мне проще запоминать через истории, эмоции и контекст общения.","Я лучше запоминаю фразы, если они связаны с переживанием или ситуацией.","Я составляю чёткий план изучения языка и следую ему.","Я предпочитаю иметь расписание занятий и регулярную практику.","Я изучаю английский спонтанно, когда возникает интерес или необходимость.","Мне нравится гибкость в обучении, без строгих планов.","Мне важны практические примеры и конкретные ситуации использования английского.","Я предпочитаю учить язык через реальные диалоги и повседневные фразы.","Мне интересны общие концепции языка, его история и связь с другими языками.","Я люблю размышлять о том, почему в языке используются те или иные конструкции.","Мне легче запоминать английские выражения через фильмы и сериалы.","Музыка на английском помогает мне лучше понимать язык.","Социальные сети могут быть полезным инструментом для изучения языка.","Я обращаю внимание на новые английские слова в интернете.","Мне интересно изучать разговорные выражения и современный английский.","Я считаю, что язык лучше изучается через реальные примеры общения.","Я стараюсь использовать английский язык вне занятий.","Я готов(а) общаться с иностранцами на английском языке.","Я использую английский при просмотре видео, фильмов или чтении.","Я хотел(а) бы чаще применять английский в реальной жизни.","Я стараюсь думать на английском языке.","Я чувствую, что английский может открыть для меня новые возможности."];
 
-    let current = 0;
-    let answers = new Array(QUESTIONS.length).fill(null);
-    let startTime = null;
-    let isTransitioning = false;
-    let finalResults = null;
+const OD=[
+  {v:1,l1:"Совсем",l2:"не согласен"},
+  {v:2,l1:"Скорее",l2:"не согласен"},
+  {v:3,l1:"Скорее",l2:"согласен"},
+  {v:4,l1:"Полностью",l2:"согласен"}
+];
 
-    // ===== ЗАПУСК ТЕСТА =====
-    function startQuiz() {
-      startTime = Date.now();
-      document.getElementById('intro').style.display = 'none';
-      document.getElementById('quizScreen').style.display = 'block';
-      renderQuestion(0);
-    }
+const REV_IDX = [1,2,4,8,23,24,31,32];
 
-    // ===== ОТРИСОВКА ВОПРОСА =====
-    function renderQuestion(index) {
-      if (isTransitioning) return;
-      isTransitioning = true;
-      current = index;
+let cur=0, raw=new Array(49).fill(null);
+let startTime = null;
+let isTransitioning = false;
+let finalResults = null;
 
-      // Progress bar
-      const percent = Math.round((index) / QUESTIONS.length * 100);
-      const pb = document.getElementById('pbFill');
-      pb.style.transition = 'width 1.2s cubic-bezier(0.4,0,0.2,1)';
-      pb.style.width = percent + '%';
-      document.getElementById('pbLabel').textContent = `${index + 1} / ${QUESTIONS.length}`;
+function go(){
+  if(raw.filter(x=>x===null).length > 0 && cur === Q.length){
+    alert('Пожалуйста, ответьте на все вопросы');
+    return;
+  }
+  startTime = Date.now();
+  document.getElementById('intro').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  rq(0);
+}
 
-      // Question card animation
-      const card = document.getElementById('qCard');
-      card.style.animation = 'none';
-      void card.offsetWidth;
-      card.style.animation = 'rise 0.4s cubic-bezier(0.4,0,0.2,1) both';
+function rq(i){
+  if(isTransitioning) return;
+  isTransitioning = true;
+  
+  cur=i;
+  const progressPercent = Math.round((i)/Q.length*100);
+  
+  const pf = document.getElementById('pf');
+  pf.style.transition = 'width 1.2s cubic-bezier(.4,0,.2,1)';
+  pf.style.width = progressPercent + '%';
+  
+  document.getElementById('pl').textContent = `${i+1} / ${Q.length}`;
+  
+  const c=document.getElementById('qc');
+  c.style.animation='none';
+  void c.offsetWidth;
+  c.style.animation='rise .4s cubic-bezier(.4,0,.2,1) both';
+  
+  document.getElementById('qt').textContent=Q[i];
+  const el=document.getElementById('op');
+  el.innerHTML='';
+  
+  OD.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='opt'+(raw[i]===o.v?' on':'');
+    b.setAttribute('type','button');
+    b.setAttribute('aria-pressed', raw[i]===o.v);
+    b.setAttribute('aria-label', `${o.l1} ${o.l2} (балл ${o.v})`);
+    b.innerHTML = `<span class="ob">${o.v}</span><span class="ol"><span>${o.l1}</span><span>${o.l2}</span></span>`;
+    b.onclick=()=>pick(i,o.v);
+    el.appendChild(b);
+  });
+  
+  setTimeout(() => { isTransitioning = false; }, 400);
+}
 
-      // Question text
-      document.getElementById('qText').textContent = QUESTIONS[index];
-
-      // Options
-      const container = document.getElementById('qOptions');
-      container.innerHTML = '';
-      OPTIONS.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'opt' + (answers[index] === opt.v ? ' on' : '');
-        btn.type = 'button';
-        btn.setAttribute('aria-pressed', answers[index] === opt.v);
-        btn.setAttribute('aria-label', `${opt.l1} ${opt.l2} (балл ${opt.v})`);
-        btn.innerHTML = `<span class="ob">${opt.v}</span><span class="ol"><span>${opt.l1}</span><span>${opt.l2}</span></span>`;
-        btn.onclick = () => selectAnswer(index, opt.v);
-        container.appendChild(btn);
-      });
-
-      setTimeout(() => { isTransitioning = false; }, 400);
-    }
-
-    // ===== ВЫБОР ОТВЕТА =====
-    function selectAnswer(index, value) {
-      answers[index] = value;
-      document.querySelectorAll('.opt').forEach((btn, i) => {
-        btn.classList.toggle('on', OPTIONS[i].v === value);
-      });
-
-      setTimeout(() => {
-        if (index + 1 < QUESTIONS.length) {
-          renderQuestion(index + 1);
-        } else {
-          if (answers.every(a => a !== null)) {
-            showResults();
-          } else {
-            alert('Пожалуйста, ответьте на все вопросы');
-            renderQuestion(index);
-          }
-        }
-      }, 300);
-    }
-
-    // ===== ПОДСЧЁТ БАЛЛОВ =====
-    function getScore(index) {
-      const val = answers[index];
-      return REVERSED.includes(index) ? 5 - val : val;
-    }
-
-    function getLevel(score, max) {
-      const p = score / max;
-      return p >= 0.75 ? ['Высокий', 'ph'] : p >= 0.5 ? ['Средний', 'pm'] : ['Низкий', 'pl'];
-    }
-
-    // ===== АНИМАЦИЯ РЕЗУЛЬТАТОВ =====
-    function animateResults() {
-      document.querySelectorAll('.rc').forEach((card, i) => {
-        setTimeout(() => card.classList.add('visible'), i * 150);
-      });
-      setTimeout(() => {
-        document.querySelectorAll('.tip').forEach((tip, i) => {
-          setTimeout(() => tip.classList.add('visible'), i * 80);
-        });
-      }, 1200);
-    }
-
-    // ===== ПОКАЗ РЕЗУЛЬТАТОВ =====
-    function showResults() {
-      document.getElementById('quizScreen').style.display = 'none';
-      document.getElementById('resultsScreen').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      const scores = QUESTIONS.map((_, i) => getScore(i));
-
-      // Blocks
-      const conf = scores.slice(0, 6).reduce((a, b) => a + b, 0);
-      const motiv = scores.slice(6, 12).reduce((a, b) => a + b, 0);
-      const vis = scores.slice(12, 15).reduce((a, b) => a + b, 0);
-      const aud = scores.slice(15, 18).reduce((a, b) => a + b, 0);
-      const kin = scores.slice(18, 21).reduce((a, b) => a + b, 0);
-      const ei = scores.slice(21, 25).reduce((a, b) => a + b, 0);
-      const tL = scores[25] + scores[26];
-      const fE = scores[27] + scores[28];
-      const jP = scores[29] + scores[30];
-      const pS = scores[31] + scores[32];
-      const sC = scores[33] + scores[34];
-      const nA = scores[35] + scores[36];
-      const modern = scores.slice(37, 43).reduce((a, b) => a + b, 0);
-      const practice = scores.slice(43, 49).reduce((a, b) => a + b, 0);
-
-      // MBTI dimensions
-      const dim1 = ei >= 9 ? 'E' : 'I';
-      const dim2 = sC > nA ? 'S' : nA > sC ? 'N' : (Math.random() > 0.5 ? 'S' : 'N');
-      const dim3 = tL > fE ? 'T' : 'F';
-      const dim4 = jP > pS ? 'J' : 'P';
-      const pt = dim1 + dim2 + dim3 + dim4;
-
-      // Cognitive style
-      let cog = 'Смешанный тип';
-      const mx = Math.max(vis, aud, kin);
-      if (vis === mx && vis > aud && vis > kin) cog = 'Визуал';
-      else if (aud === mx && aud > vis && aud > kin) cog = 'Аудиал';
-      else if (kin === mx && kin > vis && kin > aud) cog = 'Кинестетик';
-
-      // Eniostyle axes
-      const north = (scores[25] + scores[26] + scores[29] + scores[30] + scores[33] + scores[34]) / 6;
-      const south = (scores[27] + scores[28] + scores[31] + scores[32]) / 4;
-      const west = (scores[12] + scores[13] + scores[14] + scores[33] + scores[34]) / 5;
-      const east = (scores[35] + scores[36] + scores[31] + scores[32]) / 4;
-
-      const enioN = north >= 3 ? '+Север' : '-Север';
-      const enioS = south >= 3 ? '+Юг' : '-Юг';
-      const enioW = west >= 3 ? '+Запад' : '-Запад';
-      const enioE = east >= 3 ? '+Восток' : '-Восток';
-      const enioFormula = getEnioFormula(pt);
-
-      // Render results
-      document.getElementById('resultsContainer').innerHTML =
-        renderConfidence(conf) +
-        renderMotivation(motiv) +
-        renderCognitive(cog, vis, aud, kin) +
-        renderPsychotype(pt, ei, tL, fE, jP, pS, sC, nA, enioFormula) +
-        renderModernPractice(modern, practice) +
-        renderRecommendations(pt, cog, conf) +
-        renderEnioLegend();
-
-      setTimeout(animateResults, 100);
-
-      const duration = Math.round((Date.now() - startTime) / 1000);
-
-      // Store for sharing
-      finalResults = {
-        pt, ptName: PT_NAMES[pt] || '',
-        enioFormula, cog,
-        confidence: conf, motivation: motiv,
-        modernMethods: modern, realPractice: practice,
-        duration
-      };
-
-      // Send to Google Sheets
-      sendData({
-        pt, cog, conf, motiv, modern, practice,
-        vis, aud, kin, enioFormula,
-        raw: answers.join(','), duration
-      });
-    }
-
-    // ===== ЭНИОСТИЛЬ ПО ПСИХОТИПУ =====
-    function getEnioFormula(pt) {
-      const map = {
-        'ENTJ': '+Север-Восток', 'ENTP': '+Восток-Север',
-        'INTJ': '-Север+Восток', 'INTP': '-Восток+Север',
-        'ENFJ': '+Юг-Восток', 'ENFP': '+Восток-Юг',
-        'INFJ': '-Юг+Восток', 'INFP': '-Восток+Юг',
-        'ESFJ': '+Юг-Запад', 'ESFP': '+Запад-Юг',
-        'ISFJ': '-Юг+Запад', 'ISFP': '-Запад+Юг',
-        'ESTJ': '+Север-Запад', 'ESTP': '+Запад-Север',
-        'ISTJ': '-Север+Запад', 'ISTP': '-Запад+Север'
-      };
-      return map[pt] || '';
-    }
-
-    // ===== КАРТОЧКА РЕЗУЛЬТАТА =====
-    function card(label, score, max, top, body) {
-      const [lvl, cls] = getLevel(score, max);
-      return `<div class="rc">
-        <div class="rc-bar"></div>
-        <div class="rc-lbl">${label}</div>
-        <div class="srow">
-          <div class="snum">${score}</div>
-          <div class="sof">/ ${max}</div>
-          <span class="pill ${cls}">${lvl}</span>
-        </div>
-        ${top || ''}
-        <div class="desc">${body}</div>
-      </div>`;
-    }
-
-    // ===== УВЕРЕННОСТЬ =====
-    function renderConfidence(s) {
-      const desc = s >= 18
-        ? `<p>Ты уверенно чувствуешь себя в английской речи и не останавливаешься перед ошибками — это <strong>самое ценное качество</strong>. Продолжай погружаться в живое общение.</p>`
-        : s >= 12
-        ? `<p>Есть база уверенности, но страх ошибки иногда даёт о себе знать. Попробуй технику <strong>«5 минут без цензуры»</strong> — говори, не исправляя себя.</p>`
-        : `<p>Вероятно, ощущаешь тревогу. Это преодолимо. Начни с безопасной среды: iTalki, Speaky. Разреши себе быть несовершенным.</p>`;
-      return card('Уверенность в речи', s, 24, null, desc);
-    }
-
-    // ===== МОТИВАЦИЯ =====
-    function renderMotivation(s) {
-      const desc = s >= 18
-        ? `<p>У тебя сильная <strong>внутренняя мотивация</strong>. Направь её в русло: посмотри сезон сериала без субтитров или прочти книгу в оригинале.</p>`
-        : s >= 12
-        ? `<p>Мотивация умеренная. Найди личный смысл: что ты сможешь, когда заговоришь свободно? <strong>Конкретный образ цели</strong> поддержит в моменты спада.</p>`
-        : `<p>Сейчас язык — скорее необходимость. Найди точку пересечения с тем, что тебе нравится: музыка, ютуб. <strong>Интерес рождается через контакт.</strong></p>`;
-      return card('Мотивация', s, 24, null, desc);
-    }
-
-    // ===== КОГНИТИВНЫЙ СТИЛЬ =====
-    function renderCognitive(cog, v, a, k) {
-      const ds = {
-        'Визуал': `<p>Твой мозг лучше всего обрабатывает <strong>визуальную информацию</strong>.</p><p><strong>Используй:</strong> mind-map, цветные маркеры, Anki с картинками.</p><p><strong>Осторожно:</strong> не перегружай себя чисто аудио.</p>`,
-        'Аудиал': `<p>Ты лучше всего воспринимаешь <strong>звучащую речь</strong>.</p><p><strong>Используй:</strong> shadowing, подкасты, записывай себя.</p><p><strong>Осторожно:</strong> не пренебрегай чтением.</p>`,
-        'Кинестетик': `<p>Ты запоминаешь через <strong>действие и практику</strong>.</p><p><strong>Используй:</strong> пиши от руки, делай карточки, ролевые игры.</p><p><strong>Осторожно:</strong> долгое пассивное изучение утомит.</p>`,
-        'Смешанный тип': `<p>У тебя <strong>сбалансированный</strong> стиль — комбинируй методы.</p><p><strong>Используй:</strong> посмотрел → записал → повторил. Мультисенсорная практика даёт прочное запоминание.</p>`
-      };
-      const segs = [['Визуал', v, 12], ['Аудиал', a, 12], ['Кинестетик', k, 12]]
-        .map(([l, val, m]) => `<div class="seg"><div class="sl">${l} ${val}/${m}</div><div class="st"><div class="sf" style="width:${Math.round(val/m*100)}%"></div></div></div>`)
-        .join('');
-      return `<div class="rc">
-        <div class="rc-bar"></div>
-        <div class="rc-lbl">Когнитивный стиль</div>
-        <div style="font-size:22px;font-weight:800;color:var(--acc);margin-bottom:6px;">${cog}</div>
-        <div class="segs">${segs}</div>
-        <div class="desc">${ds[cog]}</div>
-      </div>`;
-    }
-
-    // ===== ПСИХОТИП =====
-    const PT_NAMES = {
-      ENTJ: 'Командир', ENTP: 'Полемист', INTJ: 'Архитектор', INTP: 'Логик',
-      ENFJ: 'Протагонист', ENFP: 'Активист', INFJ: 'Заступник', INFP: 'Посредник',
-      ESFJ: 'Консул', ESFP: 'Артист', ISFJ: 'Защитник', ISFP: 'Авантюрист',
-      ESTJ: 'Менеджер', ESTP: 'Предприниматель', ISTJ: 'Логист', ISTP: 'Виртуоз'
-    };
-    const PT_DESC = {
-      ENTJ: `<p><strong>ENTJ — Командир</strong> <span class="pt-enio">(+Север-Восток)</span>. Прирождённый лидер. Язык привлекает системностью.</p><p><strong>Стиль:</strong> чёткая программа с целями. Бизнес-английский, дебаты.</p><p><strong>Инструменты:</strong> Lingoda, Business English Pod.</p>`,
-      ENTP: `<p><strong>ENTP — Полемист</strong> <span class="pt-enio">(+Восток-Север)</span>. Любишь идеи и нестандартные подходы.</p><p><strong>Стиль:</strong> дискуссии, темы, которые задевают.</p><p><strong>Инструменты:</strong> TED Talks, философские подкасты.</p>`,
-      INTJ: `<p><strong>INTJ — Архитектор</strong> <span class="pt-enio">(-Север+Восток)</span>. Независимый, системный.</p><p><strong>Стиль:</strong> самостоятельная работа по системе.</p><p><strong>Инструменты:</strong> Coursera, сложная литература.</p>`,
-      INTP: `<p><strong>INTP — Логик</strong> <span class="pt-enio">(-Восток+Север)</span>. Аналитик, теоретик.</p><p><strong>Стиль:</strong> нужно понимать «почему». Главный вызов — начать говорить.</p><p><strong>Инструменты:</strong> этимологические словари, Linguriosity.</p>`,
-      ENFJ: `<p><strong>ENFJ — Протагонист</strong> <span class="pt-enio">(+Юг-Восток)</span>. Вдохновляешь людей. Язык — мост к людям.</p><p><strong>Стиль:</strong> расцветаешь в группе.</p><p><strong>Инструменты:</strong> HelloTalk, Tandem, волонтёрство.</p>`,
-      ENFP: `<p><strong>ENFP — Активист</strong> <span class="pt-enio">(+Восток-Юг)</span>. Творческий, энтузиастичный.</p><p><strong>Стиль:</strong> нужны разнообразие и личная связь.</p><p><strong>Инструменты:</strong> Duolingo Stories, языковые кафе.</p>`,
-      INFJ: `<p><strong>INFJ — Заступник</strong> <span class="pt-enio">(-Юг+Восток)</span>. Вдумчивый, глубокий.</p><p><strong>Стиль:</strong> тишина и глубина. Любишь читать и анализировать.</p><p><strong>Инструменты:</strong> литература, кино с глубоким сюжетом.</p>`,
-      INFP: `<p><strong>INFP — Посредник</strong> <span class="pt-enio">(-Восток+Юг)</span>. Идеалист с богатым воображением.</p><p><strong>Стиль:</strong> запоминаешь через истории и эмоции.</p><p><strong>Инструменты:</strong> английская поэзия, фильмы без дубляжа.</p>`,
-      ESTJ: `<p><strong>ESTJ — Менеджер</strong> <span class="pt-enio">(+Север-Запад)</span>. Практичный, организованный.</p><p><strong>Стиль:</strong> чёткая структура, расписание.</p><p><strong>Инструменты:</strong> Cambridge, IELTS, LinguaLeo.</p>`,
-      ESTP: `<p><strong>ESTP — Предприниматель</strong> <span class="pt-enio">(+Запад-Север)</span>. Энергичный, прагматичный.</p><p><strong>Стиль:</strong> учишься в действии.</p><p><strong>Инструменты:</strong> разговорные клубы, путешествия.</p>`,
-      ISTJ: `<p><strong>ISTJ — Логист</strong> <span class="pt-enio">(-Север+Запад)</span>. Надёжный, методичный.</p><p><strong>Стиль:</strong> система, последовательность.</p><p><strong>Инструменты:</strong> British Council, Anki.</p>`,
-      ISTP: `<p><strong>ISTP — Виртуоз</strong> <span class="pt-enio">(-Запад+Север)</span>. Независимый, технический.</p><p><strong>Стиль:</strong> разбираешься самостоятельно.</p><p><strong>Инструменты:</strong> технические каналы, Language Transfer.</p>`,
-      ESFJ: `<p><strong>ESFJ — Консул</strong> <span class="pt-enio">(+Юг-Запад)</span>. Тёплый, заботливый.</p><p><strong>Стиль:</strong> расцветаешь в поддерживающей среде.</p><p><strong>Инструменты:</strong> групповые курсы, языковые обмены.</p>`,
-      ESFP: `<p><strong>ESFP — Артист</strong> <span class="pt-enio">(+Запад-Юг)</span>. Энергичный, общительный.</p><p><strong>Стиль:</strong> нужны движение и веселье.</p><p><strong>Инструменты:</strong> стендап, тексты песен, вечеринки.</p>`,
-      ISFJ: `<p><strong>ISFJ — Защитник</strong> <span class="pt-enio">(-Юг+Запад)</span>. Внимательный, терпеливый.</p><p><strong>Стиль:</strong> повторение и закрепление.</p><p><strong>Инструменты:</strong> индивидуальные занятия, онлайн-курсы.</p>`,
-      ISFP: `<p><strong>ISFP — Авантюрист</strong> <span class="pt-enio">(-Запад+Юг)</span>. Чуткий, творческий.</p><p><strong>Стиль:</strong> учишься через красоту и ощущения.</p><p><strong>Инструменты:</strong> фильмы без дубляжа, творческие блоги.</p>`
-    };
-
-    function renderPsychotype(pt, ei, tL, fE, jP, pS, sC, nA, enioFormula) {
-      const nm = PT_NAMES[pt] || '';
-      const desc = PT_DESC[pt] || '';
-      const dims = [
-        [ei >= 9 ? 'Экстраверт' : 'Интроверт', ei >= 9 ? ei : 16 - ei, 16],
-        [sC > nA ? 'Сенсорный' : 'Интуит', Math.max(sC, nA), 8],
-        [tL > fE ? 'Логик' : 'Этик', Math.max(tL, fE), 8],
-        [jP > pS ? 'Планировщик' : 'Гибкий', Math.max(jP, pS), 8]
-      ];
-      const segs = dims.map(([l, v, m]) =>
-        `<div class="seg"><div class="sl">${l}</div><div class="st"><div class="sf" style="width:${Math.round(v/m*100)}%"></div></div></div>`
-      ).join('');
-      return `<div class="rc">
-        <div class="rc-bar"></div>
-        <div class="rc-lbl">Психотип</div>
-        <div class="pt-tag">${pt}<span class="pt-nm">${nm}</span><span class="pt-enio">${enioFormula}</span></div>
-        <div class="segs" style="margin-bottom:14px;">${segs}</div>
-        <div class="desc">${desc}</div>
-      </div>`;
-    }
-
-    // ===== СОВРЕМЕННЫЕ МЕТОДЫ И ПРАКТИКА =====
-    function renderModernPractice(m5, m6) {
-      const [l5, c5] = getLevel(m5, 24);
-      const [l6, c6] = getLevel(m6, 24);
-      const d5 = m5 >= 18
-        ? 'Ты активно используешь современный контент — отлично! Переходи от пассивного просмотра к активному: разбор фраз, shadowing.'
-        : m5 >= 12
-        ? 'Знаком(а) с современными методами, но используешь непоследовательно. Выбери 1–2 формата и добавь в рутину.'
-        : 'Попробуй добавить хотя бы один медиаформат: подкаст или эпизод сериала без дубляжа.';
-      const d6 = m6 >= 18
-        ? 'Английский уже часть твоей жизни вне занятий — самый быстрый путь к прогрессу. Найди разговорного партнёра-носителя.'
-        : m6 >= 12
-        ? 'Периодически используешь язык в жизни. Добавь один «английский ритуал» в день.'
-        : 'Чтобы сделать прорыв, начни «жить на языке»: переключи интерфейс телефона, подпишись на англоязычные каналы.';
-      return `<div class="rc">
-        <div class="rc-bar"></div>
-        <div class="rc-lbl">Современные методы & Реальная практика</div>
-        <div class="srow" style="margin-bottom:4px">
-          <div style="flex:1;font-size:12px;font-weight:700;color:var(--mut)">Современные методы</div>
-          <div class="snum" style="font-size:22px">${m5}</div>
-          <div class="sof">/24</div>
-          <span class="pill ${c5}">${l5}</span>
-        </div>
-        <div class="desc" style="margin-bottom:16px"><p>${d5}</p></div>
-        <div class="srow" style="margin-bottom:4px">
-          <div style="flex:1;font-size:12px;font-weight:700;color:var(--mut)">Реальная практика</div>
-          <div class="snum" style="font-size:22px">${m6}</div>
-          <div class="sof">/24</div>
-          <span class="pill ${c6}">${l6}</span>
-        </div>
-        <div class="desc"><p>${d6}</p></div>
-      </div>`;
-    }
-
-    // ===== РЕКОМЕНДАЦИИ =====
-    function renderRecommendations(pt, cog, conf) {
-      const tips = [];
-      if (pt[0] === 'E') tips.push(['👥', '<strong>Групповое обучение:</strong> языковые клубы — ты заряжаешься от людей.']);
-      else tips.push(['🎧', '<strong>Самостоятельная работа:</strong> онлайн-курсы в своём темпе, чтение.']);
-      if (pt[2] === 'T') tips.push(['📐', '<strong>Системный подход:</strong> грамматика структурно, схемы и таблицы.']);
-      else tips.push(['🎬', '<strong>Эмоциональный контекст:</strong> фильмы, истории, разговоры о личном.']);
-      if (pt[1] === 'S') tips.push(['🗣', '<strong>Практические диалоги:</strong> реальные ситуации — заказ в кафе, переговоры.']);
-      else tips.push(['🌐', '<strong>Концептуальное погружение:</strong> этимология, сравнение языков.']);
-      if (pt[3] === 'J') tips.push(['📅', '<strong>Структура и план:</strong> учебный план, трекинг прогресса.']);
-      else tips.push(['🎲', '<strong>Гибкое обучение:</strong> следуй интересу, меняй форматы.']);
-      if (cog === 'Визуал') tips.push(['🗂', '<strong>Визуальные инструменты:</strong> Anki с картинками, mind-map, субтитры.']);
-      else if (cog === 'Аудиал') tips.push(['🎙', '<strong>Аудио-практика:</strong> shadowing, записывай себя, подкасты.']);
-      else if (cog === 'Кинестетик') tips.push(['✍️', '<strong>Письмо и движение:</strong> от руки, карточки, ролевые игры.']);
-      else tips.push(['🔄', '<strong>Мультисенсорность:</strong> посмотрел → записал → повторил.']);
-      if (conf < 12) tips.push(['💛', '<strong>Снижение тревоги:</strong> начни с безопасной среды. Ошибки — это прогресс.']);
-      return `<div class="rc">
-        <div class="rc-bar"></div>
-        <div class="rc-lbl">Персональные рекомендации</div>
-        <ul class="tips">${tips.map(([i, tx]) => `<li class="tip"><span class="tico">${i}</span><span>${tx}</span></li>`).join('')}</ul>
-      </div>`;
-    }
-
-    // ===== ЛЕГЕНДА ЭНИОСТИЛЯ =====
-    function renderEnioLegend() {
-      return `<div class="rc">
-        <div class="rc-bar"></div>
-        <div class="rc-lbl">Эниостиль: что означают + и –</div>
-        <div class="enio-legend">
-          <p style="margin-bottom:12px"><strong>Север (С)</strong> — логика, структура, системы, правила</p>
-          <p style="margin-bottom:12px"><strong>Юг (Ю)</strong> — эмоции, отношения, эмпатия, ценности</p>
-          <p style="margin-bottom:12px"><strong>Запад (З)</strong> — действие, результат, иерархия, пространство</p>
-          <p style="margin-bottom:12px"><strong>Восток (В)</strong> — идеи, интуиция, время, возможности</p>
-          <div style="border-top:1px solid var(--brd);padding-top:12px">
-            <div class="enio-row"><span><span class="enio-dot dot-plus"></span><strong>+</strong> (экстравертный)</span><span>активно проявляю, являю миру</span></div>
-            <div class="enio-row"><span><span class="enio-dot dot-minus"></span><strong>–</strong> (интровертный)</span><span>наблюдаю, анализирую, принимаю</span></div>
-          </div>
-        </div>
-      </div>`;
-    }
-
-    // ===== ОТПРАВКА ДАННЫХ =====
-    function sendData(data) {
-      if (!SCRIPT_URL || SCRIPT_URL.includes('default')) {
-        console.log('📦 Данные готовы:', data);
-        return;
-      }
-      console.log('📤 Отправка в Google Sheets...');
-      const form = new FormData();
-      form.append('data', JSON.stringify(data));
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: form,
-        headers: { 'Accept': 'application/json' }
-      })
-      .then(() => console.log('✅ Данные отправлены'))
-      .catch(e => console.error('❌ Ошибка:', e));
-    }
-
-    // ===== ФОРМАТИРОВАНИЕ ДЛЯ ШАРИНГА =====
-    function formatForShare() {
-      const r = finalResults;
-      const lvl = (s, m) => {
-        const p = s / m;
-        return p >= 0.75 ? 'Высокий' : p >= 0.5 ? 'Средний' : 'Низкий';
-      };
-      const tip = {
-        ENTJ: 'Ставь чёткие бизнес-цели', ENTP: 'Ищи дебаты на английском',
-        INTJ: 'Создай систему и следуй ей', INTP: 'Пойми логику — потом говори',
-        ENFJ: 'Учись через общение', ENFP: 'Меняй форматы',
-        INFJ: 'Читай глубокую литературу', INFP: 'Веди дневник на английском',
-        ESTJ: 'Составь расписание', ESTP: 'Учись в действии',
-        ISTJ: 'Повторяй регулярно', ISTP: 'Разбирай тех. тексты',
-        ESFJ: 'Найди группу поддержки', ESFP: 'Учи через музыку',
-        ISFJ: 'Занимайся в комфортном темпе', ISFP: 'Смотри фильмы на английском'
-      };
-      return `🎯 МОЙ ПРОФИЛЬ ИЗУЧЕНИЯ АНГЛИЙСКОГО
-═══════════════════════════
-🧠 Психотип: ${r.pt} — ${r.ptName}
-🌀 Эниостиль: ${r.enioFormula}
-🗣️ Уверенность: ${r.confidence}/24 — ${lvl(r.confidence, 24)}
-💫 Мотивация: ${r.motivation}/24 — ${lvl(r.motivation, 24)}
-📱 Современные методы: ${r.modernMethods}/24 — ${lvl(r.modernMethods, 24)}
-🌍 Реальная практика: ${r.realPractice}/24 — ${lvl(r.realPractice, 24)}
-⏱ Время: ${r.duration} сек
-💡 Совет: ${tip[r.pt] || 'Экспериментируй с методами'}
-#EnglishProfile #Психотип #Эниостиль`;
-    }
-
-    // ===== ШАРИНГ / КОПИРОВАНИЕ =====
-    function shareResults() {
-      if (!finalResults) return;
-      const text = formatForShare();
-      if (navigator.share) {
-        navigator.share({ title: 'Мой профиль английского', text, url: window.location.href })
-          .catch(() => {});
+function pick(i,v){
+  raw[i]=v;
+  document.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('on',OD[j].v===v));
+  
+  setTimeout(()=>{
+    if(i+1 < Q.length){
+      rq(i+1);
+    } else {
+      if(raw.filter(x=>x===null).length === 0){
+        res();
       } else {
-        copyToClipboard(text);
-        showCopyMsg('📋 Скопировано! Вставьте в любое приложение.');
+        alert('Пожалуйста, ответьте на все вопросы перед завершением');
+        rq(i);
       }
     }
+  }, 300);
+}
 
-    function copyResults() {
-      if (!finalResults) return;
-      copyToClipboard(formatForShare());
-      showCopyMsg();
-    }
+function sc(i){
+  const v = raw[i];
+  return REV_IDX.includes(i) ? 5 - v : v;
+}
 
-    function copyToClipboard(text) {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-      } else {
-        fallbackCopy(text);
-      }
-    }
+function lv(s,m){
+  const p=s/m;
+  return p>=.75?['Высокий','ph']:p>=.5?['Средний','pm']:['Низкий','pl'];
+}
 
-    function fallbackCopy(text) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(ta);
-    }
-
-    function showCopyMsg(msg) {
-      const el = document.getElementById('copyMsg');
-      el.textContent = msg || '✓ Скопировано!';
-      el.style.display = 'block';
-      setTimeout(() => { el.style.display = 'none'; }, 3000);
-    }
-
-    // ===== ИНИЦИАЛИЗАЦИЯ =====
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('✅ Тест загружен');
+function animateResults() {
+  const cards = document.querySelectorAll('.rc');
+  cards.forEach((card, index) => {
+    setTimeout(() => {
+      card.classList.add('visible');
+    }, index * 150);
+  });
+  
+  setTimeout(() => {
+    const tips = document.querySelectorAll('.tip');
+    tips.forEach((tip, index) => {
+      setTimeout(() => tip.classList.add('visible'), index * 80);
     });
-  </script>
+  }, cards.length * 150 + 200);
+}
+
+function res(){
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  
+  const s = Q.map((_,i) => sc(i));
+  
+  const b1 = s.slice(0,6).reduce((a,b)=>a+b,0);
+  const b2 = s.slice(6,12).reduce((a,b)=>a+b,0);
+  const vis = s.slice(12,15).reduce((a,b)=>a+b,0);
+  const aud = s.slice(15,18).reduce((a,b)=>a+b,0);
+  const kin = s.slice(18,21).reduce((a,b)=>a+b,0);
+  const ei = s.slice(21,25).reduce((a,b)=>a+b,0);
+  const tL = s[25]+s[26], fE = s[27]+s[28], jP = s[29]+s[30], pS = s[31]+s[32], sC = s[33]+s[34], nA = s[35]+s[36];
+  const b5 = s.slice(37,43).reduce((a,b)=>a+b,0);
+  const b6 = s.slice(43,49).reduce((a,b)=>a+b,0);
+  
+  const dim1 = ei >= 9 ? 'E' : 'I';
+  const dim2 = sC > nA ? 'S' : nA > sC ? 'N' : (Math.random() > 0.5 ? 'S' : 'N');
+  const dim3 = tL > fE ? 'T' : 'F';
+  const dim4 = jP > pS ? 'J' : 'P';
+  const PT = dim1 + dim2 + dim3 + dim4;
+  
+  let cog = 'Смешанный тип';
+  const mx = Math.max(vis, aud, kin);
+  if(vis === mx && vis > aud && vis > kin) cog = 'Визуал';
+  else if(aud === mx && aud > vis && aud > kin) cog = 'Аудиал';
+  else if(kin === mx && kin > vis && kin > aud) cog = 'Кинестетик';
+  
+  // Calculate Eniostyle axes
+  const north = (s[25]+s[26]+s[29]+s[30]+s[33]+s[34]) / 6; // Logic + Planning + Concrete
+  const south = (s[27]+s[28]+s[31]+s[32]) / 4; // Emotion + Spontaneous
+  const west = (s[12]+s[13]+s[14]+s[33]+s[34]) / 5; // Visual + Concrete
+  const east = (s[35]+s[36]+s[31]+s[32]) / 4; // Abstract + Spontaneous
+  
+  const enioN = north >= 3 ? '+Север' : '-Север';
+  const enioS = south >= 3 ? '+Юг' : '-Юг';
+  const enioW = west >= 3 ? '+Запад' : '-Запад';
+  const enioE = east >= 3 ? '+Восток' : '-Восток';
+  
+  // Determine primary Eniostyle formula based on PT
+  const enioFormula = getEnioFormula(PT);
+  
+  document.getElementById('rc').innerHTML = c1(b1) + c2(b2) + c3(cog, vis, aud, kin) + c4(PT, ei, tL, fE, jP, pS, sC, nA, enioFormula) + c56(b5, b6) + cr(PT, cog, b1) + enioLegend();
+  
+  setTimeout(animateResults, 100);
+  
+  const duration = Math.round((Date.now() - startTime) / 1000);
+  
+  // Store final results for sharing
+  finalResults = {
+    pt: PT,
+    ptName: PN[PT] || '',
+    enioFormula: enioFormula,
+    cog: cog,
+    confidence: b1,
+    motivation: b2,
+    modernMethods: b5,
+    realPractice: b6,
+    duration: duration
+  };
+  
+  sv({
+    pt:PT, cog, b1, b2, b5, b6, vis, aud, kin, 
+    enioFormula: enioFormula,
+    raw:raw.join(','), 
+    duration:duration
+  });
+}
+
+// Map MBTI to Eniostyle formula
+function getEnioFormula(pt){
+  const map = {
+    'ENTJ': '+Север-Восток',
+    'ENTP': '+Восток-Север',
+    'INTJ': '-Север+Восток',
+    'INTP': '-Восток+Север',
+    'ENFJ': '+Юг-Восток',
+    'ENFP': '+Восток-Юг',
+    'INFJ': '-Юг+Восток',
+    'INFP': '-Восток+Юг',
+    'ESFJ': '+Юг-Запад',
+    'ESFP': '+Запад-Юг',
+    'ISFJ': '-Юг+Запад',
+    'ISFP': '-Запад+Юг',
+    'ESTJ': '+Север-Запад',
+    'ESTP': '+Запад-Север',
+    'ISTJ': '-Север+Запад',
+    'ISTP': '-Запад+Север'
+  };
+  return map[pt] || '';
+}
+
+function card(lbl, sn, mx, top, body){
+  const [l, cl] = lv(sn, mx);
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">${lbl}</div><div class="srow"><div class="snum">${sn}</div><div class="sof">/ ${mx}</div><span class="pill ${cl}">${l}</span></div>${top||''}<div class="desc">${body}</div></div>`;
+}
+
+function c1(s){
+  const d = s>=18 ? `<p>Ты уверенно чувствуешь себя в английской речи и не останавливаешься перед ошибками — это <strong>самое ценное качество</strong>. Именно такие люди быстрее всего достигают беглости. Продолжай погружаться в живое общение: разговорные клубы, переписка с носителями.</p>`
+    : s>=12 ? `<p>Есть база уверенности, но иногда страх ошибки даёт о себе знать. Попробуй технику <strong>«5 минут без цензуры»</strong> — говори по-английски не останавливаясь и не исправляя себя. Ошибки — не провал, а индикатор роста.</p>`
+    : `<p>Вероятно, ощущаешь тревогу при использовании языка. Хорошая новость: это <strong>полностью преодолимо</strong>. Начни с безопасной среды: iTalki или Speaky. Разреши себе быть несовершенным.</p>`;
+  return card('Уверенность в речи', s, 24, null, d);
+}
+
+function c2(s){
+  const d = s>=18 ? `<p>У тебя сильная <strong>внутренняя мотивация</strong> — ты хочешь знать язык не потому что «надо», а потому что тебе это интересно. Направь её в конкретное русло: поставь цель — посмотреть сезон сериала без субтитров или прочитать книгу в оригинале.</p>`
+    : s>=12 ? `<p>Мотивация умеренная — есть интерес, но он не всегда стабилен. Найди личный смысл: что именно ты сможешь делать, когда заговоришь свободно? <strong>Конкретный образ цели</strong> поддержит в моменты спада.</p>`
+    : `<p>Сейчас язык — скорее внешняя необходимость. Попробуй найти точку пересечения с тем, что тебе уже нравится: музыка, ютуб по хобби. <strong>Интерес рождается через контакт.</strong></p>`;
+  return card('Мотивация', s, 24, null, d);
+}
+
+function c3(cog, v, a, k){
+  const ds = {
+    'Визуал': `<p>Твой мозг лучше всего обрабатывает <strong>визуальную информацию</strong>. Ты буквально «видишь» слова и структуры.</p><p><strong>Используй:</strong> mind-map, цветные маркеры, видео с двуязычными субтитрами. Anki с картинками — твой лучший инструмент.</p><p><strong>Осторожно:</strong> не перегружай себя чисто аудио без визуальной опоры.</p>`,
+    'Аудиал': `<p>Ты лучше всего воспринимаешь <strong>звучащую речь</strong>. Ритм, интонация и мелодия языка — твой главный инструмент.</p><p><strong>Используй:</strong> shadowing, подкасты каждый день, записывай себя на диктофон.</p><p><strong>Осторожно:</strong> не пренебрегай чтением — оно закрепляет то, что ты слышишь.</p>`,
+    'Кинестетик': `<p>Ты запоминаешь через <strong>действие и практику</strong>. Для тебя «попробовать» важнее, чем «прочитать о».</p><p><strong>Используй:</strong> пиши от руки новые слова, делай физические карточки, участвуй в ролевых играх.</p><p><strong>Осторожно:</strong> долгое пассивное изучение без практики быстро тебя утомит.</p>`,
+    'Смешанный тип': `<p>У тебя <strong>сбалансированный</strong> когнитивный стиль — ты гибко используешь разные каналы.</p><p><strong>Используй:</strong> комбинируй методы — посмотрел видео → записал фразы → повторил вслух. Мультисенсорная практика даёт самое прочное запоминание.</p>`
+  };
+  const sg = `<div class="segs">${[['Визуал',v,12],['Аудиал',a,12],['Кинестетик',k,12]].map(([l,vl,m])=>`<div class="seg"><div class="sl">${l} ${vl}/${m}</div><div class="st"><div class="sf" style="width:${Math.round(vl/m*100)}%"></div></div></div>`).join('')}</div>`;
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Когнитивный стиль</div><div style="font-size:22px;font-weight:800;color:var(--acc);letter-spacing:-.01em;margin-bottom:6px;">${cog}</div>${sg}<div class="desc">${ds[cog]}</div></div>`;
+}
+
+// Updated psychotype names and Eniostyle formulas
+const PN = {
+  ENTJ:'Командир', ENTP:'Полемист', INTJ:'Архитектор', INTP:'Логик',
+  ENFJ:'Протагонист', ENFP:'Активист', INFJ:'Заступник', INFP:'Посредник',
+  ESFJ:'Консул', ESFP:'Артист', ISFJ:'Защитник', ISFP:'Авантюрист',
+  ESTJ:'Менеджер', ESTP:'Предприниматель', ISTJ:'Логист', ISTP:'Виртуоз'
+};
+
+const PD = {
+  ENTJ:`<p><strong>ENTJ — Командир</strong> <span class="pt-enio">(+Север-Восток)</span>. Прирождённый лидер с аналитическим умом. Язык привлекает системностью и применением в карьере.</p><p><strong>Стиль:</strong> нужна чёткая программа с целями. Бизнес-английский, дебаты — твоя среда.</p><p><strong>Инструменты:</strong> Lingoda, Business English Pod, Harvard Business Review.</p>`,
+  ENTP:`<p><strong>ENTP — Полемист</strong> <span class="pt-enio">(+Восток-Север)</span>. Любишь идеи и нестандартные подходы. Язык — инструмент обмена мыслями.</p><p><strong>Стиль:</strong> нужны дискуссии и темы, которые тебя задевают.</p><p><strong>Инструменты:</strong> TED Talks, философские подкасты, Toastmasters.</p>`,
+  INTJ:`<p><strong>INTJ — Архитектор</strong> <span class="pt-enio">(-Север+Восток)</span>. Независимый, системный. Язык — стратегический инструмент.</p><p><strong>Стиль:</strong> самостоятельная работа по чёткой системе.</p><p><strong>Инструменты:</strong> Coursera, edX, сложная литература, индивидуальный тьютор.</p>`,
+  INTP:`<p><strong>INTP — Логик</strong> <span class="pt-enio">(-Восток+Север)</span>. Аналитик, теоретик. Язык — система, которую нужно понять.</p><p><strong>Стиль:</strong> нужно понимать «почему». Главный вызов — начать говорить.</p><p><strong>Инструменты:</strong> Linguriosity, NativLang, этимологические словари.</p>`,
+  ENFJ:`<p><strong>ENFJ — Протагонист</strong> <span class="pt-enio">(+Юг-Восток)</span>. Вдохновляешь людей. Язык — мост к людям из других культур.</p><p><strong>Стиль:</strong> расцветаешь в группе и в эмоционально насыщенном контексте.</p><p><strong>Инструменты:</strong> HelloTalk, Tandem, волонтёрство с иностранцами.</p>`,
+  ENFP:`<p><strong>ENFP — Активист</strong> <span class="pt-enio">(+Восток-Юг)</span>. Творческий, энтузиастичный. Загораешься быстро — и угасаешь, если скучно.</p><p><strong>Стиль:</strong> нужны разнообразие и личная связь с материалом.</p><p><strong>Инструменты:</strong> Duolingo Stories, языковые кафе, творческие проекты.</p>`,
+  INFJ:`<p><strong>INFJ — Заступник</strong> <span class="pt-enio">(-Юг+Восток)</span>. Вдумчивый, глубокий. Язык — способ выразить важное и понять других.</p><p><strong>Стиль:</strong> тишина и глубина. Любишь читать и анализировать.</p><p><strong>Инструменты:</strong> литература, кино с глубоким сюжетом, pen-pal.</p>`,
+  INFP:`<p><strong>INFP — Посредник</strong> <span class="pt-enio">(-Восток+Юг)</span>. Идеалист с богатым воображением. Язык — способ выразить себя.</p><p><strong>Стиль:</strong> запоминаешь через истории, эмоции и личные смыслы.</p><p><strong>Инструменты:</strong> английская поэзия, фильмы без дубляжа, дневник на английском.</p>`,
+  ESTJ:`<p><strong>ESTJ — Менеджер</strong> <span class="pt-enio">(+Север-Запад)</span>. Практичный, организованный. Хочешь освоить язык эффективно.</p><p><strong>Стиль:</strong> чёткая структура, расписание, измеримый результат.</p><p><strong>Инструменты:</strong> Cambridge, IELTS, бизнес-английский, LinguaLeo.</p>`,
+  ESTP:`<p><strong>ESTP — Предприниматель</strong> <span class="pt-enio">(+Запад-Север)</span>. Энергичный, прагматичный. Язык — инструмент здесь и сейчас.</p><p><strong>Стиль:</strong> учишься в действии. Теория без практики — пустая трата времени.</p><p><strong>Инструменты:</strong> разговорные клубы, путешествия, Speaky или Tandem.</p>`,
+  ISTJ:`<p><strong>ISTJ — Логист</strong> <span class="pt-enio">(-Север+Запад)</span>. Надёжный, методичный. Берёшься за изучение языка серьёзно.</p><p><strong>Стиль:</strong> система, последовательность, понятный прогресс.</p><p><strong>Инструменты:</strong> British Council, Anki, международные экзамены.</p>`,
+  ISTP:`<p><strong>ISTP — Виртуоз</strong> <span class="pt-enio">(-Запад+Север)</span>. Независимый, технический. Язык — навык, который нужно «собрать руками».</p><p><strong>Стиль:</strong> разбираешься самостоятельно. Групповые занятия кажутся лишними.</p><p><strong>Инструменты:</strong> технические YouTube-каналы, документация, Language Transfer.</p>`,
+  ESFJ:`<p><strong>ESFJ — Консул</strong> <span class="pt-enio">(+Юг-Запад)</span>. Тёплый, заботливый. Язык — прежде всего связь с людьми.</p><p><strong>Стиль:</strong> расцветаешь в поддерживающей социальной среде.</p><p><strong>Инструменты:</strong> групповые курсы с куратором, языковые обмены, HelloTalk.</p>`,
+  ESFP:`<p><strong>ESFP — Артист</strong> <span class="pt-enio">(+Запад-Юг)</span>. Энергичный, общительный. Язык — способ веселиться и знакомиться.</p><p><strong>Стиль:</strong> нужны движение, разнообразие, веселье.</p><p><strong>Инструменты:</strong> стендап-комедия, разбор текстов песен, языковые вечеринки.</p>`,
+  ISFJ:`<p><strong>ISFJ — Защитник</strong> <span class="pt-enio">(-Юг+Запад)</span>. Внимательный, терпеливый. Учишься тихо, но основательно.</p><p><strong>Стиль:</strong> повторение и закрепление. Нужна безопасная, доброжелательная обстановка.</p><p><strong>Инструменты:</strong> индивидуальные занятия, онлайн-курсы в своём темпе.</p>`,
+  ISFP:`<p><strong>ISFP — Авантюрист</strong> <span class="pt-enio">(-Запад+Юг)</span>. Чуткий, творческий. Язык — способ ощутить мир другого человека.</p><p><strong>Стиль:</strong> учишься через красоту и ощущения. Сухая грамматика отталкивает.</p><p><strong>Инструменты:</strong> фильмы без дубляжа, английские блоги о творчестве.</p>`
+};
+
+function c4(PT, ei, tL, fE, jP, pS, sC, nA, enioFormula){
+  const nm = PN[PT] || '';
+  const d = PD[PT] || '';
+  const dm = [
+    [ei>=9?'Экстраверт':'Интроверт', ei>=9?ei:16-ei, 16],
+    [sC>nA?'Сенсорный':'Интуит', Math.max(sC,nA), 8],
+    [tL>fE?'Логик':'Этик', Math.max(tL,fE), 8],
+    [jP>pS?'Планировщик':'Гибкий', Math.max(jP,pS), 8]
+  ];
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Психотип</div><div class="pt-tag">${PT}<span class="pt-nm">${nm}</span><span class="pt-enio">${enioFormula}</span></div><div class="segs" style="margin-bottom:14px;">${dm.map(([l,v,m])=>`<div class="seg"><div class="sl">${l}</div><div class="st"><div class="sf" style="width:${Math.round(v/m*100)}%"></div></div></div>`).join('')}</div><div class="desc">${d}</div></div>`;
+}
+
+function c56(b5, b6){
+  const [l5,c5] = lv(b5,24), [l6,c6] = lv(b6,24);
+  const d5 = b5>=18 ? 'Ты активно используешь современный контент — отлично! Переходи от пассивного просмотра к активному: разбор фраз, shadowing, ведение заметок.'
+    : b5>=12 ? 'Знаком(а) с современными методами, но используешь непоследовательно. Выбери 1–2 формата и добавь в ежедневную рутину.'
+    : 'Попробуй добавить хотя бы один медиаформат: один подкаст в неделю или один эпизод сериала без дубляжа.';
+  const d6 = b6>=18 ? 'Английский уже часть твоей жизни вне занятий — самый быстрый путь к прогрессу. Найди регулярного разговорного партнёра-носителя.'
+    : b6>=12 ? 'Периодически используешь язык в жизни, но есть куда расти. Добавь один «английский ритуал» в день.'
+    : 'Чтобы сделать прорыв, важно начать «жить на языке»: переключи интерфейс телефона, подпишись на 2–3 англоязычных канала.';
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Современные методы &amp; Реальная практика</div><div class="srow" style="margin-bottom:4px"><div style="flex:1;font-size:12px;font-weight:700;color:var(--mut)">Современные методы</div><div class="snum" style="font-size:22px">${b5}</div><div class="sof">/24</div><span class="pill ${c5}">${l5}</span></div><div class="desc" style="margin-bottom:16px"><p>${d5}</p></div><div class="srow" style="margin-bottom:4px"><div style="flex:1;font-size:12px;font-weight:700;color:var(--mut)">Реальная практика</div><div class="snum" style="font-size:22px">${b6}</div><div class="sof">/24</div><span class="pill ${c6}">${l6}</span></div><div class="desc"><p>${d6}</p></div></div>`;
+}
+
+function cr(PT, cog, conf){
+  const t = [];
+  if(PT[0]==='E') t.push(['👥','<strong>Групповое обучение:</strong> языковые клубы, разговорные ивенты — ты заряжаешься от людей.']);
+  else t.push(['🎧','<strong>Самостоятельная работа:</strong> онлайн-курсы в своём темпе, чтение, подготовленные монологи с записью.']);
+  if(PT[2]==='T') t.push(['📐','<strong>Системный подход:</strong> грамматика структурно, схемы и таблицы, анализ закономерностей.']);
+  else t.push(['🎬','<strong>Эмоциональный контекст:</strong> фильмы, истории, разговоры о личном — так запоминаешь лучше всего.']);
+  if(PT[1]==='S') t.push(['🗣','<strong>Практические диалоги:</strong> реальные ситуации — заказ в кафе, звонок, переговоры.']);
+  else t.push(['🌐','<strong>Концептуальное погружение:</strong> этимология, сравнение языков, лингвистика.']);
+  if(PT[3]==='J') t.push(['📅','<strong>Структура и план:</strong> учебный план на месяц, трекинг прогресса. Регулярность — твоя суперсила.']);
+  else t.push(['🎲','<strong>Гибкое обучение:</strong> следуй интересу, меняй темы и форматы. Главное — не пропускать практику.']);
+  if(cog==='Визуал') t.push(['🗂','<strong>Визуальные инструменты:</strong> Anki с картинками, mind-map, субтитры, цветовое кодирование.']);
+  else if(cog==='Аудиал') t.push(['🎙','<strong>Аудио-практика:</strong> shadowing, записывай себя, подкасты каждый день.']);
+  else if(cog==='Кинестетик') t.push(['✍️','<strong>Письмо и движение:</strong> от руки, физические карточки, ролевые игры.']);
+  else t.push(['🔄','<strong>Мультисенсорность:</strong> посмотрел видео → записал фразы → повторил вслух.']);
+  if(conf<12) t.push(['💛','<strong>Снижение языковой тревоги:</strong> начни с безопасной среды. Ошибки — это прогресс.']);
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Персональные рекомендации</div><ul class="tips">${t.map(([i,tx])=>`<li class="tip"><span class="tico">${i}</span><span>${tx}</span></li>`).join('')}</ul></div>`;
+}
+
+function enioLegend(){
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Эниостиль: что означают + и –</div><div class="enio-legend"><p style="margin-bottom:12px"><strong>Север (С)</strong> — логика, структура, системы, правила</p><p style="margin-bottom:12px"><strong>Юг (Ю)</strong> — эмоции, отношения, эмпатия, ценности</p><p style="margin-bottom:12px"><strong>Запад (З)</strong> — действие, результат, иерархия, пространство</p><p style="margin-bottom:12px"><strong>Восток (В)</strong> — идеи, интуиция, время, возможности</p><div style="border-top:1px solid var(--brd);padding-top:12px"><div class="enio-row"><span><span class="enio-dot dot-plus"></span><strong>+</strong> (экстравертный)</span><span>активно проявляю, являю миру</span></div><div class="enio-row"><span><span class="enio-dot dot-minus"></span><strong>–</strong> (интровертный)</span><span>наблюдаю, анализирую, принимаю</span></div></div></div></div>`;
+}
+
+function sv(data){
+  // 🔧 Если скрипт ещё не настроен — данные выводятся в консоль
+  if(!SU || SU.includes('script.google.com/default')){
+    console.log('📦 Данные готовы к отправке:', data);
+    console.log('https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec');
+    return;
+  }
+  
+  console.log('📤 Отправка данных в Google Sheets...', data);
+  
+  const form = new FormData();
+  form.append('data', JSON.stringify(data));
+  
+  // 🔧 Используем правильные заголовки для Google Apps Script
+  fetch(SU, {
+    method: 'POST',
+    mode: 'no-cors', // Важно для Google Apps Script
+    body: form,
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(() => console.log('✅ Данные отправлены'))
+  .catch(e => console.error('❌ Ошибка отправки:', e));
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 Тест загружен');
+});
+
+  // ===== ФУНКЦИЯ СОХРАНЕНИЯ В PDF =====
+document.getElementById('savePdfBtn')?.addEventListener('click', async function() {
+  const btn = this;
+  const originalText = btn.innerHTML;
+  
+  // Блокируем кнопку
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Создаём PDF...';
+  
+  try {
+    // Находим контейнер с результатами
+    const resultsContainer = document.getElementById('resultsScreen');
+    
+    // Временно скрываем лишние элементы для чистого снимка
+    const hideElements = document.querySelectorAll('.save-btn, .btn-copy, .copy-success, .blob');
+    hideElements.forEach(el => el.style.display = 'none');
+    
+    // Генерируем изображение экрана
+    const canvas = await html2canvas(resultsContainer, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#f4f2ff',
+      logging: false,
+      width: resultsContainer.scrollWidth,
+      height: resultsContainer.scrollHeight
+    });
+    
+    // Возвращаем скрытые элементы
+    hideElements.forEach(el => el.style.display = '');
+    
+    // Создаём PDF
+    const { jsPDF } = window.jspdf;
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'px',
+      format: [canvas.width, canvas.height]
+    });
+    
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    
+    // Скачиваем файл
+    const date = new Date().toISOString().slice(0, 10);
+    const pt = finalResults?.pt || 'Result';
+    pdf.save(`English_Profile_${pt}_${date}.pdf`);
+    
+  } catch (error) {
+    console.error('PDF error:', error);
+    alert('⚠️ Не удалось создать PDF. Попробуйте ещё раз или используйте "Печать → Сохранить как PDF".');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+});
+  
+</script>
 </body>
 </html>
