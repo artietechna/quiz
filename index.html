@@ -15,7 +15,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .b2{width:360px;height:360px;background:#bae6fd;opacity:.22;bottom:-90px;left:-90px;}
 .shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px 60px;}
 @keyframes rise{from{opacity:0;transform:translateY(20px) scale(.99);}to{opacity:1;transform:translateY(0) scale(1);}}
-@keyframes flow{from{background-position:0 0;}to{background-position:100% 0;}}
 
 /* INTRO */
 #intro{max-width:560px;width:100%;animation:rise .55s cubic-bezier(.4,0,.2,1) both;}
@@ -42,12 +41,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .pb-fill{height:100%;background:var(--grad);border-radius:99px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
 .pb-lbl{font-size:15px;font-weight:700;color:var(--acc);white-space:nowrap;min-width:72px;text-align:right;font-variant-numeric:tabular-nums;}
 .q-card{background:var(--sur);border:1.5px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:var(--sh);padding:40px 36px 32px;animation:rise .4s cubic-bezier(.4,0,.2,1) both;}
-
-/* Вопрос */
 .q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:26px;}
 .q-text{font-size:clamp(21px,3.5vw,24px);font-weight:600;line-height:1.55;color:var(--text);letter-spacing:-.01em;}
-
-/* Горизонтальные кнопки - текст в 2 строки */
 .opts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
 .opt{display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--bg);border:2px solid var(--brd);border-radius:18px;padding:20px 10px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:600;color:var(--mut);transition:border-color .2s,background .2s,color .2s,transform .15s;text-align:center;justify-content:center;min-height:110px;}
 .opt:hover{border-color:var(--acc);background:rgba(108,71,255,.05);color:var(--text);}
@@ -64,8 +59,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .res-chip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);border:1px solid var(--brd);border-radius:99px;padding:6px 16px;font-size:13px;font-weight:700;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
 .res-title{font-size:clamp(32px,6vw,44px);font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.15;margin-bottom:6px;}
 .res-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-
-/* Анимация карточек результатов */
 .rc{background:var(--sur);border:1.5px solid var(--brd);border-radius:20px;padding:28px;margin-bottom:12px;box-shadow:0 2px 16px rgba(108,71,255,.07);position:relative;overflow:hidden;opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);}
 .rc.visible{opacity:1;transform:translateY(0);}
 .rc-bar{position:absolute;top:0;left:0;width:100%;height:3px;background:var(--grad);border-radius:20px 20px 0 0;}
@@ -90,28 +83,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .tip{display:flex;gap:11px;align-items:flex-start;font-size:16px;line-height:1.75;color:#4e4470;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease;}
 .tip.visible{opacity:1;transform:translateX(0);}
 .tico{min-width:32px;height:32px;border-radius:8px;background:var(--pbg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px;}
-.btn-print{display:block;margin:20px auto 0;background:transparent;border:1.5px solid var(--brd);border-radius:12px;padding:16px 28px;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:600;color:var(--mut);cursor:pointer;transition:all .18s;opacity:0;animation:rise .5s ease .8s forwards;}
-.btn-print:hover{border-color:var(--acc);color:var(--acc);background:var(--pbg);}
-#sav{display:none;position:fixed;inset:0;background:rgba(244,242,255,.8);backdrop-filter:blur(10px);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-size:17px;font-weight:600;color:var(--acc);}
-#sav.on{display:flex;}
-.spin{width:40px;height:40px;border:3px solid rgba(108,71,255,.15);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite;}
-@keyframes sp{to{transform:rotate(360deg);}}
-
-/* Улучшенные стили для печати (экспорт в PDF) */
-@media print {
-  body { background: white; color: black; }
-  .blob, .btn-print, #sav, .shell { display: none !important; }
-  #resultsScreen { display: block !important; max-width: 100%; }
-  .rc { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
-  .rc-bar { display: none; }
-  .res-title { color: black !important; }
-  .res-title span { background: none !important; color: black !important; -webkit-text-fill-color: black !important; }
-  .pill { border: 1px solid #ccc; }
-  .ph { background: #d1fae5 !important; color: #065f46 !important; }
-  .pm { background: #fef9c3 !important; color: #854d0e !important; }
-  .pl { background: #fee2e2 !important; color: #991b1b !important; }
-  .pt-tag { background: #333 !important; color: white !important; }
-}
 
 @media(max-width:768px){
   .opts{grid-template-columns:repeat(2,1fr);gap:12px;}
@@ -137,7 +108,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </head>
 <body>
 <div class="blob b1"></div><div class="blob b2"></div>
-<div id="sav"><div class="spin"></div><span>Сохраняем результаты…</span></div>
 <div class="shell">
 
 <div id="intro">
@@ -175,21 +145,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <h2 class="res-title">Вот твой<br><span>профиль</span></h2>
   </div>
   <div id="rc"></div>
-  <button class="btn-print" onclick="exportPDF()" aria-label="Скачать результаты в PDF">📥 Скачать отчёт (PDF)</button>
-  <button class="btn-print" onclick="shareResult()" aria-label="Поделиться результатом" style="margin-top:10px;">🔗 Поделиться профилем</button>
 </div>
 
 </div>
 <script>
 // ===== КОНФИГУРАЦИЯ =====
-const TEST_VERSION = '1.0';
-const SU = "https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec".trim();
-const MIN_ANSWER_TIME_MS = 800;
+// 🔧 ВАЖНО: Вставьте сюда ваш реальный URL Google Apps Script без пробелов!
+const SU="https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec";
 
-// ===== ВОПРОСЫ И ЛОГИКА =====
+// ===== ВОПРОСЫ =====
 const Q=["Я чувствую себя уверенно, когда говорю на английском языке.","Я боюсь допустить ошибку, когда говорю на английском.","Я стараюсь избегать разговоров на английском языке.","Даже если я делаю ошибки, я продолжаю говорить на английском.","Мне трудно начать разговор на английском языке.","Я могу объяснить свою мысль на английском, даже если не знаю точного слова.","Мне важно хорошо владеть английским языком.","Я регулярно стараюсь улучшать свой уровень английского.","Я изучаю английский язык только из-за необходимости (работа, учёба).","Мне интересно узнавать новые слова и выражения на английском.","Я испытываю удовольствие, когда понимаю английскую речь.","Я хотел(а) бы говорить на английском свободно.","Мне проще запоминать информацию, когда я вижу её (схемы, таблицы, карточки).","Я лучше понимаю грамматику, когда вижу правила в виде схем или таблиц.","Мне помогают видео с субтитрами для изучения английского.","Мне проще запоминать информацию, когда я слышу её (аудио, подкасты).","Я хорошо запоминаю произношение, слушая носителей языка.","Мне нравится изучать английский через песни и аудиокниги.","Мне нужно что-то делать руками, чтобы информация запомнилась.","Я лучше запоминаю слова, когда записываю их или печатаю.","Мне помогает физическое движение или ролевые игры при изучении языка.","Я предпочитаю изучать английский в группе, общаясь с другими людьми.","Мне легче говорить на английском, когда вокруг много людей.","Я предпочитаю изучать английский самостоятельно, в тишине.","Мне нужно время подумать, прежде чем ответить на английском.","Для меня важно понимать грамматические правила и логику языка.","Я стараюсь анализировать структуру предложений и находить закономерности.","Мне проще запоминать через истории, эмоции и контекст общения.","Я лучше запоминаю фразы, если они связаны с переживанием или ситуацией.","Я составляю чёткий план изучения языка и следую ему.","Я предпочитаю иметь расписание занятий и регулярную практику.","Я изучаю английский спонтанно, когда возникает интерес или необходимость.","Мне нравится гибкость в обучении, без строгих планов.","Мне важны практические примеры и конкретные ситуации использования английского.","Я предпочитаю учить язык через реальные диалоги и повседневные фразы.","Мне интересны общие концепции языка, его история и связь с другими языками.","Я люблю размышлять о том, почему в языке используются те или иные конструкции.","Мне легче запоминать английские выражения через фильмы и сериалы.","Музыка на английском помогает мне лучше понимать язык.","Социальные сети могут быть полезным инструментом для изучения языка.","Я обращаю внимание на новые английские слова в интернете.","Мне интересно изучать разговорные выражения и современный английский.","Я считаю, что язык лучше изучается через реальные примеры общения.","Я стараюсь использовать английский язык вне занятий.","Я готов(а) общаться с иностранцами на английском языке.","Я использую английский при просмотре видео, фильмов или чтении.","Я хотел(а) бы чаще применять английский в реальной жизни.","Я стараюсь думать на английском языке.","Я чувствую, что английский может открыть для меня новые возможности."];
 
-// Варианты ответов с разбивкой на 2 строки
 const OD=[
   {v:1,l1:"Совсем",l2:"не согласен"},
   {v:2,l1:"Скорее",l2:"не согласен"},
@@ -201,8 +167,6 @@ const REV_IDX = [1,2,4,8,23,24,31,32];
 
 let cur=0, raw=new Array(49).fill(null);
 let startTime = null;
-let answerTimes = [];
-let lastAnswerTime = null;
 let isTransitioning = false;
 
 function go(){
@@ -211,7 +175,6 @@ function go(){
     return;
   }
   startTime = Date.now();
-  answerTimes = [];
   document.getElementById('intro').style.display='none';
   document.getElementById('quizScreen').style.display='block';
   rq(0);
@@ -224,7 +187,6 @@ function rq(i){
   cur=i;
   const progressPercent = Math.round((i)/Q.length*100);
   
-  // Плавное обновление прогресс-бара
   const pf = document.getElementById('pf');
   pf.style.transition = 'width 1.2s cubic-bezier(.4,0,.2,1)';
   pf.style.width = progressPercent + '%';
@@ -246,7 +208,6 @@ function rq(i){
     b.setAttribute('type','button');
     b.setAttribute('aria-pressed', raw[i]===o.v);
     b.setAttribute('aria-label', `${o.l1} ${o.l2} (балл ${o.v})`);
-    // Текст в 2 строки через span
     b.innerHTML = `<span class="ob">${o.v}</span><span class="ol"><span>${o.l1}</span><span>${o.l2}</span></span>`;
     b.onclick=()=>pick(i,o.v);
     el.appendChild(b);
@@ -256,21 +217,9 @@ function rq(i){
 }
 
 function pick(i,v){
-  const now = Date.now();
-  const answerTime = lastAnswerTime ? (now - lastAnswerTime) : null;
-  
-  if (answerTime !== null && answerTime < MIN_ANSWER_TIME_MS) {
-    console.warn(`⚠️ Вопрос ${i+1}: слишком быстрый ответ (${answerTime}мс < ${MIN_ANSWER_TIME_MS}мс)`);
-    answerTimes.push({q:i+1, time:answerTime, valid:false});
-  } else {
-    answerTimes.push({q:i+1, time:answerTime, valid:true});
-  }
-  lastAnswerTime = now;
-  
   raw[i]=v;
   document.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('on',OD[j].v===v));
   
-  // Плавный переход к следующему вопросу
   setTimeout(()=>{
     if(i+1 < Q.length){
       rq(i+1);
@@ -344,21 +293,12 @@ function res(){
   
   setTimeout(animateResults, 100);
   
-  const totalAnswers = answerTimes.filter(a => a.time !== null).length;
-  const validAnswers = answerTimes.filter(a => a.valid).length;
-  const validityRate = totalAnswers > 0 ? (validAnswers / totalAnswers * 100).toFixed(1) : 100;
   const duration = Math.round((Date.now() - startTime) / 1000);
-  
-  console.log(`📊 Валидность ответов: ${validityRate}% (${validAnswers}/${totalAnswers})`);
-  console.log(`⏱ Время прохождения: ${duration} сек`);
   
   sv({
     pt:PT, cog, b1, b2, b5, b6, vis, aud, kin, 
     raw:raw.join(','), 
-    version:TEST_VERSION,
-    duration:duration,
-    validityRate:validityRate,
-    fastAnswers:answerTimes.filter(a => !a.valid).map(a => a.q)
+    duration:duration
   });
 }
 
@@ -453,51 +393,34 @@ function cr(PT, cog, conf){
   return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Персональные рекомендации</div><ul class="tips">${t.map(([i,tx])=>`<li class="tip"><span class="tico">${i}</span><span>${tx}</span></li>`).join('')}</ul></div>`;
 }
 
-function exportPDF() {
-  alert('💡 В окне печати выбери «Сохранить как PDF» в списке принтеров — это создаст аккуратный отчёт для диссертации!');
-  window.print();
-}
-
-function shareResult() {
-  const pt = document.querySelector('.pt-tag')?.textContent || 'Мой профиль';
-  const text = `Я прошёл диагностический опросник и получил профиль: ${pt}. Проверь свой: [ссылка на тест]`;
-  
-  if (navigator.share) {
-    navigator.share({ title: 'Мой психологический профиль', text }).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Ссылка скопирована! Можешь отправить друзьям 📋');
-    });
-  }
-}
-
 function sv(data){
-  if(!SU || SU.includes("https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec") || SU === "https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec"){
-    console.log('📦 Данные готовы к отправке (режим отладки):', data);
+  // 🔧 Если скрипт ещё не настроен — данные выводятся в консоль
+  if(!SU || SU.includes('script.google.com/default')){
+    console.log('📦 Данные готовы к отправке:', data);
+    console.log('https://script.google.com/macros/s/AKfycbxdhb49cktK_UvbTmbfGwtj1omr-hapQhq5fYkNwO_IzQrjBA2SSIEWPsUBpRpPcWtV/exec');
     return;
   }
   
   console.log('📤 Отправка данных в Google Sheets...', data);
-  document.getElementById('sav').classList.add('on');
   
   const form = new FormData();
   form.append('data', JSON.stringify(data));
   
+  // 🔧 Используем правильные заголовки для Google Apps Script
   fetch(SU, {
     method: 'POST',
-    mode: 'no-cors',
+    mode: 'no-cors', // Важно для Google Apps Script
     body: form,
-    headers: { 'Accept': 'application/json' }
+    headers: {
+      'Accept': 'application/json'
+    }
   })
-  .catch(e => console.error('❌ Ошибка отправки:', e))
-  .finally(() => {
-    document.getElementById('sav').classList.remove('on');
-    console.log('✅ Отправка завершена');
-  });
+  .then(() => console.log('✅ Данные отправлены'))
+  .catch(e => console.error('❌ Ошибка отправки:', e));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log(`🚀 Тест загружен. Версия: ${TEST_VERSION}`);
+  console.log('🚀 Тест загружен');
 });
 </script>
 </body>
