@@ -77,12 +77,29 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .desc p{margin-bottom:10px;}
 .desc p:last-child{margin-bottom:0;}
 .desc strong{color:var(--acc);font-weight:700;}
-.pt-tag{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;font-size:22px;font-weight:800;padding:10px 22px;border-radius:99px;margin-bottom:14px;letter-spacing:-.01em;}
-.pt-nm{font-size:15px;font-weight:500;opacity:.65;}
+.pt-tag{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;font-size:22px;font-weight:800;padding:10px 22px;border-radius:99px;margin-bottom:14px;letter-spacing:-.01em;flex-wrap:wrap;justify-content:center;}
+.pt-nm{font-size:15px;font-weight:500;opacity:.9;}
+.pt-enio{font-size:13px;font-weight:400;opacity:.75;margin-left:8px;}
 .tips{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:10px;}
 .tip{display:flex;gap:11px;align-items:flex-start;font-size:16px;line-height:1.75;color:#4e4470;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease;}
 .tip.visible{opacity:1;transform:translateX(0);}
 .tico{min-width:32px;height:32px;border-radius:8px;background:var(--pbg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* Save Button */
+.save-section{margin-top:24px;padding-top:20px;border-top:1px solid var(--brd);}
+.btn-save{width:100%;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff;border:none;border-radius:16px;padding:16px 24px;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(16,185,129,.25);transition:transform .18s,box-shadow .18s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;}
+.btn-save:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(16,185,129,.35);}
+.btn-copy{width:100%;background:var(--sur);color:var(--acc);border:2px solid var(--brd);border-radius:16px;padding:14px 24px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-copy:hover{border-color:var(--acc);background:rgba(108,71,255,.05);}
+.copy-success{display:none;color:#10b981;font-size:14px;font-weight:600;text-align:center;margin-top:8px;animation:rise .3s ease;}
+
+/* Eniostyle legend */
+.enio-legend{background:var(--pbg);border:1px solid var(--brd);border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:var(--mut);}
+.enio-legend strong{color:var(--acc);}
+.enio-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;}
+.enio-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;}
+.dot-plus{background:var(--grad);}
+.dot-minus{background:rgba(108,71,255,.3);}
 
 @media(max-width:768px){
   .opts{grid-template-columns:repeat(2,1fr);gap:12px;}
@@ -93,6 +110,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   .q-text{font-size:20px;}
   .rc{padding:22px 18px;}
   .scale-grid{grid-template-columns:1fr;}
+  .pt-tag{font-size:20px;padding:8px 18px;}
 }
 @media(max-width:480px){
   .opts{grid-template-columns:repeat(2,1fr);}
@@ -103,6 +121,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   .pb-lbl{font-size:14px;}
   .i-title{font-size:28px;}
   .i-sub{font-size:16px;}
+  .pt-tag{font-size:18px;flex-direction:column;gap:4px;}
+  .pt-enio{margin-left:0;}
 }
 </style>
 </head>
@@ -118,7 +138,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <div class="i-body">
     <p>49 утверждений о том, как ты воспринимаешь, запоминаешь и чувствуешь язык.</p>
     <p>Отвечай искренне, выбирая тот вариант, который наиболее точно отражает твоё мнение.</p>
-    <p>Узнай свой психотип и получи персональные советы.</p>
+    <p>Узнай свой психотип, профиль Эниостиля и получи персональные советы.</p>
   </div>
   <div class="scale-grid">
     <div class="sc"><span class="sn">1</span>Совсем не согласен</div>
@@ -145,6 +165,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <h2 class="res-title">Вот твой<br><span>профиль</span></h2>
   </div>
   <div id="rc"></div>
+  
+  <!-- Save Section -->
+  <div class="save-section">
+    <button class="btn-save" onclick="shareResults()" aria-label="Поделиться результатами">
+      <span>📤</span> Поделиться результатами
+    </button>
+    <button class="btn-copy" onclick="copyResults()" aria-label="Скопировать результаты">
+      <span>📋</span> Скопировать текст
+    </button>
+    <div class="copy-success" id="copyMsg">✓ Скопировано в буфер обмена!</div>
+  </div>
 </div>
 
 </div>
@@ -168,6 +199,7 @@ const REV_IDX = [1,2,4,8,23,24,31,32];
 let cur=0, raw=new Array(49).fill(null);
 let startTime = null;
 let isTransitioning = false;
+let finalResults = null;
 
 function go(){
   if(raw.filter(x=>x===null).length > 0 && cur === Q.length){
@@ -289,17 +321,68 @@ function res(){
   else if(aud === mx && aud > vis && aud > kin) cog = 'Аудиал';
   else if(kin === mx && kin > vis && kin > aud) cog = 'Кинестетик';
   
-  document.getElementById('rc').innerHTML = c1(b1) + c2(b2) + c3(cog, vis, aud, kin) + c4(PT, ei, tL, fE, jP, pS, sC, nA) + c56(b5, b6) + cr(PT, cog, b1);
+  // Calculate Eniostyle axes
+  const north = (s[25]+s[26]+s[29]+s[30]+s[33]+s[34]) / 6; // Logic + Planning + Concrete
+  const south = (s[27]+s[28]+s[31]+s[32]) / 4; // Emotion + Spontaneous
+  const west = (s[12]+s[13]+s[14]+s[33]+s[34]) / 5; // Visual + Concrete
+  const east = (s[35]+s[36]+s[31]+s[32]) / 4; // Abstract + Spontaneous
+  
+  const enioN = north >= 3 ? '+Север' : '-Север';
+  const enioS = south >= 3 ? '+Юг' : '-Юг';
+  const enioW = west >= 3 ? '+Запад' : '-Запад';
+  const enioE = east >= 3 ? '+Восток' : '-Восток';
+  
+  // Determine primary Eniostyle formula based on PT
+  const enioFormula = getEnioFormula(PT);
+  
+  document.getElementById('rc').innerHTML = c1(b1) + c2(b2) + c3(cog, vis, aud, kin) + c4(PT, ei, tL, fE, jP, pS, sC, nA, enioFormula) + c56(b5, b6) + cr(PT, cog, b1) + enioLegend();
   
   setTimeout(animateResults, 100);
   
   const duration = Math.round((Date.now() - startTime) / 1000);
   
+  // Store final results for sharing
+  finalResults = {
+    pt: PT,
+    ptName: PN[PT] || '',
+    enioFormula: enioFormula,
+    cog: cog,
+    confidence: b1,
+    motivation: b2,
+    modernMethods: b5,
+    realPractice: b6,
+    duration: duration
+  };
+  
   sv({
     pt:PT, cog, b1, b2, b5, b6, vis, aud, kin, 
+    enioFormula: enioFormula,
     raw:raw.join(','), 
     duration:duration
   });
+}
+
+// Map MBTI to Eniostyle formula
+function getEnioFormula(pt){
+  const map = {
+    'ENTJ': '+Север-Восток',
+    'ENTP': '+Восток-Север',
+    'INTJ': '-Север+Восток',
+    'INTP': '-Восток+Север',
+    'ENFJ': '+Юг-Восток',
+    'ENFP': '+Восток-Юг',
+    'INFJ': '-Юг+Восток',
+    'INFP': '-Восток+Юг',
+    'ESFJ': '+Юг-Запад',
+    'ESFP': '+Запад-Юг',
+    'ISFJ': '-Юг+Запад',
+    'ISFP': '-Запад+Юг',
+    'ESTJ': '+Север-Запад',
+    'ESTP': '+Запад-Север',
+    'ISTJ': '-Север+Запад',
+    'ISTP': '-Запад+Север'
+  };
+  return map[pt] || '';
 }
 
 function card(lbl, sn, mx, top, body){
@@ -332,27 +415,34 @@ function c3(cog, v, a, k){
   return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Когнитивный стиль</div><div style="font-size:22px;font-weight:800;color:var(--acc);letter-spacing:-.01em;margin-bottom:6px;">${cog}</div>${sg}<div class="desc">${ds[cog]}</div></div>`;
 }
 
-const PN = {ENTJ:'Командир',ENTP:'Полемист',INTJ:'Стратег',INTP:'Логик',ENFJ:'Тренер',ENFP:'Борец',INFJ:'Советник',INFP:'Медиатор',ESTJ:'Менеджер',ESTP:'Делец',ISTJ:'Администратор',ISTP:'Виртуоз',ESFJ:'Консул',ESFP:'Шоумен',ISFJ:'Защитник',ISFP:'Художник'};
-const PD = {
-  ENTJ:`<p><strong>ENTJ — Командир.</strong> Прирождённый лидер с аналитическим умом. Язык привлекает системностью и применением в карьере и переговорах.</p><p><strong>Стиль:</strong> нужна чёткая программа с целями. Бизнес-английский, дебаты — твоя среда.</p><p><strong>Инструменты:</strong> Lingoda, Business English Pod, Harvard Business Review на английском.</p>`,
-  ENTP:`<p><strong>ENTP — Полемист.</strong> Любишь идеи и нестандартные подходы. Язык — инструмент обмена мыслями.</p><p><strong>Стиль:</strong> нужны дискуссии и темы, которые тебя задевают.</p><p><strong>Инструменты:</strong> TED Talks, философские подкасты, Toastmasters International.</p>`,
-  INTJ:`<p><strong>INTJ — Стратег.</strong> Независимый, системный. Язык — стратегический инструмент.</p><p><strong>Стиль:</strong> самостоятельная работа по чёткой системе. Терпеть не можешь пустую болтовню.</p><p><strong>Инструменты:</strong> Coursera, edX, сложная литература, индивидуальный тьютор.</p>`,
-  INTP:`<p><strong>INTP — Логик.</strong> Аналитик, теоретик. Язык — система, которую нужно понять, а не заучить.</p><p><strong>Стиль:</strong> нужно понимать «почему». Главный вызов — начать говорить.</p><p><strong>Инструменты:</strong> Linguriosity, NativLang, этимологические словари. Правило: 1 час теории = 1 час разговора.</p>`,
-  ENFJ:`<p><strong>ENFJ — Тренер.</strong> Вдохновляешь людей. Язык — мост к людям из других культур.</p><p><strong>Стиль:</strong> расцветаешь в группе и в эмоционально насыщенном контексте.</p><p><strong>Инструменты:</strong> HelloTalk, Tandem, волонтёрство с иностранцами.</p>`,
-  ENFP:`<p><strong>ENFP — Борец.</strong> Творческий, энтузиастичный. Загораешься быстро — и угасаешь, если скучно.</p><p><strong>Стиль:</strong> нужны разнообразие и личная связь с материалом. Зубрёжка убивает интерес.</p><p><strong>Инструменты:</strong> Duolingo Stories, языковые кафе, творческие проекты на английском.</p>`,
-  INFJ:`<p><strong>INFJ — Советник.</strong> Вдумчивый, глубокий. Язык — способ выразить важное и понять других.</p><p><strong>Стиль:</strong> тишина и глубина. Любишь читать и анализировать.</p><p><strong>Инструменты:</strong> литература, кино с глубоким сюжетом, pen-pal по интересующей теме.</p>`,
-  INFP:`<p><strong>INFP — Медиатор.</strong> Идеалист с богатым воображением. Язык — способ выразить себя.</p><p><strong>Стиль:</strong> запоминаешь через истории, эмоции и личные смыслы.</p><p><strong>Инструменты:</strong> английская поэзия и худлитература, фильмы без дубляжа, дневник на английском.</p>`,
-  ESTJ:`<p><strong>ESTJ — Менеджер.</strong> Практичный, организованный. Хочешь освоить язык эффективно.</p><p><strong>Стиль:</strong> чёткая структура, расписание, измеримый результат.</p><p><strong>Инструменты:</strong> Cambridge, IELTS, бизнес-английский, LinguaLeo с трекингом прогресса.</p>`,
-  ESTP:`<p><strong>ESTP — Делец.</strong> Энергичный, прагматичный. Язык — инструмент здесь и сейчас.</p><p><strong>Стиль:</strong> учишься в действии. Теория без практики — пустая трата времени.</p><p><strong>Инструменты:</strong> разговорные клубы, путешествия, английские мероприятия. Speaky или Tandem.</p>`,
-  ISTJ:`<p><strong>ISTJ — Администратор.</strong> Надёжный, методичный. Берёшься за изучение языка серьёзно.</p><p><strong>Стиль:</strong> система, последовательность, понятный прогресс.</p><p><strong>Инструменты:</strong> British Council, Anki с регулярным повторением, международные экзамены.</p>`,
-  ISTP:`<p><strong>ISTP — Виртуоз.</strong> Независимый, технический. Язык — навык, который нужно «собрать руками».</p><p><strong>Стиль:</strong> разбираешься самостоятельно. Групповые занятия кажутся лишними.</p><p><strong>Инструменты:</strong> технические YouTube-каналы, документация и форумы. Language Transfer.</p>`,
-  ESFJ:`<p><strong>ESFJ — Консул.</strong> Тёплый, заботливый. Язык — прежде всего связь с людьми.</p><p><strong>Стиль:</strong> расцветаешь в поддерживающей социальной среде.</p><p><strong>Инструменты:</strong> групповые курсы с куратором, языковые обмены, HelloTalk.</p>`,
-  ESFP:`<p><strong>ESFP — Шоумен.</strong> Энергичный, общительный. Язык — способ веселиться и знакомиться.</p><p><strong>Стиль:</strong> нужны движение, разнообразие, веселье.</p><p><strong>Инструменты:</strong> стендап-комедия на английском, разбор текстов песен, языковые вечеринки.</p>`,
-  ISFJ:`<p><strong>ISFJ — Защитник.</strong> Внимательный, терпеливый. Учишься тихо, но основательно.</p><p><strong>Стиль:</strong> повторение и закрепление. Нужна безопасная, доброжелательная обстановка.</p><p><strong>Инструменты:</strong> индивидуальные занятия с терпеливым преподавателем, онлайн-курсы в своём темпе.</p>`,
-  ISFP:`<p><strong>ISFP — Художник.</strong> Чуткий, творческий. Язык — способ ощутить мир другого человека.</p><p><strong>Стиль:</strong> учишься через красоту и ощущения. Сухая грамматика отталкивает.</p><p><strong>Инструменты:</strong> фильмы без дубляжа, английские блоги о творчестве. Изучай язык через любимый вид искусства.</p>`
+// Updated psychotype names and Eniostyle formulas
+const PN = {
+  ENTJ:'Командир', ENTP:'Полемист', INTJ:'Архитектор', INTP:'Логик',
+  ENFJ:'Протагонист', ENFP:'Активист', INFJ:'Заступник', INFP:'Посредник',
+  ESFJ:'Консул', ESFP:'Артист', ISFJ:'Защитник', ISFP:'Авантюрист',
+  ESTJ:'Менеджер', ESTP:'Предприниматель', ISTJ:'Логист', ISTP:'Виртуоз'
 };
 
-function c4(PT, ei, tL, fE, jP, pS, sC, nA){
+const PD = {
+  ENTJ:`<p><strong>ENTJ — Командир</strong> <span class="pt-enio">(+Север-Восток)</span>. Прирождённый лидер с аналитическим умом. Язык привлекает системностью и применением в карьере.</p><p><strong>Стиль:</strong> нужна чёткая программа с целями. Бизнес-английский, дебаты — твоя среда.</p><p><strong>Инструменты:</strong> Lingoda, Business English Pod, Harvard Business Review.</p>`,
+  ENTP:`<p><strong>ENTP — Полемист</strong> <span class="pt-enio">(+Восток-Север)</span>. Любишь идеи и нестандартные подходы. Язык — инструмент обмена мыслями.</p><p><strong>Стиль:</strong> нужны дискуссии и темы, которые тебя задевают.</p><p><strong>Инструменты:</strong> TED Talks, философские подкасты, Toastmasters.</p>`,
+  INTJ:`<p><strong>INTJ — Архитектор</strong> <span class="pt-enio">(-Север+Восток)</span>. Независимый, системный. Язык — стратегический инструмент.</p><p><strong>Стиль:</strong> самостоятельная работа по чёткой системе.</p><p><strong>Инструменты:</strong> Coursera, edX, сложная литература, индивидуальный тьютор.</p>`,
+  INTP:`<p><strong>INTP — Логик</strong> <span class="pt-enio">(-Восток+Север)</span>. Аналитик, теоретик. Язык — система, которую нужно понять.</p><p><strong>Стиль:</strong> нужно понимать «почему». Главный вызов — начать говорить.</p><p><strong>Инструменты:</strong> Linguriosity, NativLang, этимологические словари.</p>`,
+  ENFJ:`<p><strong>ENFJ — Протагонист</strong> <span class="pt-enio">(+Юг-Восток)</span>. Вдохновляешь людей. Язык — мост к людям из других культур.</p><p><strong>Стиль:</strong> расцветаешь в группе и в эмоционально насыщенном контексте.</p><p><strong>Инструменты:</strong> HelloTalk, Tandem, волонтёрство с иностранцами.</p>`,
+  ENFP:`<p><strong>ENFP — Активист</strong> <span class="pt-enio">(+Восток-Юг)</span>. Творческий, энтузиастичный. Загораешься быстро — и угасаешь, если скучно.</p><p><strong>Стиль:</strong> нужны разнообразие и личная связь с материалом.</p><p><strong>Инструменты:</strong> Duolingo Stories, языковые кафе, творческие проекты.</p>`,
+  INFJ:`<p><strong>INFJ — Заступник</strong> <span class="pt-enio">(-Юг+Восток)</span>. Вдумчивый, глубокий. Язык — способ выразить важное и понять других.</p><p><strong>Стиль:</strong> тишина и глубина. Любишь читать и анализировать.</p><p><strong>Инструменты:</strong> литература, кино с глубоким сюжетом, pen-pal.</p>`,
+  INFP:`<p><strong>INFP — Посредник</strong> <span class="pt-enio">(-Восток+Юг)</span>. Идеалист с богатым воображением. Язык — способ выразить себя.</p><p><strong>Стиль:</strong> запоминаешь через истории, эмоции и личные смыслы.</p><p><strong>Инструменты:</strong> английская поэзия, фильмы без дубляжа, дневник на английском.</p>`,
+  ESTJ:`<p><strong>ESTJ — Менеджер</strong> <span class="pt-enio">(+Север-Запад)</span>. Практичный, организованный. Хочешь освоить язык эффективно.</p><p><strong>Стиль:</strong> чёткая структура, расписание, измеримый результат.</p><p><strong>Инструменты:</strong> Cambridge, IELTS, бизнес-английский, LinguaLeo.</p>`,
+  ESTP:`<p><strong>ESTP — Предприниматель</strong> <span class="pt-enio">(+Запад-Север)</span>. Энергичный, прагматичный. Язык — инструмент здесь и сейчас.</p><p><strong>Стиль:</strong> учишься в действии. Теория без практики — пустая трата времени.</p><p><strong>Инструменты:</strong> разговорные клубы, путешествия, Speaky или Tandem.</p>`,
+  ISTJ:`<p><strong>ISTJ — Логист</strong> <span class="pt-enio">(-Север+Запад)</span>. Надёжный, методичный. Берёшься за изучение языка серьёзно.</p><p><strong>Стиль:</strong> система, последовательность, понятный прогресс.</p><p><strong>Инструменты:</strong> British Council, Anki, международные экзамены.</p>`,
+  ISTP:`<p><strong>ISTP — Виртуоз</strong> <span class="pt-enio">(-Запад+Север)</span>. Независимый, технический. Язык — навык, который нужно «собрать руками».</p><p><strong>Стиль:</strong> разбираешься самостоятельно. Групповые занятия кажутся лишними.</p><p><strong>Инструменты:</strong> технические YouTube-каналы, документация, Language Transfer.</p>`,
+  ESFJ:`<p><strong>ESFJ — Консул</strong> <span class="pt-enio">(+Юг-Запад)</span>. Тёплый, заботливый. Язык — прежде всего связь с людьми.</p><p><strong>Стиль:</strong> расцветаешь в поддерживающей социальной среде.</p><p><strong>Инструменты:</strong> групповые курсы с куратором, языковые обмены, HelloTalk.</p>`,
+  ESFP:`<p><strong>ESFP — Артист</strong> <span class="pt-enio">(+Запад-Юг)</span>. Энергичный, общительный. Язык — способ веселиться и знакомиться.</p><p><strong>Стиль:</strong> нужны движение, разнообразие, веселье.</p><p><strong>Инструменты:</strong> стендап-комедия, разбор текстов песен, языковые вечеринки.</p>`,
+  ISFJ:`<p><strong>ISFJ — Защитник</strong> <span class="pt-enio">(-Юг+Запад)</span>. Внимательный, терпеливый. Учишься тихо, но основательно.</p><p><strong>Стиль:</strong> повторение и закрепление. Нужна безопасная, доброжелательная обстановка.</p><p><strong>Инструменты:</strong> индивидуальные занятия, онлайн-курсы в своём темпе.</p>`,
+  ISFP:`<p><strong>ISFP — Авантюрист</strong> <span class="pt-enio">(-Запад+Юг)</span>. Чуткий, творческий. Язык — способ ощутить мир другого человека.</p><p><strong>Стиль:</strong> учишься через красоту и ощущения. Сухая грамматика отталкивает.</p><p><strong>Инструменты:</strong> фильмы без дубляжа, английские блоги о творчестве.</p>`
+};
+
+function c4(PT, ei, tL, fE, jP, pS, sC, nA, enioFormula){
   const nm = PN[PT] || '';
   const d = PD[PT] || '';
   const dm = [
@@ -361,7 +451,7 @@ function c4(PT, ei, tL, fE, jP, pS, sC, nA){
     [tL>fE?'Логик':'Этик', Math.max(tL,fE), 8],
     [jP>pS?'Планировщик':'Гибкий', Math.max(jP,pS), 8]
   ];
-  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Психотип</div><div class="pt-tag">${PT}<span class="pt-nm">${nm}</span></div><div class="segs" style="margin-bottom:14px;">${dm.map(([l,v,m])=>`<div class="seg"><div class="sl">${l}</div><div class="st"><div class="sf" style="width:${Math.round(v/m*100)}%"></div></div></div>`).join('')}</div><div class="desc">${d}</div></div>`;
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Психотип</div><div class="pt-tag">${PT}<span class="pt-nm">${nm}</span><span class="pt-enio">${enioFormula}</span></div><div class="segs" style="margin-bottom:14px;">${dm.map(([l,v,m])=>`<div class="seg"><div class="sl">${l}</div><div class="st"><div class="sf" style="width:${Math.round(v/m*100)}%"></div></div></div>`).join('')}</div><div class="desc">${d}</div></div>`;
 }
 
 function c56(b5, b6){
@@ -393,6 +483,10 @@ function cr(PT, cog, conf){
   return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Персональные рекомендации</div><ul class="tips">${t.map(([i,tx])=>`<li class="tip"><span class="tico">${i}</span><span>${tx}</span></li>`).join('')}</ul></div>`;
 }
 
+function enioLegend(){
+  return `<div class="rc"><div class="rc-bar"></div><div class="rc-lbl">Эниостиль: что означают + и –</div><div class="enio-legend"><p style="margin-bottom:12px"><strong>Север (С)</strong> — логика, структура, системы, правила</p><p style="margin-bottom:12px"><strong>Юг (Ю)</strong> — эмоции, отношения, эмпатия, ценности</p><p style="margin-bottom:12px"><strong>Запад (З)</strong> — действие, результат, иерархия, пространство</p><p style="margin-bottom:12px"><strong>Восток (В)</strong> — идеи, интуиция, время, возможности</p><div style="border-top:1px solid var(--brd);padding-top:12px"><div class="enio-row"><span><span class="enio-dot dot-plus"></span><strong>+</strong> (экстравертный)</span><span>активно проявляю, являю миру</span></div><div class="enio-row"><span><span class="enio-dot dot-minus"></span><strong>–</strong> (интровертный)</span><span>наблюдаю, анализирую, принимаю</span></div></div></div></div>`;
+}
+
 function sv(data){
   // 🔧 Если скрипт ещё не настроен — данные выводятся в консоль
   if(!SU || SU.includes('script.google.com/default')){
@@ -417,6 +511,113 @@ function sv(data){
   })
   .then(() => console.log('✅ Данные отправлены'))
   .catch(e => console.error('❌ Ошибка отправки:', e));
+}
+
+// ===== SHARE & COPY FUNCTIONS =====
+function shareResults(){
+  if(!finalResults) return;
+  
+  const text = formatResultsForShare();
+  
+  // Try Web Share API first
+  if(navigator.share){
+    navigator.share({
+      title: 'Мой профиль изучения английского',
+      text: text,
+      url: window.location.href
+    }).catch(err => console.log('Share cancelled', err));
+  } else {
+    // Fallback: copy to clipboard and show message
+    copyToClipboard(text);
+    showCopySuccess('📋 Результаты скопированы! Вставьте в любое приложение.');
+  }
+}
+
+function copyResults(){
+  if(!finalResults) return;
+  const text = formatResultsForShare();
+  copyToClipboard(text);
+  showCopySuccess();
+}
+
+function formatResultsForShare(){
+  const r = finalResults;
+  return `🎯 МОЙ ПРОФИЛЬ ИЗУЧЕНИЯ АНГЛИЙСКОГО
+═══════════════════════════
+
+🧠 Психотип: ${r.pt} — ${r.ptName}
+🌀 Эниостиль: ${r.enioFormula}
+
+🗣️ Уверенность: ${r.confidence}/24 — ${getLevelText(r.confidence, 24)}
+💫 Мотивация: ${r.motivation}/24 — ${getLevelText(r.motivation, 24)}
+📱 Современные методы: ${r.modernMethods}/24 — ${getLevelText(r.modernMethods, 24)}
+🌍 Реальная практика: ${r.realPractice}/24 — ${getLevelText(r.realPractice, 24)}
+
+⏱ Время прохождения: ${r.duration} сек
+
+💡 Совет: Начни с сильных сторон твоего типа!
+${getQuickTip(r.pt)}
+
+#EnglishProfile #Психотип #Эниостиль`;
+}
+
+function getLevelText(score, max){
+  const p = score/max;
+  return p>=.75?'Высокий':p>=.5?'Средний':'Низкий';
+}
+
+function getQuickTip(pt){
+  const tips = {
+    ENTJ: 'Ставь чёткие бизнес-цели в изучении языка',
+    ENTP: 'Ищи дебаты и дискуссии на английском',
+    INTJ: 'Создай свою систему и следуй ей',
+    INTP: 'Пойми логику языка — потом говори',
+    ENFJ: 'Учись через общение и помощь другим',
+    ENFP: 'Меняй форматы, чтобы не терять интерес',
+    INFJ: 'Читай глубокую литературу на английском',
+    INFP: 'Веди дневник и пиши стихи на английском',
+    ESTJ: 'Составь расписание и отслеживай прогресс',
+    ESTP: 'Учись в действии: путешествуй, общайся',
+    ISTJ: 'Повторяй регулярно — это твоя сила',
+    ISTP: 'Разбирай технические тексты и инструкции',
+    ESFJ: 'Найди группу поддержки для практики',
+    ESFP: 'Учи язык через музыку и развлечения',
+    ISFJ: 'Занимайся в комфортном темпе, без спешки',
+    ISFP: 'Смотри фильмы и слушай музыку на английском'
+  };
+  return tips[pt] || 'Экспериментируй с разными методами обучения';
+}
+
+function copyToClipboard(text){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).catch(err => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+  } catch(err) {
+    console.error('Copy failed', err);
+  }
+  document.body.removeChild(ta);
+}
+
+function showCopySuccess(msg){
+  const el = document.getElementById('copyMsg');
+  el.textContent = msg || '✓ Скопировано в буфер обмена!';
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
