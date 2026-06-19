@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slay English - Пробное диагностическое занятие</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #8FED39 0%, #FF1493 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+ 
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+ 
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+ 
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            background: #8FED39;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-weight: 900;
+            font-size: 28px;
+            line-height: 1;
+        }
+ 
+        .logo-slay {
+            color: #FF1493;
+            margin-bottom: 5px;
+        }
+ 
+        .logo-eng {
+            color: #000;
+        }
+ 
+        h1 {
+            color: #000;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+ 
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+ 
+        .info-box {
+            background: #f8f8f8;
+            border-left: 4px solid #FF1493;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+ 
+        .info-box h3 {
+            color: #FF1493;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+ 
+        .info-box p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+ 
+        .info-box ul {
+            margin-left: 20px;
+            color: #333;
+        }
+ 
+        .info-box li {
+            margin-bottom: 5px;
+        }
+ 
+        .start-btn {
+            background: linear-gradient(135deg, #FF1493, #8FED39);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            max-width: 400px;
+        }
+ 
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4);
+        }
+ 
+        .features {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+ 
+        .feature {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+ 
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+ 
+        .feature-title {
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 5px;
+        }
+ 
+        .feature-text {
+            color: #666;
+            font-size: 14px;
+        }
+ 
+        .quiz-container {
+            display: none;
+        }
+ 
+        .progress-bar {
+            background: #f0f0f0;
+            height: 10px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+ 
+        .progress-fill {
+            background: linear-gradient(90deg, #8FED39, #FF1493);
+            height: 100%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+ 
+        .stage-indicator {
+            background: #8FED39;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+ 
+        .level-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+ 
+        .level-A1 { background: #4CAF50; color: white; }
+        .level-A2 { background: #8BC34A; color: white; }
+        .level-B1 { background: #FFC107; color: black; }
+        .level-B2 { background: #FF9800; color: white; }
+        .level-C1 { background: #F44336; color: white; }
+ 
+        .skill-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+ 
+        .question-counter {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+ 
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+ 
+        .reading-text {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333;
+            border-left: 4px solid #8FED39;
+            font-style: italic;
+        }
+ 
+        .reading-text::before {
+            content: "📖 Прочитай текст:";
+            display: block;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #8FED39;
+            font-style: normal;
+        }
+ 
+        .answers-horizontal {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+ 
+        .answer-btn-h {
+            background: #f8f8f8;
+            border: 3px solid transparent;
+            padding: 15px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+            text-align: center;
+            font-family: inherit;
+            line-height: 1.3;
+        }
+ 
+        .answer-btn-h:hover {
+            background: #e8f5e9;
+            border-color: #8FED39;
+            transform: scale(1.05);
+        }
+ 
+        .answer-btn-h.selected {
+            background: #8FED39;
+            border-color: #FF1493;
+            color: black;
+            font-weight: 700;
+        }
+ 
+        .answers-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+ 
+        .answer-btn-v {
+            background: #f8f8f8;
+            border: 3px solid transparent;
+            padding: 18px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-align: left;
+            font-family: inherit;
+            line-height: 1.4;
+        }
+ 
+        .answer-btn-v:hover {
+            background: #e8f5e9;
+            border-color: #8FED39;
+            transform: translateX(10px);
+        }
+ 
+        .answer-btn-v.selected {
+            background: #8FED39;
+            border-color: #FF1493;
+            color: black;
+            font-weight: 700;
+        }
+ 
+        .navigation {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 30px;
+            gap: 15px;
+        }
+ 
+        .nav-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+ 
+        .prev-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+ 
+        .prev-btn:hover:not(:disabled) {
+            background: #e0e0e0;
+        }
+ 
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+ 
+        .results-container {
+            display: none;
+            text-align: center;
+        }
+ 
+        .result-card {
+            background: linear-gradient(135deg, #8FED39, #FF1493);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+ 
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+ 
+        .result-value {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+ 
+        .result-description {
+            font-size: 16px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+ 
+        .mbti-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+ 
+        .mbti-type {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+ 
+        .mbti-name {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+ 
+        .mbti-description {
+            font-size: 16px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+ 
+        .level-details {
+            background: #fff;
+            border: 2px solid #8FED39;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+ 
+        .level-details h3 {
+            color: #000;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+ 
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+ 
+        .level-score-item {
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: 12px;
+            background: #f8f8f8;
+        }
+ 
+        .level-score-item .level-label {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+ 
+        .level-score-item .score {
+            font-size: 24px;
+            font-weight: 900;
+        }
+ 
+        .level-score-item.active {
+            background: #8FED39;
+            color: black;
+        }
+ 
+        .psych-details {
+            background: #fff;
+            border: 2px solid #FF1493;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+ 
+        .psych-details h3 {
+            color: #000;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+ 
+        .psych-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+ 
+        .psych-item-title {
+            font-weight: 700;
+            color: #FF1493;
+            margin-bottom: 8px;
+        }
+ 
+        .psych-item-text {
+            color: #333;
+            line-height: 1.5;
+        }
+ 
+        .recommendations {
+            background: #f8f8f8;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+ 
+        .recommendations h3 {
+            color: #000;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+ 
+        .rec-section {
+            margin-bottom: 25px;
+        }
+ 
+        .rec-section-title {
+            font-weight: 700;
+            color: #FF1493;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+ 
+        .rec-item {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.5;
+        }
+ 
+        .rec-item::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #8FED39;
+            font-weight: 900;
+            font-size: 20px;
+        }
+ 
+        .cta-section {
+            background: black;
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+ 
+        .cta-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #8FED39;
+        }
+ 
+        .cta-text {
+            margin-bottom: 20px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+ 
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 700;
+            transition: transform 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+ 
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+        }
+ 
+        .save-btn {
+            background: #8FED39;
+            color: black;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+ 
+        .save-btn:hover {
+            transform: translateY(-3px);
+        }
+ 
+        .error-review {
+            background: #fff;
+            border: 2px solid #FF1493;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+ 
+        .error-review h3 {
+            color: #000;
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+ 
+        .error-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: #fff5f5;
+            border-left: 4px solid #F44336;
+        }
+ 
+        .error-item.correct {
+            background: #f5fff5;
+            border-left-color: #4CAF50;
+        }
+ 
+        .error-question {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #000;
+        }
+ 
+        .error-answer {
+            margin-bottom: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+ 
+        .error-answer.wrong {
+            background: #ffebee;
+            color: #c62828;
+        }
+ 
+        .error-answer.right {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+ 
+        .toggle-errors-btn {
+            background: linear-gradient(135deg, #FF1493, #8FED39);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+ 
+        .toggle-errors-btn:hover {
+            transform: translateY(-2px);
+        }
+ 
+        .errors-container {
+            display: none;
+        }
+ 
+        .errors-container.show {
+            display: block;
+        }
+ 
+        @media (max-width: 768px) {
+            .answers-horizontal {
+                grid-template-columns: 1fr 1fr;
+            }
+           
+            .answer-btn-h {
+                font-size: 14px;
+                padding: 12px;
+            }
+           
+            .container {
+                padding: 20px;
+            }
+           
+            h1 {
+                font-size: 24px;
+            }
+           
+            .question {
+                font-size: 18px;
+            }
+ 
+            .result-value, .mbti-type {
+                font-size: 32px;
+            }
+ 
+            .level-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 5px;
+            }
+ 
+            .level-score-item {
+                padding: 10px 5px;
+            }
+ 
+            .level-score-item .level-label {
+                font-size: 14px;
+            }
+ 
+            .level-score-item .score {
+                font-size: 18px;
+            }
+        }
+ 
+        @media (max-width: 480px) {
+            .answers-horizontal {
+                grid-template-columns: 1fr;
+            }
+        }
+ 
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .cta-section, .navigation, .start-btn, .toggle-errors-btn {
+                display: none;
+            }
+            .errors-container {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="startScreen">
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="logo-slay">SLAY</div>
+                    <div class="logo-eng">ENG</div>
+                </div>
+            </div>
+            <h1>Пробное диагностическое занятие</h1>
+            <p class="subtitle">
+                Комплексная оценка уровня английского + определение психотипа обучения<br>
+                <strong>84 вопроса • 45-60 минут • Персональные рекомендации</strong>
+            </p>
+ 
+            <div class="info-box">
+                <h3>📋 Как проходит занятие</h3>
+                <p>Это полноценное пробное занятие, которое ты проходишь самостоятельно. Преподаватель присутствует, но не вмешивается — только наблюдает за твоим процессом.</p>
+                <ul>
+                    <li><strong>Этап 1:</strong> Психологический профиль (49 вопросов, ~20 минут)</li>
+                    <li><strong>Этап 2:</strong> Тест по английскому (35 вопросов, ~25-30 минут)</li>
+                    <li><strong>Результаты:</strong> Уровень CEFR + MBTI психотип + персональный план</li>
+                </ul>
+                <p style="margin-top: 15px; font-weight: 700; color: #FF1493;">
+                    После завершения преподаватель разберёт с тобой результаты и составит индивидуальный план обучения.
+                </p>
+            </div>
+           
+            <button class="start-btn" onclick="startQuiz()">
+                Начать занятие →
+            </button>
+           
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-title">MBTI Психотип</div>
+                    <div class="feature-text">49 вопросов для определения типа личности и стиля обучения</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Уровень A1-C1</div>
+                    <div class="feature-text">Грамматика, лексика, чтение</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Персональный план</div>
+                    <div class="feature-text">Рекомендации под твой психотип и уровень</div>
+                </div>
+            </div>
+        </div>
+ 
+        <!-- Quiz Container -->
+        <div id="quizContainer" class="quiz-container">
+            <div class="stage-indicator" id="stageIndicator">Этап 1: Психология</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+           
+            <div class="question-counter" id="questionCounter">Вопрос 1 из 49</div>
+            <div id="levelBadgeContainer"></div>
+            <div id="extraContentContainer"></div>
+            <div class="question" id="questionText"></div>
+            <div id="answersContainer"></div>
+           
+            <div class="navigation">
+                <button class="nav-btn prev-btn" id="prevBtn" onclick="prevQuestion()" disabled>
+                    ← Назад
+                </button>
+            </div>
+        </div>
+ 
+        <!-- Results Container -->
+        <div id="resultsContainer" class="results-container">
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="logo-slay">SLAY</div>
+                    <div class="logo-eng">ENG</div>
+                </div>
+            </div>
+           
+            <h1>Результаты диагностического занятия</h1>
+           
+            <div class="result-card">
+                <div class="result-title">📚 Твой уровень английского</div>
+                <div class="result-value" id="englishLevel">B1</div>
+                <div class="result-description" id="englishDescription">Intermediate</div>
+            </div>
+ 
+            <!-- Уровень по каждому уровню CEFR -->
+            <div class="level-details">
+                <h3>📊 Твои результаты по уровням</h3>
+                <div class="level-grid" id="levelScoresGrid"></div>
+                <p style="text-align: center; color: #666; font-size: 14px;">
+                    Всего правильных ответов: <strong id="totalCorrectCount">0</strong> из 35
+                </p>
+            </div>
+           
+            <div class="mbti-card">
+                <div class="result-title">🧠 Твой MBTI психотип</div>
+                <div class="mbti-type" id="mbtiType">INTJ</div>
+                <div class="mbti-name" id="mbtiName">Архитектор</div>
+                <div class="mbti-description" id="mbtiDescription">Рациональные интроверты, Интуиция и логика</div>
+            </div>
+ 
+            <div class="psych-details">
+                <h3>🎓 Стиль обучения</h3>
+                <div class="psych-item" id="learningStyleItem"></div>
+            </div>
+           
+            <div class="recommendations">
+                <h3>🎯 Персональные рекомендации</h3>
+                <div id="recommendationsList"></div>
+            </div>
+ 
+            <button class="toggle-errors-btn" onclick="toggleErrorReview()">
+                📋 Посмотреть разбор ответов по английскому
+            </button>
+           
+            <div class="error-review errors-container" id="errorsContainer">
+                <h3>📝 Разбор ответов</h3>
+                <div id="errorsList"></div>
+            </div>
+           
+            <div class="cta-section">
+                <div class="cta-title">🎉 Занятие завершено!</div>
+                <div class="cta-text">
+                    Сохрани результат или поделись с преподавателем.<br>
+                    Преподаватель поможет разобраться в результатах и составит индивидуальный план обучения.
+                </div>
+                <a href="https://t.me/slaying_english" class="telegram-btn" target="_blank">
+                    💬 Написать в Telegram
+                </a>
+                <button class="save-btn" onclick="window.print()">
+                    💾 Сохранить результат
+                </button>
+            </div>
+           
+            <button class="start-btn" onclick="location.reload()" style="margin-top: 20px;">
+                Пройти заново
+            </button>
+        </div>
+    </div>
+ 
+    <script>
+        // MBTI PSYCHOLOGY QUESTIONS (49 questions)
+        const psychologyQuestions = [
+            // E/I (12)
+            { text: "После долгого рабочего дня я предпочитаю встретиться с друзьями, чем остаться дома одному.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            { text: "Мне легче думать вслух и обсуждать идеи с другими, чем размышлять в одиночестве.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            { text: "Я чувствую прилив энергии, когда нахожусь в большой компании людей.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            { text: "Мне нужно время в одиночестве, чтобы восстановить силы после общения.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "I" },
+            { text: "Я предпочитаю работать в команде, чем индивидуально.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            { text: "Мне комфортнее говорить, чем слушать.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            { text: "Я часто думаю о своих мыслях и чувствах, анализирую себя.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "I" },
+            { text: "Мне нравится быть в центре внимания.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            { text: "Я предпочитаю глубокое общение с одним человеком, чем поверхностное с многими.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "I" },
+            { text: "Мне легко знакомиться с новыми людьми.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            { text: "Я часто чувствую себя истощённым после социальных мероприятий.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "I" },
+            { text: "Мне нравится делиться своими мыслями и идеями с другими.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "EI", scores: [0, 1, 2, 3], type: "E" },
+            // S/N (12)
+            { text: "Я больше доверяю конкретным фактам и деталям, чем общим идеям и концепциям.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "S" },
+            { text: "Мне интереснее думать о будущем и возможностях, чем о настоящем и реальности.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "N" },
+            { text: "Я предпочитаю практичные решения, которые работают здесь и сейчас.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "S" },
+            { text: "Мне нравится искать скрытые смыслы и закономерности в вещах.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "N" },
+            { text: "Я лучше запоминаю конкретные детали, чем общие впечатления.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "S" },
+            { text: "Мне интереснее обсуждать теории и идеи, чем практические вопросы.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "N" },
+            { text: "Я предпочитаю учиться через практический опыт, а не через теорию.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "S" },
+            { text: "Мне нравится воображать и фантазировать о том, что могло бы быть.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "N" },
+            { text: "Я больше ориентируюсь на прошлый опыт, чем на новые возможности.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "S" },
+            { text: "Мне интересно изучать новые концепции, даже если они не применимы на практике.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "N" },
+            { text: "Я предпочитаю чёткие инструкции, а не абстрактные объяснения.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "S" },
+            { text: "Мне нравится думать о глобальных идеях и больших картинах.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "SN", scores: [0, 1, 2, 3], type: "N" },
+            // T/F (12)
+            { text: "При принятии решений я больше руководствуюсь логикой, чем чувствами.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "T" },
+            { text: "Мне важно учитывать чувства других людей при принятии решений.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "F" },
+            { text: "Я ценю справедливость больше, чем гармонию.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "T" },
+            { text: "Мне легче критиковать, если это необходимо, даже если это заденет чувства.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "T" },
+            { text: "Я стараюсь избегать конфликтов и поддерживать мир.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "F" },
+            { text: "Мне важнее быть правым, чем быть приятным.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "T" },
+            { text: "Я принимаю решения сердцем, а не головой.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "F" },
+            { text: "Мне интереснее анализировать проблемы, чем поддерживать людей.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "T" },
+            { text: "Я ценю эмпатию и понимание больше, чем объективность.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "F" },
+            { text: "Мне легче говорить правду, даже если она неприятна.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "T" },
+            { text: "Я стараюсь учитывать, как мои слова повлияют на других.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "F" },
+            { text: "Мне важнее эффективность, чем чувства людей.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "TF", scores: [0, 1, 2, 3], type: "T" },
+            // J/P (13)
+            { text: "Мне нравится планировать всё заранее и следовать плану.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "J" },
+            { text: "Я предпочитаю спонтанность и гибкость, чем строгие планы.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "P" },
+            { text: "Мне важно завершать дела в срок.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "J" },
+            { text: "Я легко адаптируюсь к изменениям планов.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "P" },
+            { text: "Мне нравится иметь чёткий список дел и следовать ему.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "J" },
+            { text: "Я предпочитаю оставлять варианты открытыми, чем принимать решения заранее.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "P" },
+            { text: "Мне комфортнее, когда всё организовано и структурировано.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "J" },
+            { text: "Я часто откладываю дела на последний момент.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "P" },
+            { text: "Мне важно принимать решения быстро и двигаться дальше.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "J" },
+            { text: "Я предпочитаю исследовать варианты, прежде чем принимать решение.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "P" },
+            { text: "Мне нравится завершать проекты, а не начинать новые.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "J" },
+            { text: "Я легко переключаюсь между задачами и не люблю рутину.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "P" },
+            { text: "Мне важно иметь контроль над ситуацией и знать, что будет дальше.", answers: ["Совсем не согласен", "Скорее не согласен", "Скорее согласен", "Полностью согласен"], category: "JP", scores: [0, 1, 2, 3], type: "J" }
+        ];
+ 
+        // ENGLISH QUESTIONS (35 questions: 5 levels × 7 questions each)
+        const englishQuestions = [
+    // ========== A1 LEVEL (Questions 1-7) ==========
+    {
+        text: "How many siblings does Emma have?",
+        answers: ["Two", "Three", "Four", "Five"],
+        correct: 1,
+        level: "A1",
+        skill: "reading",
+        extraText: "Emma has got two brothers and one sister. Her eldest brother is a doctor and he works in a big hospital. Her sister is a student. She studies medicine too. Emma doesn't have any children. She's only 25 years old."
+    },
+    {
+        text: "What does Emma's sister do?",
+        answers: ["She's a doctor", "She's a nurse", "She's a student", "She's a teacher"],
+        correct: 2,
+        level: "A1",
+        skill: "reading",
+        extraText: "Emma has got two brothers and one sister. Her eldest brother is a doctor and he works in a big hospital. Her sister is a student. She studies medicine too. Emma doesn't have any children. She's only 25 years old."
+    },
+    {
+        text: "There ___ three cats and ___ dog in the garden.",
+        answers: ["is / a", "are / a", "are / an", "is / an"],
+        correct: 1,
+        level: "A1",
+        skill: "grammar"
+    },
+    {
+        text: "My parents ___ in Madrid, but I ___ in Barcelona.",
+        answers: ["live / lives", "lives / live", "live / live", "living / live"],
+        correct: 2,
+        level: "A1",
+        skill: "grammar"
+    },
+    {
+        text: "___ she got any brothers?",
+        answers: ["Do", "Is", "Has", "Does"],
+        correct: 2,
+        level: "A1",
+        skill: "grammar"
+    },
+    {
+        text: "I need to buy some ___ for breakfast — bread, milk and eggs.",
+        answers: ["clothes", "furniture", "groceries", "electronics"],
+        correct: 2,
+        level: "A1",
+        skill: "vocabulary"
+    },
+    {
+        text: "My ___ is my mother's sister.",
+        answers: ["cousin", "niece", "aunt", "grandmother"],
+        correct: 2,
+        level: "A1",
+        skill: "vocabulary"
+    },
+ 
+    // ========== A2 LEVEL (Questions 8-14) ==========
+    {
+        text: "What was the weather like during their holiday?",
+        answers: ["It was rainy", "It was cloudy", "It was sunny", "It was cold"],
+        correct: 2,
+        level: "A2",
+        skill: "reading",
+        extraText: "Last summer, I went to Italy with my family. We stayed in a small hotel near the beach. The weather was amazing — it was sunny every day. I swam in the sea and ate lots of pizza. My brother didn't like the food, so he cooked pasta in our room."
+    },
+    {
+        text: "Why did the brother cook pasta?",
+        answers: ["He wanted to save money", "He didn't like the hotel food", "The hotel didn't have a restaurant", "He's a chef"],
+        correct: 1,
+        level: "A2",
+        skill: "reading",
+        extraText: "Last summer, I went to Italy with my family. We stayed in a small hotel near the beach. The weather was amazing — it was sunny every day. I swam in the sea and ate lots of pizza. My brother didn't like the food, so he cooked pasta in our room."
+    },
+    {
+        text: "I ___ to the gym three times this week.",
+        answers: ["go", "went", "have been", "was going"],
+        correct: 2,
+        level: "A2",
+        skill: "grammar"
+    },
+    {
+        text: "This book is ___ than the one I read last month.",
+        answers: ["interesting", "more interesting", "most interesting", "the most interesting"],
+        correct: 1,
+        level: "A2",
+        skill: "grammar"
+    },
+    {
+        text: "You ___ smoke in the hospital. It's forbidden.",
+        answers: ["don't have to", "shouldn't", "mustn't", "needn't"],
+        correct: 2,
+        level: "A2",
+        skill: "grammar"
+    },
+    {
+        text: "I need to ___ an appointment with the dentist.",
+        answers: ["do", "make", "have", "take"],
+        correct: 1,
+        level: "A2",
+        skill: "vocabulary"
+    },
+    {
+        text: "The flight was ___ because of bad weather.",
+        answers: ["delayed", "cancelled", "postponed", "arrested"],
+        correct: 0,
+        level: "A2",
+        skill: "vocabulary"
+    },
+ 
+    // ========== B1 LEVEL (Questions 15-21) ==========
+    {
+        text: "Why did the person stop taking French classes?",
+        answers: ["They were too expensive", "They were too busy with work", "They didn't like the teacher", "They moved to another city"],
+        correct: 1,
+        level: "B1",
+        skill: "reading",
+        extraText: "If I had more free time, I would learn a new language. I've always wanted to speak French fluently. Last year, I started taking evening classes, but I had to give them up because I was working too much. I hope I can start again next month."
+    },
+    {
+        text: "What does the person want to do in the future?",
+        answers: ["Move to France", "Start French classes again", "Learn another language", "Stop working"],
+        correct: 1,
+        level: "B1",
+        skill: "reading",
+        extraText: "If I had more free time, I would learn a new language. I've always wanted to speak French fluently. Last year, I started taking evening classes, but I had to give them up because I was working too much. I hope I can start again next month."
+    },
+    {
+        text: "If I ___ you, I would accept the job offer.",
+        answers: ["am", "was", "were", "would be"],
+        correct: 2,
+        level: "B1",
+        skill: "grammar"
+    },
+    {
+        text: "The report ___ by the manager yesterday.",
+        answers: ["wrote", "was written", "has written", "is written"],
+        correct: 1,
+        level: "B1",
+        skill: "grammar"
+    },
+    {
+        text: "I ___ to Paris three times. I love it there.",
+        answers: ["went", "have been", "was", "had been"],
+        correct: 1,
+        level: "B1",
+        skill: "grammar"
+    },
+    {
+        text: "I can't ___ up with this noise anymore. It's driving me crazy.",
+        answers: ["put", "take", "stand", "keep"],
+        correct: 3,
+        level: "B1",
+        skill: "vocabulary"
+    },
+    {
+        text: "She's very ___ — she always finishes her work on time.",
+        answers: ["reliable", "stubborn", "ambitious", "creative"],
+        correct: 0,
+        level: "B1",
+        skill: "vocabulary"
+    },
+ 
+    // ========== B2 LEVEL (Questions 22-28) ==========
+    {
+        text: "What is one advantage of AI in healthcare mentioned in the text?",
+        answers: ["It's cheaper than human doctors", "It can diagnose diseases accurately", "It has empathy", "It treats all patients equally"],
+        correct: 1,
+        level: "B2",
+        skill: "reading",
+        extraText: "The implementation of artificial intelligence in healthcare has raised numerous ethical concerns. While AI algorithms can diagnose diseases with remarkable accuracy, they lack the empathy and nuanced understanding that human doctors provide. Furthermore, the potential for algorithmic bias could lead to unequal treatment of patients from different demographic backgrounds."
+    },
+    {
+        text: "What is a potential problem with AI in healthcare?",
+        answers: ["It's too expensive", "It's too slow", "It might treat different groups of patients unfairly", "It can't diagnose diseases"],
+        correct: 2,
+        level: "B2",
+        skill: "reading",
+        extraText: "The implementation of artificial intelligence in healthcare has raised numerous ethical concerns. While AI algorithms can diagnose diseases with remarkable accuracy, they lack the empathy and nuanced understanding that human doctors provide. Furthermore, the potential for algorithmic bias could lead to unequal treatment of patients from different demographic backgrounds."
+    },
+    {
+        text: "___ I known about the traffic, I would have left earlier.",
+        answers: ["If", "Had", "Would", "Should"],
+        correct: 1,
+        level: "B2",
+        skill: "grammar"
+    },
+    {
+        text: "Not only ___ the exam, but she also got the highest score in the class.",
+        answers: ["she passed", "did she pass", "she did pass", "passed she"],
+        correct: 1,
+        level: "B2",
+        skill: "grammar"
+    },
+    {
+        text: "He ___ have called me. I was worried sick!",
+        answers: ["must", "should", "would", "might"],
+        correct: 1,
+        level: "B2",
+        skill: "grammar"
+    },
+    {
+        text: "The company decided to ___ the meeting until next week due to the CEO's illness.",
+        answers: ["call off", "put off", "take off", "get off"],
+        correct: 1,
+        level: "B2",
+        skill: "vocabulary"
+    },
+    {
+        text: "Her argument was completely ___ — there was no evidence to support it.",
+        answers: ["valid", "invalid", "valuable", "invaluable"],
+        correct: 1,
+        level: "B2",
+        skill: "vocabulary"
+    },
+ 
+    // ========== C1 LEVEL (Questions 29-35) ==========
+    {
+        text: "What do technological determinists believe?",
+        answers: ["Technology is shaped by society", "Technology develops independently", "Technology is controlled by politics", "Technology is unimportant"],
+        correct: 1,
+        level: "C1",
+        skill: "reading",
+        extraText: "The dichotomy between technological determinism and social constructivism has long plagued the field of science and technology studies. While determinists argue that technology develops according to its own internal logic, constructivists contend that technological development is shaped by social, political, and economic factors. This theoretical impasse has hindered our ability to develop comprehensive frameworks for understanding the complex interplay between technology and society."
+    },
+    {
+        text: "What does 'theoretical impasse' mean in this context?",
+        answers: ["A theoretical breakthrough", "A theoretical disagreement that cannot be resolved", "A theoretical experiment", "A theoretical success"],
+        correct: 1,
+        level: "C1",
+        skill: "reading",
+        extraText: "The dichotomy between technological determinism and social constructivism has long plagued the field of science and technology studies. While determinists argue that technology develops according to its own internal logic, constructivists contend that technological development is shaped by social, political, and economic factors. This theoretical impasse has hindered our ability to develop comprehensive frameworks for understanding the complex interplay between technology and society."
+    },
+    {
+        text: "It is essential that he ___ the project by Friday.",
+        answers: ["completes", "complete", "will complete", "would complete"],
+        correct: 1,
+        level: "C1",
+        skill: "grammar"
+    },
+    {
+        text: "Seldom ___ such a brilliant performance.",
+        answers: ["I have seen", "have I seen", "I saw", "did I see"],
+        correct: 1,
+        level: "C1",
+        skill: "grammar"
+    },
+    {
+        text: "The report, ___ was published last month, has been widely criticized.",
+        answers: ["that", "which", "what", "whose"],
+        correct: 1,
+        level: "C1",
+        skill: "grammar"
+    },
+    {
+        text: "The politician's speech was full of ___ — he promised everything but delivered nothing.",
+        answers: ["rhetoric", "dialogue", "monologue", "prologue"],
+        correct: 0,
+        level: "C1",
+        skill: "vocabulary"
+    },
+    {
+        text: "She has a ___ understanding of quantum physics, despite not being a physicist.",
+        answers: ["shallow", "nuanced", "superficial", "trivial"],
+        correct: 1,
+        level: "C1",
+        skill: "vocabulary"
+    }
+];
+        // MBTI Type Definitions
+        const mbtiTypes = {
+            'ENTJ': { name: 'Командир', description: 'Рациональные экстраверты, Интуиция и логика, +Север-Восток', learning: 'Стратегическое мышление, лидерство, планирование', recommendations: ['Ставь амбициозные цели и создавай чёткие планы', 'Изучай английский через бизнес-кейсы и стратегии', 'Веди группу или помогай другим — это мотивирует', 'Используй дедлайны и отслеживай прогресс'] },
+            'ENTP': { name: 'Полемист', description: 'Иррациональные экстраверты, Интуиция и логика, +Восток-Север', learning: 'Дебаты, исследование идей, нестандартные подходы', recommendations: ['Изучай английский через дискуссии и дебаты', 'Исследуй разные точки зрения на темы', 'Используй игры и интеллектуальные вызовы', 'Не зацикливайся на одном методе — чередуй'] },
+            'INTJ': { name: 'Архитектор', description: 'Рациональные интроверты, Интуиция и логика, -Север+Восток', learning: 'Системный анализ, стратегия, независимость', recommendations: ['Создай собственную систему изучения языка', 'Анализируй грамматику как логическую структуру', 'Читай сложные тексты и анализируй их', 'Работай самостоятельно, без давления'] },
+            'INTP': { name: 'Логик', description: 'Иррациональные интроверты, Интуиция и логика, -Восток+Север', learning: 'Теоретический анализ, исследование, понимание систем', recommendations: ['Изучай грамматику глубоко и систематически', 'Исследуй этимологию слов и языковые структуры', 'Читай научные статьи и философские тексты', 'Не торопись — тебе нужно время на усвоение'] },
+            'ENFJ': { name: 'Протагонист', description: 'Рациональные экстраверты, Интуиция и этика, +Юг-Восток', learning: 'Вдохновение других, гармония, развитие людей', recommendations: ['Изучай английский через помощь другим', 'Присоединись к разговорному клубу', 'Читай литературу о развитии личности', 'Используй язык для вдохновения и мотивации'] },
+            'ENFP': { name: 'Активист', description: 'Иррациональные экстраверты, Интуиция и этика, +Восток-Юг', learning: 'Творчество, возможности, энтузиазм', recommendations: ['Изучай английский через творчество и искусство', 'Используй разнообразные методы и форматы', 'Смотри фильмы, читай художественную литературу', 'Не ограничивай себя рамками — экспериментируй'] },
+            'INFJ': { name: 'Заступник', description: 'Рациональные интроверты, Интуиция и этика, -Юг+Восток', learning: 'Глубокое понимание, смысл, идеализм', recommendations: ['Изучай английский через литературу и философию', 'Ищи глубокий смысл в языке и культуре', 'Веди дневник на английском', 'Работай в спокойной обстановке'] },
+            'INFP': { name: 'Посредник', description: 'Иррациональные интроверты, Интуиция и этика, -Восток+Юг', learning: 'Ценности, аутентичность, творческое самовыражение', recommendations: ['Изучай английский через поэзию и литературу', 'Выражай свои чувства и мысли на языке', 'Читай книги, которые трогают эмоции', 'Создавай творческие проекты на английском'] },
+            'ESFJ': { name: 'Консул', description: 'Рациональные экстраверты, Сенсорика и этика, +Юг-Запад', learning: 'Забота о других, традиции, практическая помощь', recommendations: ['Изучай английский через общение и помощь', 'Следуй традиционным методам обучения', 'Практикуй язык в социальных ситуациях', 'Получай обратную связь от преподавателя'] },
+            'ESFP': { name: 'Артист', description: 'Иррациональные экстраверты, Сенсорика и этика, +Запад-Юг', learning: 'Настоящий момент, опыт, развлечения', recommendations: ['Изучай английский через музыку и фильмы', 'Используй игры и интерактивные методы', 'Практикуй язык в реальных ситуациях', 'Не засиживайся за учебниками — действуй'] },
+            'ISFJ': { name: 'Защитник', description: 'Рациональные интроверты, Сенсорика и этика, -Юг+Запад', learning: 'Надёжность, детали, забота о других', recommendations: ['Следуй чёткому плану обучения', 'Запоминай детали и правила', 'Помогай другим ученикам', 'Создай комфортный режим занятий'] },
+            'ISFP': { name: 'Авантюрист', description: 'Иррациональные интроверты, Сенсорика и этика, -Запад+Юг', learning: 'Эстетика, гармония, практический опыт', recommendations: ['Изучай английский через искусство и красоту', 'Используй визуальные материалы', 'Практикуй язык в приятной обстановке', 'Не торопись — наслаждайся процессом'] },
+            'ESTJ': { name: 'Менеджер', description: 'Рациональные экстраверты, Сенсорика и логика, +Север-Запад', learning: 'Организация, эффективность, традиции', recommendations: ['Создай структурированный план обучения', 'Следуй проверенным методам', 'Отслеживай прогресс и результаты', 'Используй язык для организации и управления'] },
+            'ESTP': { name: 'Предприниматель', description: 'Иррациональные экстраверты, Сенсорика и логика, +Запад-Север', learning: 'Действие, риск, практические результаты', recommendations: ['Изучай английский через практику и действие', 'Не бойся ошибаться — действуй', 'Используй язык в бизнесе и переговорах', 'Ставь короткие дедлайны и достигай целей'] },
+            'ISTJ': { name: 'Логист', description: 'Рациональные интроверты, Сенсорика и логика, -Север+Запад', learning: 'Ответственность, факты, надёжность', recommendations: ['Следуй чёткому расписанию', 'Запоминай факты и правила', 'Используй проверенные учебники', 'Будь последовательным в обучении'] },
+            'ISTP': { name: 'Виртуоз', description: 'Иррациональные интроверты, Сенсорика и логика, -Запад+Север', learning: 'Практика, инструменты, решение проблем', recommendations: ['Изучай английский через практику', 'Разбирай язык как механизм', 'Используй технологические инструменты', 'Решай языковые задачи и головоломки'] }
+        };
+ 
+        // State
+        let currentStage = 1;
+        let currentQuestion = 0;
+        let answers = { psychology: [], english: [] };
+ 
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            showQuestion();
+        }
+ 
+        function showQuestion() {
+            const questions = currentStage === 1 ? psychologyQuestions : englishQuestions;
+            const question = questions[currentQuestion];
+           
+            const totalQuestions = psychologyQuestions.length + englishQuestions.length;
+            const currentTotal = (currentStage === 1 ? 0 : psychologyQuestions.length) + currentQuestion;
+            const progress = ((currentTotal) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+           
+            document.getElementById('stageIndicator').textContent =
+                currentStage === 1 ? 'Этап 1: Психологический профиль (MBTI)' : 'Этап 2: Английский язык';
+            document.getElementById('stageIndicator').style.background =
+                currentStage === 1 ? '#8FED39' : '#FF1493';
+           
+            document.getElementById('questionCounter').textContent =
+                `Вопрос ${currentQuestion + 1} из ${questions.length}`;
+           
+            const levelBadgeContainer = document.getElementById('levelBadgeContainer');
+            const extraContentContainer = document.getElementById('extraContentContainer');
+           
+            if (currentStage === 2) {
+                const skillNames = {
+                    'grammar': 'Грамматика',
+                    'vocabulary': 'Лексика',
+                    'reading': 'Чтение'
+                };
+                levelBadgeContainer.innerHTML = `
+                    <div class="level-badge level-${question.level}">Уровень ${question.level}</div>
+                    <span class="skill-badge">${skillNames[question.skill]}</span>
+                `;
+               
+                let extraContent = '';
+                if (question.skill === 'reading' && question.extraText) {
+                    extraContent = `<div class="reading-text">${question.extraText}</div>`;
+                }
+                extraContentContainer.innerHTML = extraContent;
+                document.getElementById('questionText').textContent = question.text;
+            } else {
+                levelBadgeContainer.innerHTML = '';
+                extraContentContainer.innerHTML = '';
+                document.getElementById('questionText').textContent = question.text;
+            }
+           
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+           
+            if (currentStage === 1) {
+                answersContainer.className = 'answers-horizontal';
+                question.answers.forEach((answer, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'answer-btn-h';
+                    btn.textContent = answer;
+                    btn.onclick = () => selectAnswer(index);
+                    if (answers.psychology[currentQuestion] === index) {
+                        btn.classList.add('selected');
+                    }
+                    answersContainer.appendChild(btn);
+                });
+            } else {
+                answersContainer.className = 'answers-vertical';
+                question.answers.forEach((answer, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'answer-btn-v';
+                    btn.textContent = answer;
+                    btn.onclick = () => selectAnswer(index);
+                    if (answers.english[currentQuestion] === index) {
+                        btn.classList.add('selected');
+                    }
+                    answersContainer.appendChild(btn);
+                });
+            }
+           
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+        }
+ 
+        function selectAnswer(index) {
+            if (currentStage === 1) {
+                answers.psychology[currentQuestion] = index;
+                if (currentQuestion < psychologyQuestions.length - 1) {
+                    setTimeout(() => {
+                        currentQuestion++;
+                        showQuestion();
+                    }, 200);
+                } else {
+                    setTimeout(() => {
+                        currentStage = 2;
+                        currentQuestion = 0;
+                        showQuestion();
+                    }, 200);
+                }
+            } else {
+                answers.english[currentQuestion] = index;
+                if (currentQuestion < englishQuestions.length - 1) {
+                    setTimeout(() => {
+                        currentQuestion++;
+                        showQuestion();
+                    }, 200);
+                } else {
+                    setTimeout(() => {
+                        showResults();
+                    }, 200);
+                }
+            }
+            showQuestion();
+        }
+ 
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+ 
+        function calculateMBTI() {
+            const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            answers.psychology.forEach((answerIndex, qIndex) => {
+                const question = psychologyQuestions[qIndex];
+                const score = question.scores[answerIndex];
+                scores[question.type] += score;
+            });
+            return (scores.E >= scores.I ? 'E' : 'I') +
+                   (scores.S >= scores.N ? 'S' : 'N') +
+                   (scores.T >= scores.F ? 'T' : 'F') +
+                   (scores.J >= scores.P ? 'J' : 'P');
+        }
+ 
+        function calculateEnglishResults() {
+            let correctAnswers = 0;
+            let levelScores = { A1: 0, A2: 0, B1: 0, B2: 0, C1: 0 };
+           
+            answers.english.forEach((answerIndex, qIndex) => {
+                const question = englishQuestions[qIndex];
+                if (answerIndex === question.correct) {
+                    correctAnswers++;
+                    levelScores[question.level]++;
+                }
+            });
+           
+            // Честная логика определения уровня
+            let determinedLevel = 'A1';
+            if (correctAnswers >= 28) determinedLevel = 'C1';
+            else if (correctAnswers >= 21) determinedLevel = 'B2';
+            else if (correctAnswers >= 14) determinedLevel = 'B1';
+            else if (correctAnswers >= 7) determinedLevel = 'A2';
+           
+            const levelDescriptions = {
+                'A1': ' Elementary — Начальный уровень. Ты знаешь базовые фразы и можешь представиться.',
+                'A2': 'Pre-Intermediate — Ниже среднего. Ты можешь говорить на простые темы.',
+                'B1': 'Intermediate — Средний уровень. Ты можешь поддерживать разговор на знакомые темы.',
+                'B2': 'Upper-Intermediate — Выше среднего. Ты свободно общаешься на большинство тем.',
+                'C1': 'Advanced — Продвинутый уровень. Ты владеешь языком на профессиональном уровне.'
+            };
+           
+            return {
+                level: determinedLevel,
+                description: levelDescriptions[determinedLevel],
+                correctAnswers: correctAnswers,
+                totalQuestions: englishQuestions.length,
+                levelScores: levelScores
+            };
+        }
+ 
+        function generateRecommendations(englishResults, mbtiType) {
+            const recs = [];
+            const typeInfo = mbtiTypes[mbtiType];
+           
+            if (englishResults.level === 'A1' || englishResults.level === 'A2') {
+                recs.push({
+                    title: '📚 Базовая грамматика',
+                    items: ['Сосредоточься на Present Simple, Past Simple, Future Simple', 'Учи 10-15 новых слов в день с помощью карточек', 'Используй приложения типа Duolingo или Anki']
+                });
+            } else if (englishResults.level === 'B1') {
+                recs.push({
+                    title: '💬 Разговорная практика',
+                    items: ['Присоединись к разговорному клубу', 'Читай адаптированные книги уровня B1-B2', 'Смотри сериалы с английскими субтитрами']
+                });
+            } else {
+                recs.push({
+                    title: '🎯 Продвинутый уровень',
+                    items: ['Читай оригинальную литературу', 'Смотри фильмы без субтитров', 'Готовься к международным экзаменам']
+                });
+            }
+ 
+            recs.push({
+                title: `🧠 Твой MBTI: ${typeInfo.name}`,
+                items: typeInfo.recommendations
+            });
+ 
+            return recs;
+        }
+ 
+        function generateErrorReview() {
+            const errorsList = document.getElementById('errorsList');
+            errorsList.innerHTML = '';
+           
+            englishQuestions.forEach((question, index) => {
+                const userAnswer = answers.english[index];
+                const isCorrect = userAnswer === question.correct;
+               
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-item' + (isCorrect ? ' correct' : '');
+               
+                const skillNames = {
+                    'grammar': 'Грамматика',
+                    'vocabulary': 'Лексика',
+                    'reading': 'Чтение'
+                };
+               
+                let questionDisplay = question.text;
+                if (question.skill === 'reading' && question.extraText) {
+                    questionDisplay = `<div style="font-size: 13px; color: #666; margin-bottom: 8px; font-style: italic;">"${question.extraText.substring(0, 100)}..."</div>${question.text}`;
+                }
+               
+                errorDiv.innerHTML = `
+                    <div class="error-question">${index + 1}. ${questionDisplay}</div>
+                    <div class="error-answer ${isCorrect ? 'right' : 'wrong'}">
+                        ${isCorrect ? '✓' : '✗'} Твой ответ: ${question.answers[userAnswer]}
+                    </div>
+                    ${!isCorrect ? `<div class="error-answer right">✓ Правильный ответ: ${question.answers[question.correct]}</div>` : ''}
+                    <div style="margin-top: 8px; font-size: 12px; color: #666;">
+                        Уровень: <span class="level-badge level-${question.level}" style="display: inline-block; padding: 2px 10px; font-size: 11px;">${question.level}</span>
+                        • ${skillNames[question.skill]}
+                    </div>
+                `;
+               
+                errorsList.appendChild(errorDiv);
+            });
+        }
+ 
+        function toggleErrorReview() {
+            const container = document.getElementById('errorsContainer');
+            container.classList.toggle('show');
+        }
+ 
+        function showResults() {
+            const englishResults = calculateEnglishResults();
+            const mbtiType = calculateMBTI();
+            const typeInfo = mbtiTypes[mbtiType];
+            const recommendations = generateRecommendations(englishResults, mbtiType);
+            
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+           
+            // Уровень английского
+            document.getElementById('englishLevel').textContent = englishResults.level;
+            document.getElementById('englishDescription').textContent = englishResults.description;
+           
+            // Сетка результатов по уровням
+            const levelScoresGrid = document.getElementById('levelScoresGrid');
+            const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
+            levelScoresGrid.innerHTML = levels.map(level => {
+                const isActive = englishResults.level === level;
+                return `
+                    <div class="level-score-item ${isActive ? 'active' : ''}">
+                        <div class="level-label">${level}</div>
+                        <div class="score">${englishResults.levelScores[level]}/7</div>
+                    </div>
+                `;
+            }).join('');
+           
+            document.getElementById('totalCorrectCount').textContent = englishResults.correctAnswers;
+           
+            // MBTI
+            document.getElementById('mbtiType').textContent = mbtiType;
+            document.getElementById('mbtiName').textContent = typeInfo.name;
+            document.getElementById('mbtiDescription').textContent = typeInfo.description;
+ 
+            // Стиль обучения (без дублирования)
+            const learningStyleItem = document.getElementById('learningStyleItem');
+            learningStyleItem.innerHTML = `
+                <div class="psych-item-title">${typeInfo.learning}</div>
+                <div class="psych-item-text" style="margin-top: 10px;">
+                    ${typeInfo.recommendations.map(rec => `• ${rec}`).join('<br>')}
+                </div>
+            `;
+           
+            // Рекомендации
+            const recList = document.getElementById('recommendationsList');
+            recList.innerHTML = recommendations.map(rec => `
+                <div class="rec-section">
+                    <div class="rec-section-title">${rec.title}</div>
+                    ${rec.items.map(item => `<div class="rec-item">${item}</div>`).join('')}
+                </div>
+            `).join('');
+ 
+            generateErrorReview();
+            window.scrollTo(0, 0);
+        }
+ 
+        window.onbeforeunload = function() {
+            if (document.getElementById('quizContainer').style.display === 'block') {
+                return "Тест ещё не завершён. Вы уверены, что хотите уйти?";
+            }
+        };
+    </script>
+</body>
+</html>
